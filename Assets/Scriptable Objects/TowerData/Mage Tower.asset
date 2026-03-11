@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffca03c2ccb33d3499ba13da25645d78, type: 3}
+  m_Name: Mage Tower
+  m_EditorClassIdentifier: Assembly-CSharp::TowerData
+  TowerName: Mage Tower
+  Description: Mage Tower Desc
+  _baseDamage: 15
+  _multiplierDamage: 1
+  _baseAttackRange: 3
+  _multiplierAttackRange: 0
+  _baseAttackRate: 2
+  _multiplierAttackRate: 0
+  _costBuild: 90
+  _multiplierCost: 1.5
+  TowerAttackBehaviours: []
+  TowerAttackEffects: []
+  towerSprites:
+  - {fileID: -1708149656318744547, guid: f1ce3a02096bf6d4ba83f6a158563337, type: 3}
+  - {fileID: 6937817954938267909, guid: c80aa38d1d453c54e803d4f602813742, type: 3}
+  - {fileID: -6470460504253458178, guid: a623ed648caf5664e971693927b25e23, type: 3}
+  AttackableType: -1
+  references:
+    version: 2
+    RefIds: []

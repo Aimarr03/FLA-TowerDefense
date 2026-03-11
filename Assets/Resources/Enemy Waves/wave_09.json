@@ -1,0 +1,16 @@
+{
+    "enemies" : [
+        {
+            "type": 0,
+            "amount": 12
+        },
+        {
+            "type": 1,
+            "amount": 6
+        },
+        {
+            "type": 2,
+            "amount": 4
+        }
+    ]
+}

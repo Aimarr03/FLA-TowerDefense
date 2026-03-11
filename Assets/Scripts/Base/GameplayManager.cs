@@ -1,0 +1,245 @@
+using NavMeshPlus.Components;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public static partial class TD_API
+{
+    public static EconomyManager Economy { get; internal set; }
+    public static List<TowerActionSO> TowerActions { get; internal set; }
+    public static List<TowerActionSO> BuildActions{ get; internal set; }
+    public static Dictionary<EnemyType,EnemyData> EnemyDatas { get; internal set; }
+}
+public class GameplayManager : MonoBehaviour
+{
+    public static GameplayManager instance;
+
+    [SerializeField] private List<TowerActionSO> towerActions;
+    [SerializeField] private List<BuyAction> buildData;
+    [SerializeField] private List<EnemyData> enemyData;
+
+    [Space(25)]
+    [SerializeField] private NavMeshSurface Surface2D;
+    [SerializeField] private MainBase mainBase;
+    [SerializeField] private EnemySpawner spawner; 
+    [SerializeField] private EconomyManager economyManager;
+    [SerializeField] private float BaseBuildStateDuration = 60;
+
+    private RoundPerformance currentRoundPerformance;
+    private float buildPhaseDuration;
+    
+    [Header("Enemy Wave")]
+    public EnemyWave currentEnemyWave;
+    private List<EnemyWave> enemyWaves;
+
+    private List<RoundPerformance> roundPerformances;
+
+    public State GameState { get; private set; }
+    public int currentWaveIndex { get; private set; }
+    public int currentWave => currentWaveIndex + 1;
+    public int maxWave => enemyWaves.Count;
+    public Vector3 DestinationPos { get; private set; }
+    public float currentBuildPhaseDuration { get; private set; }
+    public MainBase MainBase => mainBase;
+    public enum State
+    {
+        Building,
+        Defending,
+        Win,
+        GameOver,
+    }
+
+    public Action<State> onchangedState;
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            GameState = State.Building;
+            currentBuildPhaseDuration = BaseBuildStateDuration;
+            buildPhaseDuration = currentBuildPhaseDuration;
+            
+            mainBase.OnDeath += GameOver;
+            DestinationPos = mainBase.transform.position;
+
+            InitializedAPI();
+            InitializedWave();
+
+            TowerActionSO.ActionInvoke += TowerActionInvoke;
+        }
+    }
+    private void OnDestroy()
+    {
+        TowerActionSO.ActionInvoke -= TowerActionInvoke;
+    }
+    private void Update()
+    {
+        switch (GameState)
+        {
+            case State.Building:
+                currentBuildPhaseDuration -= Time.deltaTime;
+                if(currentBuildPhaseDuration <= 0)
+                {
+                    StartDefending();
+                }
+                break;
+        }
+    }
+    private void InitializedWave()
+    {
+        string resourcePath = "Demo Waves";
+        var waves = Resources.LoadAll<TextAsset>(resourcePath);
+
+        enemyWaves = new List<EnemyWave>();
+        roundPerformances = new();
+        foreach (TextAsset wave in waves)
+        {
+            string waveString = wave.text;
+            EnemyWave enemyWave = JsonUtility.FromJson<EnemyWave>(waveString);
+            enemyWaves.Add(enemyWave);
+            roundPerformances.Add(new RoundPerformance());
+        }
+
+        currentWaveIndex = 0;
+        int index = Mathf.Clamp(currentWaveIndex, 0, enemyWaves.Count - 1);
+        currentEnemyWave = enemyWaves[index];
+        currentRoundPerformance = roundPerformances[index];
+    }
+    private void InitializedAPI()
+    {
+        TD_API.Economy = economyManager;
+        TD_API.TowerActions = towerActions;
+        TD_API.BuildActions = new();
+        foreach (var build in buildData)
+        {
+            TD_API.BuildActions.Add(build);
+        }
+
+        TD_API.EnemyDatas = new();
+        foreach (var enemy in enemyData)
+        {
+            Debug.Log($"Add {enemy.enemyType}");
+            TD_API.EnemyDatas.Add(enemy.enemyType, enemy);
+        }
+    }
+    private void ChangeState(State newState)
+    {
+        GameState = newState;
+        onchangedState?.Invoke(GameState);
+    }
+    private void TowerActionInvoke(TowerActionType actionType)
+    {
+        var actionMetric = currentRoundPerformance.ActionMetric;
+        switch (actionType)
+        {
+            case TowerActionType.Buy:
+                if(GameState == State.Building)
+                {
+                    actionMetric.BuildPhase_BuyAction++;
+                }
+                else if(GameState == State.Defending)
+                {
+                    actionMetric.DefendPhase_BuyAction++;
+                }
+                break;
+            case TowerActionType.Sell:
+                if (GameState == State.Building)
+                {
+                    actionMetric.BuildPhase_SellAction++;
+                }
+                else if (GameState == State.Defending)
+                {
+                    actionMetric.DefendPhase_SellAction++;
+                }
+                break;
+            case TowerActionType.Upgrade:
+                if (GameState == State.Building)
+                {
+                    actionMetric.BuildPhase_UpgradeAction++;
+                }
+                else if (GameState == State.Defending)
+                {
+                    actionMetric.DefendPhase_UpgradeAction++;
+                }
+                break;
+        }
+    }
+    private void GameOver()
+    {
+        Debug.Log("Game Over!");
+        ChangeState(State.GameOver);
+    }
+    public void DefendsOver()
+    {
+        bool condition = GameState switch
+        {
+            State.Defending => true,
+            _ => false
+        };
+        if (!condition) return;
+        
+        currentRoundPerformance.TotalEnemy = spawner.TotalEnemy;
+        currentRoundPerformance.RemainingEnemy = spawner.EnemyReachDestination;
+        currentRoundPerformance.EnemyRemainingHealth = spawner.EnemyRemainingHealth;
+        currentRoundPerformance.EnemyTotalHealth = spawner.EnemyTotalHealth;
+
+        currentWaveIndex++;
+        currentBuildPhaseDuration = BaseBuildStateDuration;
+        buildPhaseDuration = currentBuildPhaseDuration;
+        if (currentWave > enemyWaves.Count)
+        {
+            ChangeState(State.Win);
+        }
+        else
+        {
+            int index = Mathf.Clamp(currentWaveIndex, 0, enemyWaves.Count - 1);
+            currentEnemyWave = enemyWaves[index];
+            currentRoundPerformance = roundPerformances[index];
+            ChangeState(State.Building);
+        }
+    }
+    public void StartDefending()
+    {
+        bool condition = GameState switch
+        {
+            State.Building => true,
+            _ => false
+        };
+
+        if (!condition) return;
+        ChangeState(State.Defending);
+        currentBuildPhaseDuration = 0;
+
+        
+        currentRoundPerformance.BuildPhaseDuration = buildPhaseDuration;
+        currentRoundPerformance.RemainingbuildPhaseDuration = currentBuildPhaseDuration;
+    }
+}
+[Serializable]
+public class RoundPerformance
+{
+    public float EnemyTotalHealth;
+    public float EnemyRemainingHealth;
+
+    public float BuildPhaseDuration;
+    public float RemainingbuildPhaseDuration;
+
+    public int TotalEnemy;
+    public int RemainingEnemy;
+
+    public ActionMetrics ActionMetric = new();
+    public float normalizedEnemyCount => RemainingEnemy / TotalEnemy;
+    public float normalizedDuration => RemainingbuildPhaseDuration / BuildPhaseDuration;
+    public float normalizedEnemyHP => EnemyRemainingHealth / EnemyTotalHealth;
+}
+[Serializable]
+public class ActionMetrics
+{
+    public int BuildPhase_SellAction;
+    public int BuildPhase_BuyAction;
+    public int BuildPhase_UpgradeAction;
+
+    public int DefendPhase_SellAction;
+    public int DefendPhase_BuyAction;
+    public int DefendPhase_UpgradeAction;
+}

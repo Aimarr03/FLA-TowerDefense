@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61c999ab2022bcb418b2ba9c5da371c3, type: 3}
+  m_Name: Enemy Goblin Data
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  EnemyName: Goblin
+  EnemyDesc: 
+  MaxHealth: 25
+  MovementSpeed: 2
+  Damage: 15
+  AttackRate: 1.5
+  enemyGroundType: 1
+  enemyType: 0
+  enemyPrefab: {fileID: 7641949150275397005, guid: 477acde38d58f6046b36ada292a1d3ee, type: 3}

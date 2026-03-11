@@ -1,0 +1,32 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "UpgradeAction", menuName = "Scriptable Objects/UpgradeAction")]
+public class UpgradeAction : TowerActionSO
+{
+    public override bool ExecutableConditions(Tower tower)
+    {
+        bool towerCondition = tower.CurrentState == Tower.State.Built && !tower.IsMax;
+        int upgradeCost = (int) tower.TowerData.UpgradeCost(tower.Level + 1);
+        bool moneyCondition = TD_API.Economy.IsEnough(upgradeCost);
+        
+        bool fullCondition = towerCondition && moneyCondition;
+        Debug.Log($"Upgrade Action: {towerCondition}");
+        return towerCondition;
+    }
+
+    public override void Executes(Tower tower)
+    {
+        tower.Upgrade();
+        ActionInvoke?.Invoke(TowerActionType.Upgrade);
+    }
+
+    public override ActionContext GetActionContext(Tower tower)
+    {
+        var actionContext = new ActionContext();
+        actionContext.actionName = $"Upgrade Tower";
+        actionContext.actionDescription = $"Upgrade Tower for ${tower.TowerData.UpgradeCost(tower.Level + 1)}";
+        actionContext.isExecutable = ExecutableConditions(tower);
+        actionContext.clickEvent = () => Executes(tower);
+        return actionContext;
+    }
+}
