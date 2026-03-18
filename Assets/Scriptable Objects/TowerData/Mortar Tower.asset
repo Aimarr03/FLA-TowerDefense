@@ -30,6 +30,7 @@ MonoBehaviour:
   - {fileID: 6937817954938267909, guid: 479c02627d4f4d341a1578b69edfe920, type: 3}
   - {fileID: -6470460504253458178, guid: 0828084f690e79e4d8f7d780feed0f94, type: 3}
   AttackableType: 1
+  animatorController: {fileID: 9100000, guid: eb31b906931d3624681f1bdf5c041a21, type: 2}
   references:
     version: 2
     RefIds:
