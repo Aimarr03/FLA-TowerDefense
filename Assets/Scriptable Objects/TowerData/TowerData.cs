@@ -29,6 +29,7 @@ public class TowerData : ScriptableObject
     public Sprite[] towerSprites;
 
     public EnemyTraverseType AttackableType;
+    public RuntimeAnimatorController animatorController;
     public float AttackRange(int level)
     {
         float multiplier = _baseAttackRange * _multiplierAttackRange;

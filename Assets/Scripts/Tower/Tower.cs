@@ -15,6 +15,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     [Header("Visual")]
     [SerializeField] private SpriteRenderer visual;
     [SerializeField] private Sprite unBuildSprite;
+    [SerializeField] private Animator animator;
 
     private AreaDetection rangeDetection;
     private UIAction uiAction;
@@ -178,7 +179,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
                 AttackBehaviours.Add(attackBehaviour);
             }
         }
-
+        animator.runtimeAnimatorController = towerData.animatorController;
+        animator.Play($"Upgrade_{level}");
         UpdateData();
     }
     public void Sell()
@@ -222,6 +224,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
 
         float upgradeCost = TowerData.UpgradeCost(level);
         TD_API.Economy.UseMoney((int)upgradeCost);
+        animator.Play($"Upgrade_{level}");
         UpdateData();
     }
     private void UpdateData()
