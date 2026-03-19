@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 370a427b2aedfeb43956c5cdb89eedb7, type: 3}
+  m_Name: ProblemPosingQuestion 4
+  m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingQuestion
+  questionText: Make a word problem about 'how many enemies are still approaching'
+    that can be solved by 18 - 7
+  possibleSentences:
+  - 'There are 18 enemies marching toward the base '
+  - '7 enemies were eliminated by the catapult tower '
+  - 'How many enemies are still approaching? '
+  - '18 gold is required to upgrade the mage tower '
+  - '7 towers are currently defending the path '
+  - '11 seconds are left before the wave ends  '
+  correctOrder: 000000000100000003000000

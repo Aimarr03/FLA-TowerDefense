@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 370a427b2aedfeb43956c5cdb89eedb7, type: 3}
+  m_Name: ProblemPosingQuestion 3
+  m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingQuestion
+  questionText: Make a word problem about 'how many enemies attacked in both waves'
+    that can be solved by 10 + 5
+  possibleSentences:
+  - '10 enemies attacked during the first wave '
+  - '5 enemies joined the attack in the second wave '
+  - 'How many enemies attacked in both waves? '
+  - '10 gold was spent building the catapult tower '
+  - '5 enemies were defeated before reaching the base '
+  - '15 seconds remained before the next wave  '
+  correctOrder: 000000000100000003000000

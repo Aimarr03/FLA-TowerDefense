@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 370a427b2aedfeb43956c5cdb89eedb7, type: 3}
+  m_Name: ProblemPosingQuestion 1
+  m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingQuestion
+  questionText: Make a word problem about 'how many enemies reached the base' that
+    can be solved by 15 - 6
+  possibleSentences:
+  - 'There are 15 enemies charging toward the base '
+  - '6 enemies were defeated by the towers '
+  - 'How many enemies reached the base? '
+  - 'There are 9 enemies in the current wave '
+  - '6 enemies were slowed by the mage tower '
+  - '15 towers were placed along the path  '
+  correctOrder: 000000000100000003000000
