@@ -783,6 +783,7 @@ GameObject:
   - component: {fileID: 485781146}
   - component: {fileID: 485781145}
   - component: {fileID: 485781147}
+  - component: {fileID: 485781148}
   m_Layer: 0
   m_Name: Answered Question 2
   m_TagString: Untagged
@@ -896,6 +897,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &485781148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485781143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 803357b1bad7ab040ba2071f9d4741f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingSentence
 --- !u!1 &743950729
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,6 +921,7 @@ GameObject:
   - component: {fileID: 743950733}
   - component: {fileID: 743950732}
   - component: {fileID: 743950731}
+  - component: {fileID: 743950734}
   m_Layer: 0
   m_Name: Answered Question 4
   m_TagString: Untagged
@@ -1021,6 +1035,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 743950729}
   m_CullTransparentMesh: 1
+--- !u!114 &743950734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 743950729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 803357b1bad7ab040ba2071f9d4741f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingSentence
 --- !u!1 &750095112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,6 +1059,7 @@ GameObject:
   - component: {fileID: 750095116}
   - component: {fileID: 750095115}
   - component: {fileID: 750095114}
+  - component: {fileID: 750095117}
   m_Layer: 0
   m_Name: Answered Question 3
   m_TagString: Untagged
@@ -1146,6 +1173,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 750095112}
   m_CullTransparentMesh: 1
+--- !u!114 &750095117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 750095112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 803357b1bad7ab040ba2071f9d4741f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingSentence
 --- !u!1 &754520826
 GameObject:
   m_ObjectHideFlags: 0
@@ -2291,6 +2330,7 @@ GameObject:
   - component: {fileID: 1283906603}
   - component: {fileID: 1283906602}
   - component: {fileID: 1283906604}
+  - component: {fileID: 1283906605}
   m_Layer: 0
   m_Name: Answered Question 0
   m_TagString: Untagged
@@ -2404,6 +2444,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &1283906605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283906600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 803357b1bad7ab040ba2071f9d4741f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingSentence
 --- !u!1 &1336641614
 GameObject:
   m_ObjectHideFlags: 0
@@ -2451,6 +2503,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingGenerator
   questions: []
   questionTMP: {fileID: 920746526}
+  chosenSenteceTMP:
+  - {fileID: 334061620}
+  - {fileID: 2003026664}
+  - {fileID: 1784036992}
 --- !u!1 &1386808190
 GameObject:
   m_ObjectHideFlags: 0
@@ -2707,6 +2763,7 @@ GameObject:
   - component: {fileID: 1741327945}
   - component: {fileID: 1741327944}
   - component: {fileID: 1741327946}
+  - component: {fileID: 1741327947}
   m_Layer: 0
   m_Name: Answered Question 1
   m_TagString: Untagged
@@ -2820,6 +2877,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &1741327947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741327942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 803357b1bad7ab040ba2071f9d4741f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingSentence
 --- !u!1 &1760856838
 GameObject:
   m_ObjectHideFlags: 0
@@ -3319,6 +3388,7 @@ GameObject:
   - component: {fileID: 2046743354}
   - component: {fileID: 2046743353}
   - component: {fileID: 2046743352}
+  - component: {fileID: 2046743355}
   m_Layer: 0
   m_Name: Answered Question 5
   m_TagString: Untagged
@@ -3432,6 +3502,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2046743350}
   m_CullTransparentMesh: 1
+--- !u!114 &2046743355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046743350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 803357b1bad7ab040ba2071f9d4741f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProblemPosingSentence
 --- !u!1 &2086417286
 GameObject:
   m_ObjectHideFlags: 0
