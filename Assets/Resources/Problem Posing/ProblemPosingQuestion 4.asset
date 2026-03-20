@@ -21,4 +21,4 @@ MonoBehaviour:
   - '18 gold is required to upgrade the mage tower '
   - '7 towers are currently defending the path '
   - '11 seconds are left before the wave ends  '
-  correctOrder: 000000000100000003000000
+  correctOrder: 000000000100000002000000

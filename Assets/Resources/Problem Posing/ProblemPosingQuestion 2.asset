@@ -21,4 +21,4 @@ MonoBehaviour:
   - '8 enemies were defeated in the last wave '
   - 'There are 4 towers placed along the path '
   - '12 gold is needed to upgrade the archer tower  '
-  correctOrder: 000000000100000003000000
+  correctOrder: 000000000100000002000000

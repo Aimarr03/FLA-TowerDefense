@@ -16,7 +16,7 @@ public class ProblemPosingGenerator : MonoBehaviour
     [SerializeField] private List<TextMeshProUGUI> chosenSenteceTMP;
 
     List<ProblemPosingSentence> sentences;
-    ProblemPosingSentence?[] chosenSentence;
+    ProblemPosingSentence[] chosenSentence;
     private void Awake()
     {
         questions = Resources.LoadAll<ProblemPosingQuestion>("Problem Posing").ToList();
@@ -70,6 +70,19 @@ public class ProblemPosingGenerator : MonoBehaviour
         {
             chosenSentence[index] = posingSentence;
             chosenSenteceTMP[index].text = posingSentence.Sentence;
+            
+            /// Check if there are any sentences left that isn't null
+            index = Array.IndexOf(chosenSentence, null);
+            if (index == -1)
+            {
+                foreach (var sentence in sentences)
+                {
+                    if (!chosenSentence.Contains(sentence))
+                    {
+                        sentence.ToggleInterractability(false);
+                    }
+                }
+            }
         }
     }
     public void RemoveSentece(ProblemPosingSentence posingSentence)
@@ -79,10 +92,48 @@ public class ProblemPosingGenerator : MonoBehaviour
         {
             chosenSenteceTMP[index].text = "";
             chosenSentence[index] = null;
+
+            /// Check if there are any sentences left that isn't null
+            index = Array.IndexOf(chosenSentence, null);
+            if (index != -1)
+            {
+                foreach (var sentence in sentences)
+                {
+                    sentence.ToggleInterractability(true);
+                }
+            }
         }
     }
     public void SubmitAnswer()
     {
+        bool isCorrect = true;
+        for(int i = 0; i < currentQuestion.correctOrder.Count; i++)
+        {
+            int correctIndex = currentQuestion.correctOrder[i];
+            Debug.Log($"chosen index: {chosenSentence[i]?.IndexSentence}, correct index: {correctIndex}");
+            if (chosenSentence[i] == null || chosenSentence[i].IndexSentence != correctIndex)
+            {
+                isCorrect = false;
+                break;
+            }
+        }
 
+        for(int index = 0; index < chosenSentence.Length; index++)
+        {
+            var sentence = chosenSentence[index];
+            if (sentence != null)
+            {
+                RemoveSentece(sentence);
+            }
+        }
+        isActive = false;
+        currentQuestion = null;
+        foreach (var sentence in sentences)
+        {
+            sentence.SetEmpty();
+            sentence.ToggleInterractability(false);
+        }
+
+        Debug.Log($"Is Correct: {isCorrect}");
     }
 }

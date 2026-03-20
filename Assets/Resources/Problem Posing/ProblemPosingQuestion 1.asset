@@ -21,4 +21,4 @@ MonoBehaviour:
   - 'There are 9 enemies in the current wave '
   - '6 enemies were slowed by the mage tower '
   - '15 towers were placed along the path  '
-  correctOrder: 000000000100000003000000
+  correctOrder: 000000000100000002000000

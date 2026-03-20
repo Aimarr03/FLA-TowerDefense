@@ -9,12 +9,11 @@ public class ProblemPosingSentence : MonoBehaviour
     private TextMeshProUGUI textTMP;
 
     private int indexSentence = -1;
-    private int indexChosen =  -1;
     private string sentence;
+    private bool isActive;
     ProblemPosingGenerator generator;
 
     public int IndexSentence => indexSentence;
-    public int IndexChosen => indexChosen;
     public string Sentence => sentence;
     private void Awake()
     {
@@ -25,7 +24,7 @@ public class ProblemPosingSentence : MonoBehaviour
         
         toggle.onValueChanged.RemoveAllListeners();
         toggle.onValueChanged.AddListener(ToggleBool);
-        toggle.interactable = false;
+        ToggleInterractability(false);
     }
 
     public void SetSentence(string sentence, int index)
@@ -33,14 +32,22 @@ public class ProblemPosingSentence : MonoBehaviour
         this.sentence = sentence;
         this.indexSentence = index;
         textTMP.text = sentence;
-        toggle.interactable = true;
+        ToggleInterractability(true);
+    }
+    public void SetEmpty()
+    {
+        sentence = "";
+        indexSentence = -1;
+        textTMP.text = "";
+        ToggleInterractability(false);
+        ToggleVisual(false);
     }
 
     public void ToggleBool(bool value)
     {
         if (!generator.IsActive) return;
-        image.color = value ? Color.green : Color.white;
-        
+        ToggleVisual(value);
+
         if (value)
         {
             generator.SetSentence(this);
@@ -50,4 +57,9 @@ public class ProblemPosingSentence : MonoBehaviour
             generator.RemoveSentece(this);
         }
     }
+    private void ToggleVisual(bool value)
+    {
+        image.color = value ? Color.green : Color.white;
+    }
+    public void ToggleInterractability(bool value) => toggle.interactable = value;
 }
