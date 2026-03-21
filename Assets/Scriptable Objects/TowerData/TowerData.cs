@@ -27,6 +27,7 @@ public class TowerData : ScriptableObject
     [SerializeReference] public List<TowerAttackEffect> TowerAttackEffects;
 
     public Sprite[] towerSprites;
+    public Sprite[] iconSprites;
 
     public EnemyTraverseType AttackableType;
     public RuntimeAnimatorController animatorController;
@@ -67,6 +68,7 @@ public class TowerData : ScriptableObject
         float totalCost = _costBuild + (multiplier * CalculatedLevel(level));
         return Mathf.Ceil(totalCost);
     }    
+    public Sprite GetIconSprite(int level) => iconSprites[Mathf.Clamp(level, 0, iconSprites.Length - 1)];
     public Sprite GetSprite(int level) => towerSprites[Mathf.Clamp(level, 0, towerSprites.Length - 1)];
 
     public float CostBuild() => _costBuild;

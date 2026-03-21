@@ -28,6 +28,10 @@ MonoBehaviour:
   - {fileID: -1708149656318744547, guid: f1ce3a02096bf6d4ba83f6a158563337, type: 3}
   - {fileID: 6937817954938267909, guid: c80aa38d1d453c54e803d4f602813742, type: 3}
   - {fileID: -6470460504253458178, guid: a623ed648caf5664e971693927b25e23, type: 3}
+  iconSprites:
+  - {fileID: 2847894867104497665, guid: 4cd7a79184a88f24aae4fd76d3434ce3, type: 3}
+  - {fileID: 2847894867104497665, guid: 8b9feb029bea20945b2d7da59bbd3801, type: 3}
+  - {fileID: 2847894867104497665, guid: 45eef4d2878a36345981be7b63783951, type: 3}
   AttackableType: -1
   animatorController: {fileID: 9100000, guid: e289f518f0bc77145b681053074b5636, type: 2}
   references:

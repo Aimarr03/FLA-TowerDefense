@@ -45029,7 +45029,7 @@ MonoBehaviour:
   mainBase: {fileID: 705281854}
   spawner: {fileID: 1857650229}
   economyManager:
-    currentMoney: 320
+    currentMoney: 450
   BaseBuildStateDuration: 10
   currentEnemyWave:
     enemies: []

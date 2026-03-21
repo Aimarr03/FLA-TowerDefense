@@ -29,8 +29,12 @@ MonoBehaviour:
   - {fileID: -855298285791758126, guid: b8c22662b1526c3439f75dd20e4c30c1, type: 3}
   - {fileID: 6937817954938267909, guid: a4b8dcdd0f0c5da4ba8d696b254b25a0, type: 3}
   - {fileID: -6470460504253458178, guid: 1cd1aa222e31e8b438f97cfef733c0c3, type: 3}
+  iconSprites:
+  - {fileID: 1021327000545907795, guid: f44f843ef77b7ab449d0dfce54e7533f, type: 3}
+  - {fileID: 1021327000545907795, guid: e6dc3229f2c25fd4ca88b07e73fa8d1a, type: 3}
+  - {fileID: 1021327000545907795, guid: 87bc6dc5bef8ab24c9888f89268ef368, type: 3}
   AttackableType: -1
-  animatorController: {fileID: 9100000, guid: 9bd4148f2e8633243b47a3c1e5243862, type: 2}
+  animatorController: {fileID: 9100000, guid: 1c9203eadbd75b940a3774aa9e5a9121, type: 2}
   references:
     version: 2
     RefIds:
