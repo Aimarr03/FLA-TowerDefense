@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeAction
   Name: Upgrade Tower
   Description: Upgrade Tower
+  upgradeIcon: {fileID: 21300000, guid: 6fd85a1eb796b644db4c570c20a32388, type: 3}

@@ -6,23 +6,23 @@ using UnityEngine.Events;
 
 public class UIAction : MonoBehaviour
 {
-    [SerializeField] private Button uiButton;
+    [SerializeField] private TowerActionButton uiButton;
     [SerializeField] private float distance = 180f;
-    List<Button> buttons;
+    List<TowerActionButton> buttons;
 
     private int startingButtons = 5;
     ActionContext selectedContext;
-    Button selectedButton;
+    TowerActionButton selectedButton;
     private void Awake()
     {
-        buttons = new List<Button>();
+        buttons = new List<TowerActionButton>();
         CreateButton(startingButtons);
     }
     private void CreateButton(int count)
     {
         for (int index = 0; index < count; index++)
         {
-            Button newButton = Instantiate(uiButton, transform);
+            TowerActionButton newButton = Instantiate(uiButton, transform);
             newButton.gameObject.SetActive(false);
             buttons.Add(newButton);
         }
@@ -39,7 +39,7 @@ public class UIAction : MonoBehaviour
         
         for(int index = 0; index < buttons.Count; index++)
         {
-            Button button = buttons[index];
+            TowerActionButton button = buttons[index];
             RectTransform rectButton = button.GetComponent<RectTransform>();
             
             button.gameObject.SetActive(false);
@@ -50,17 +50,18 @@ public class UIAction : MonoBehaviour
         float stepAngle = (clickCounts == 1) ? 0f : 360f / clickCounts;        
         for (int index = 0; index < clickAction.Count; index++) 
         {
-            Button button = buttons[index];
+            TowerActionButton button = buttons[index];
             RectTransform rectButton = button.GetComponent<RectTransform>();
 
             button.gameObject.SetActive(true);
-            button.onClick.RemoveAllListeners();
+            button.Button.onClick.RemoveAllListeners();
 
             var context = clickAction[index];
-            button.onClick.AddListener(() => OnActionClicked(context, button));
+            button.iconAction = context.actionIcon;
+            button.Button.onClick.AddListener(() => OnActionClicked(context, button));
+            button.SetActionIcon();
             if (context.isExecutable)
             {
-                
                 //button.onClick.AddListener(CloseAction);
             }
             
@@ -73,7 +74,7 @@ public class UIAction : MonoBehaviour
 
         }
     }
-    private void OnActionClicked(ActionContext context, Button button)
+    private void OnActionClicked(ActionContext context, TowerActionButton button)
     {
         if(selectedContext == context)
         {
@@ -91,15 +92,18 @@ public class UIAction : MonoBehaviour
 
         SelectAction(context, button);
     }
-    private void SelectAction(ActionContext context, Button button)
+    private void SelectAction(ActionContext context, TowerActionButton button)
     {
-        if(selectedButton != null && selectedButton != button)
+        bool condition = selectedButton != null && selectedButton != button;
+        Debug.Log($"Condition: {condition}");
+        if (selectedButton != null && selectedButton != button)
         {
-            //DeselectButton;
+            //Deselectbutton
+            selectedButton.SetActionIcon();
         }
         selectedContext = context;
         selectedButton = button;
-
+        button.SetConfirmIcon();
         Debug.Log($"Action: {context.actionName}");
         Debug.Log($"Desc: {context.actionDescription}");
         //Select Button and Show Tooltip
@@ -109,11 +113,12 @@ public class UIAction : MonoBehaviour
         if(selectedButton != null)
         {
             //Deselectbutton
+            selectedButton.SetActionIcon();
         }
 
         selectedContext = null;
         selectedButton = null;
-        foreach (Button button in buttons)
+        foreach (TowerActionButton button in buttons)
         {
             button.gameObject.SetActive(false);
             RectTransform buttonRect = button.GetComponent<RectTransform>();

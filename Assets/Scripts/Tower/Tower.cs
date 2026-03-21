@@ -191,6 +191,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         TD_API.Economy.GainMoney((int)sellCost);
         towerState = State.None;
         level = -1;
+
+        animator.runtimeAnimatorController = null;
         visual.sprite = unBuildSprite;
 
         foreach (var attackEffect in TowerData.TowerAttackEffects)

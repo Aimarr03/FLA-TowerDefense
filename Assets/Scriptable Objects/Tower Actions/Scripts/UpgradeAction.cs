@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UpgradeAction", menuName = "Scriptable Objects/UpgradeAction")]
 public class UpgradeAction : TowerActionSO
 {
+    [SerializeField] private Sprite upgradeIcon;
     public override bool ExecutableConditions(Tower tower)
     {
         bool towerCondition = tower.CurrentState == Tower.State.Built && !tower.IsMax;
@@ -27,6 +28,7 @@ public class UpgradeAction : TowerActionSO
         actionContext.actionDescription = $"Upgrade Tower for ${tower.TowerData.UpgradeCost(tower.Level + 1)}";
         actionContext.isExecutable = ExecutableConditions(tower);
         actionContext.clickEvent = () => Executes(tower);
+        actionContext.actionIcon = upgradeIcon;
         return actionContext;
     }
 }

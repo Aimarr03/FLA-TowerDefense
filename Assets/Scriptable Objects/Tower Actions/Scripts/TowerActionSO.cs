@@ -14,8 +14,11 @@ public abstract class TowerActionSO : ScriptableObject
 public class ActionContext
 {
     public string actionName;
-    public string actionDescription;
+    public Sprite actionIcon;
+    public int actionCost;
+    public TowerActionType actionType;
     public Action clickEvent;
+    public string actionDescription;
     public bool isExecutable;
 }
 public enum TowerActionType

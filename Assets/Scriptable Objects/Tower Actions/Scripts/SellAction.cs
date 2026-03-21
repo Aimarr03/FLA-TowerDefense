@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SellAction", menuName = "Scriptable Objects/SellAction")]
 public class SellAction : TowerActionSO
 {
+    [SerializeField] private Sprite sellIcon;
     public override bool ExecutableConditions(Tower tower)
     {
         bool condition = tower.CurrentState == Tower.State.Built && tower.Level > 0;
@@ -23,7 +24,7 @@ public class SellAction : TowerActionSO
         actionContext.actionDescription = $"Sell Tower for ${tower.TowerData.SellCost(tower.Level)}";
         actionContext.isExecutable = ExecutableConditions(tower);
         actionContext.clickEvent = () => Executes(tower);
-
+        actionContext.actionIcon = sellIcon;
         return actionContext;
     }
 }

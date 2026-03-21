@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SellAction
   Name: Sell Tower
   Description: Sell Tower
+  sellIcon: {fileID: 21300000, guid: 2dda0f5b7965ef246b85cbce4f066596, type: 3}

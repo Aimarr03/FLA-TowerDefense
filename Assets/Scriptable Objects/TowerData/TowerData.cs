@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class TowerData : ScriptableObject
 {
     public string TowerName;
+    [TextArea(3, 10)]
     public string Description;
 
     [Header("Damage")]
