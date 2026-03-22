@@ -27,7 +27,7 @@ public class BuyAction : TowerActionSO
         var actionContext = new ActionContext();
         actionContext.actionName = $"Buy Tower";
         actionContext.actionDescription = $"{towerData.Description}\nBuy {towerData.TowerName} for ${towerData.CostBuild()}";
-        actionContext.isExecutable = ExecutableConditions(tower);
+        actionContext.isExecutable = () => ExecutableConditions(tower);
         actionContext.clickEvent = () => Executes(tower);
         actionContext.actionIcon = towerData.iconSprites[0];
         actionContext.actionCost = (int) towerData.CostBuild();

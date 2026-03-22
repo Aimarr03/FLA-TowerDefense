@@ -60,7 +60,7 @@ public class UIAction : MonoBehaviour
             button.iconAction = context.actionIcon;
             button.Button.onClick.AddListener(() => OnActionClicked(context, button));
             button.SetActionIcon();
-            if (context.isExecutable)
+            if (context.isExecutable())
             {
                 //button.onClick.AddListener(CloseAction);
             }
@@ -71,14 +71,13 @@ public class UIAction : MonoBehaviour
 
             Vector2 buttonNewPos = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)) * distance;
             rectButton.anchoredPosition = buttonNewPos;
-
         }
     }
     private void OnActionClicked(ActionContext context, TowerActionButton button)
     {
         if(selectedContext == context)
         {
-            if (selectedContext.isExecutable)
+            if (selectedContext.isExecutable())
             {
                 context.clickEvent?.Invoke();
                 CloseAction();

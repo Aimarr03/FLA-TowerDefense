@@ -19,7 +19,7 @@ public class ActionContext
     public TowerActionType actionType;
     public Action clickEvent;
     public string actionDescription;
-    public bool isExecutable;
+    public Func<bool> isExecutable;
 }
 public enum TowerActionType
 {

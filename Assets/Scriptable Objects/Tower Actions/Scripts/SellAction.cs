@@ -22,7 +22,7 @@ public class SellAction : TowerActionSO
         var actionContext = new ActionContext();
         actionContext.actionName = $"Sell Tower";
         actionContext.actionDescription = $"Sell Tower for ${tower.TowerData.SellCost(tower.Level)}";
-        actionContext.isExecutable = ExecutableConditions(tower);
+        actionContext.isExecutable = () => ExecutableConditions(tower);
         actionContext.clickEvent = () => Executes(tower);
         actionContext.actionIcon = sellIcon;
         return actionContext;

@@ -272,8 +272,13 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         {
             listActions.Add(action.GetActionContext(this));
         }
-        
-        if (GameplayManager.instance.GameState != GameplayManager.State.Building) return;
+        bool condition = GameplayManager.instance.GameState switch 
+        { 
+            GameplayManager.State.Building => true, 
+            GameplayManager.State.Defending => true,
+            _ => false 
+        };
+        if (!condition) return;
         uiAction.OnDisplayAction(listActions);
     }
 
