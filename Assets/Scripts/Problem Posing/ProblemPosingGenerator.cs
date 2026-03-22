@@ -21,28 +21,34 @@ public class ProblemPosingGenerator : MonoBehaviour
     {
         questions = Resources.LoadAll<ProblemPosingQuestion>("Problem Posing").ToList();
         sentences = GetComponentsInChildren<ProblemPosingSentence>().ToList();
-        
+        gameObject.SetActive(false);
+        isActive = false;
     }
     private void Update()
     {
         /// For testing purposes, we can toggle the problem posing generator with the space key.
         
-        if (Input.GetKeyDown(KeyCode.Space))
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    InvokeQuestion();
+        //}
+    }
+    public void GenerateProblem()
+    {
+        if (isActive)
         {
-            if (isActive)
-            {
-                Debug.Log("Question is already on!");
-                return;
-            }
-            isActive = true;
-            GenerateProblemPosingQuestion();
+            Debug.Log("Question is already on!");
+            return;
         }
+        gameObject.SetActive(true);
+        isActive = true;
+        GenerateProblemPosingQuestion();
     }
     private void GenerateProblemPosingQuestion()
     {
         currentQuestion = questions[Random.Range(0, questions.Count - 1)];
         questionTMP.text = currentQuestion.questionText;
-        chosenSentence = new ProblemPosingSentence?[3];
+        chosenSentence = new ProblemPosingSentence[3];
 
         List<(int index, string sentence)> sentences = new List<(int, string)>();
         int index = 0;
@@ -134,6 +140,11 @@ public class ProblemPosingGenerator : MonoBehaviour
             sentence.ToggleInterractability(false);
         }
 
+        gameObject.SetActive(false);
+        if (isCorrect)
+        {
+            TD_API.Economy.GainMoney(100);
+        }
         Debug.Log($"Is Correct: {isCorrect}");
     }
 }

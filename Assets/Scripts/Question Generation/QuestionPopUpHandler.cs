@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class QuestionPopUpHandler : MonoBehaviour
 {
-    private ArithmeticGeneration arithmeticGeneration;
-
     private QuestionPopUp prefabPopUp;
     private float intervalToSpawn = 2f;
     private float currentTick = 0f;
@@ -13,8 +11,6 @@ public class QuestionPopUpHandler : MonoBehaviour
     private void Awake()
     {
         prefabPopUp = GetComponentInChildren<QuestionPopUp>();
-        arithmeticGeneration = GetComponent<ArithmeticGeneration>();
-
         questionsSpawned = new List<QuestionPopUp>();
         prefabPopUp.gameObject.SetActive(false);
     }
@@ -25,16 +21,16 @@ public class QuestionPopUpHandler : MonoBehaviour
         if (currentTick > intervalToSpawn)
         {
             currentTick = 0f;
-            SpawnPopUp();
+            //SpawnPopUp();
         }
     }
-    private void SpawnPopUp()
+    public void SpawnPopUp(ArithmeticQuestion question, float duration)
     {
         var activePopUp = Instantiate(prefabPopUp, transform);
-        var arithmeticQuestion = arithmeticGeneration.CreateArithmeticQuestion();
+        var arithmeticQuestion = question;
 
         activePopUp.OnFinishedQuestion += OnPopUpAnswered;
-        activePopUp.Setup(arithmeticQuestion, 12f);
+        activePopUp.Setup(arithmeticQuestion, duration);
 
         activePopUp.gameObject.SetActive(true);
         questionsSpawned.Add(activePopUp);
@@ -48,11 +44,5 @@ public class QuestionPopUpHandler : MonoBehaviour
         }
         questionPopUp.gameObject.SetActive(false);
         Destroy(questionPopUp.gameObject, 1f);
-
-        if(question.resultType == ResultType.Correct)
-        {
-            int result = Random.Range(6, 9);
-            TD_API.Economy.GainMoney(result);
-        }
     }
 }

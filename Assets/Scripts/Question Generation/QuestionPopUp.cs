@@ -50,7 +50,8 @@ public class QuestionPopUp : MonoBehaviour
         if(currentDuration <= 0)
         {
             currentDuration = 0;
-            question.resultType = ResultType.OutOfTime;
+            question.Timeout();
+            //question.resultType = ResultType.OutOfTime;
 
             Finish();
         }

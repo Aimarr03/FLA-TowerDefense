@@ -9,7 +9,12 @@ public class EconomyManager
 
     public int CurrentMoney => currentMoney;
 
-    public bool IsEnough(int amount) => currentMoney >= amount;
+    public bool IsEnough(int amount)
+    {
+        bool condition = currentMoney >= amount;
+        Debug.Log($"Required Money: {amount} with money left {currentMoney}");
+        return condition;
+    }
     public void GainMoney(int money)
     {
         currentMoney += money;

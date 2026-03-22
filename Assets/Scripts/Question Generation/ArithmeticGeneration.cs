@@ -4,6 +4,15 @@ using Random = UnityEngine.Random;
 
 public class ArithmeticGeneration : MonoBehaviour
 {
+    [SerializeField] private QuestionPopUpHandler questionPopUpHandler;
+    [SerializeField] private float questionDuration = 12f;
+    [SerializeField] private float intervalSpawn = 6f;
+
+    private float currentTick = 0f;
+    private int maxQuestion = 0;
+    private int currentQuestionCount = 0;
+    private bool isActive = false;
+
     private ArithMeticDifficultyTier[] tiers = new ArithMeticDifficultyTier[]
     {
         new ArithMeticDifficultyTier(
@@ -41,6 +50,38 @@ public class ArithmeticGeneration : MonoBehaviour
     private void Awake()
     {
         currentTier = tiers[0];
+    }
+    private void Update()
+    {
+        if (!isActive) return;
+        currentTick += Time.deltaTime;
+        if(currentTick > intervalSpawn && currentQuestionCount < maxQuestion)
+        {
+            currentTick = 0f;
+            currentQuestionCount++;
+            var arithmeticQuestion = CreateArithmeticQuestion();
+            arithmeticQuestion.OnAnswered += (resultType) =>
+            {
+                if(resultType == ResultType.Correct)
+                {
+                    int result = Random.Range(6, 9);
+                    TD_API.Economy.GainMoney(result);
+                }
+            };
+            questionPopUpHandler.SpawnPopUp(arithmeticQuestion, questionDuration);
+            
+            if(currentQuestionCount >= maxQuestion)
+            {
+                isActive = false;
+            }
+        }
+    }
+    public void GenerateProblem(int maxQuestion)
+    {
+        currentTick = 0f;
+        currentQuestionCount = 0;
+        this.maxQuestion = maxQuestion;
+        isActive = true;
     }
     public void SetTier(int tier)
     {
@@ -111,9 +152,18 @@ public class ArithmeticQuestion
     public OperatorType operatorType;
     public ResultType resultType;
     public int result { get; private set; }
+    public Action<ResultType> OnAnswered;
     public void AnsweredQuestion(int answered)
     {
+        if(resultType != ResultType.None) return;
         resultType = answered == result ? ResultType.Correct : ResultType.Incorrect;
+        OnAnswered?.Invoke(resultType);
+    }
+    public void Timeout()
+    {
+        if (resultType != ResultType.None) return;
+        resultType = ResultType.OutOfTime;
+        OnAnswered?.Invoke(resultType);
     }
     public ArithmeticQuestion(int a, int b, OperatorType operatorType)
     {

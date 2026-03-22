@@ -2,6 +2,7 @@ using NavMeshPlus.Components;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static partial class TD_API
 {
@@ -13,7 +14,11 @@ public static partial class TD_API
 public class GameplayManager : MonoBehaviour
 {
     public static GameplayManager instance;
+    [Header("Main Componene")]
+    [SerializeField] private ArithmeticGeneration arithmeticGeneration;
+    [SerializeField] private ProblemPosingGenerator problemPosingGenerator;
 
+    [Space(25)]
     [SerializeField] private List<TowerActionSO> towerActions;
     [SerializeField] private List<BuyAction> buildData;
     [SerializeField] private List<EnemyData> enemyData;
@@ -78,7 +83,7 @@ public class GameplayManager : MonoBehaviour
         {
             case State.Building:
                 currentBuildPhaseDuration -= Time.deltaTime;
-                if(currentBuildPhaseDuration <= 0)
+                if (currentBuildPhaseDuration <= 0)
                 {
                     StartDefending();
                 }
@@ -196,6 +201,19 @@ public class GameplayManager : MonoBehaviour
             currentEnemyWave = enemyWaves[index];
             currentRoundPerformance = roundPerformances[index];
             ChangeState(State.Building);
+            if (currentWaveIndex > 0)
+            {
+                float randomValue = Random.value;
+                Debug.Log("Random Value: " + randomValue);
+                if (randomValue > 0.5f)
+                {
+                    arithmeticGeneration.GenerateProblem(6);
+                }
+                else
+                {
+                    problemPosingGenerator.GenerateProblem();
+                }
+            }
         }
     }
     public void StartDefending()

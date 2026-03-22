@@ -8,6 +8,7 @@ public class MainBase : MonoBehaviour, I_MouseInteractable
 
     HealthBar healthBar;
     public Action OnDeath;
+    public Action<(int maxHealth, int currentHealth)> OnUpdatedHealth;
     private void Awake()
     {
         healthBar = GetComponentInChildren<HealthBar>(true);
@@ -33,7 +34,8 @@ public class MainBase : MonoBehaviour, I_MouseInteractable
         CurrentHealth -= damage;
         CurrentHealth = Mathf.Max(CurrentHealth, 0);
         healthBar.UpdateHealth(CurrentHealth / MaxHealth);
-        if(CurrentHealth <= 0)
+        OnUpdatedHealth?.Invoke(((int)MaxHealth, (int)CurrentHealth));
+        if (CurrentHealth <= 0)
         {
             OnDeath?.Invoke();
             OnDeath = null;
