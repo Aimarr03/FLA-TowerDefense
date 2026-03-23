@@ -19,7 +19,7 @@ MonoBehaviour:
   _baseAttackRange: 9
   _multiplierAttackRange: 0
   _baseAttackRate: 3
-  _multiplierAttackRate: 0.4
+  _multiplierAttackRate: 0.2
   _costBuild: 115
   _multiplierCost: 1
   TowerAttackBehaviours: []

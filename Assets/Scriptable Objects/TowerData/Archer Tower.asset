@@ -16,8 +16,8 @@ MonoBehaviour:
   Description: Archer Tower Desc
   _baseDamage: 5
   _multiplierDamage: 0.5
-  _baseAttackRange: 4
-  _multiplierAttackRange: 0.5
+  _baseAttackRange: 6
+  _multiplierAttackRange: 0.3
   _baseAttackRate: 1
   _multiplierAttackRate: 0.15
   _costBuild: 70

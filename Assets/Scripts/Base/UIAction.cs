@@ -60,10 +60,7 @@ public class UIAction : MonoBehaviour
             button.iconAction = context.actionIcon;
             button.Button.onClick.AddListener(() => OnActionClicked(context, button));
             button.SetActionIcon();
-            if (context.isExecutable())
-            {
-                //button.onClick.AddListener(CloseAction);
-            }
+            button.isExecutable = context.isExecutable;
             
 
             float angle = stepAngle * index;

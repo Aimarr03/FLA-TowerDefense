@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   EnemyName: Wolf
   EnemyDesc: 
-  MaxHealth: 20
-  MovementSpeed: 10
+  MaxHealth: 25
+  MovementSpeed: 6
   Damage: 5
   AttackRate: 1.1
   enemyGroundType: 1

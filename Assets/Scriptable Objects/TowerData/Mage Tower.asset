@@ -16,8 +16,8 @@ MonoBehaviour:
   Description: Mage Tower Desc
   _baseDamage: 15
   _multiplierDamage: 1
-  _baseAttackRange: 3
-  _multiplierAttackRange: 0
+  _baseAttackRange: 7
+  _multiplierAttackRange: 0.15
   _baseAttackRate: 2
   _multiplierAttackRate: 0
   _costBuild: 90

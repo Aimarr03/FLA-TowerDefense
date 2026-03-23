@@ -71,7 +71,7 @@ public class Enemy : MonoBehaviour
         enemyType = enemyData.enemyType;
         
         currentHealh = maxHealth;
-
+        characterMovement.MovementSpeed = movementSpeed;
     }
     private void StopAction()
     {
