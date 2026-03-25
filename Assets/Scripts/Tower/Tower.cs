@@ -16,6 +16,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     [SerializeField] private SpriteRenderer visual;
     [SerializeField] private Sprite unBuildSprite;
     [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer attackRangeEffect;
 
     private AreaDetection rangeDetection;
     private UIAction uiAction;
@@ -235,6 +236,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         attackRate = TowerData.AttackRate(level);
         attackRange = TowerData.AttackRange(level);
         rangeDetection.circleCollider.radius = attackRange;
+
+        attackRangeEffect.transform.localScale = Vector3.one * attackRange * 2;
     }
 
 
@@ -255,7 +258,10 @@ public class Tower : MonoBehaviour, I_MouseInteractable
 
     public void OnMouseSelect()
     {
-        
+        if(CurrentState == State.Built)
+        {
+            attackRangeEffect.gameObject.SetActive(true);
+        }
         List<ActionContext> listActions = new();
         var actions = TD_API.TowerActions;
         switch (CurrentState)
@@ -285,5 +291,6 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     public void OnMouseDeselect()
     {
         uiAction.CloseAction();
+        attackRangeEffect.gameObject.SetActive(false);
     }
 }

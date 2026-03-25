@@ -15,7 +15,14 @@ public class Bullet : MonoBehaviour
     }
     private void Update()
     {
-        if(target == null) return;
+        if (target == null) return;
+        if (target.isDead)
+        {
+            gameObject.SetActive(false);
+            Destroy(gameObject, 1f);
+            target = null;
+            return;
+        }
         transform.position = Vector2.MoveTowards(transform.position, target.transform.position, projectileSpeed * Time.deltaTime);
     }
 
