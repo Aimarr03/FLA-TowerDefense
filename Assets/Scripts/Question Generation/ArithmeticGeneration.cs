@@ -6,13 +6,14 @@ public class ArithmeticGeneration : MonoBehaviour
 {
     [SerializeField] private QuestionPopUpHandler questionPopUpHandler;
     [SerializeField] private float questionDuration = 12f;
-    [SerializeField] private float intervalSpawn = 6f;
+    [SerializeField] private float intervalSpawn = 3f;
 
     private float currentTick = 0f;
     private int maxQuestion = 0;
     private int currentQuestionCount = 0;
     private bool isActive = false;
 
+    public Action OnCorrectAnswer;
     private ArithMeticDifficultyTier[] tiers = new ArithMeticDifficultyTier[]
     {
         new ArithMeticDifficultyTier(
@@ -58,22 +59,7 @@ public class ArithmeticGeneration : MonoBehaviour
         if(currentTick > intervalSpawn && currentQuestionCount < maxQuestion)
         {
             currentTick = 0f;
-            currentQuestionCount++;
-            var arithmeticQuestion = CreateArithmeticQuestion();
-            arithmeticQuestion.OnAnswered += (resultType) =>
-            {
-                if(resultType == ResultType.Correct)
-                {
-                    int result = Random.Range(6, 9);
-                    TD_API.Economy.GainMoney(result);
-                }
-            };
-            questionPopUpHandler.SpawnPopUp(arithmeticQuestion, questionDuration);
-            
-            if(currentQuestionCount >= maxQuestion)
-            {
-                isActive = false;
-            }
+            OnCreateArithmeticQuestion();
         }
     }
     public void GenerateProblem(int maxQuestion)
@@ -82,6 +68,7 @@ public class ArithmeticGeneration : MonoBehaviour
         currentQuestionCount = 0;
         this.maxQuestion = maxQuestion;
         isActive = true;
+        OnCreateArithmeticQuestion();
     }
     public void SetTier(int tier)
     {
@@ -90,7 +77,24 @@ public class ArithmeticGeneration : MonoBehaviour
         
         currentTier = tiers[indexTier];
     }
+    private void OnCreateArithmeticQuestion()
+    {
+        currentQuestionCount++;
+        var arithmeticQuestion = CreateArithmeticQuestion();
+        arithmeticQuestion.OnAnswered += (resultType) =>
+        {
+            if (resultType == ResultType.Correct)
+            {
+                OnCorrectAnswer?.Invoke();
+            }
+        };
+        questionPopUpHandler.SpawnPopUp(arithmeticQuestion, questionDuration);
 
+        if (currentQuestionCount >= maxQuestion)
+        {
+            isActive = false;
+        }
+    }
     public ArithmeticQuestion CreateArithmeticQuestion()
     {
         if (currentTier == null)

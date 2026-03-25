@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerData
   TowerName: Mortar Tower
   Description: Mortar Tower Desc
-  _baseDamage: 20
-  _multiplierDamage: 1
-  _baseAttackRange: 9
-  _multiplierAttackRange: 0
+  _baseDamage: 7
+  _multiplierDamage: 0.5
+  _baseAttackRange: 7
+  _multiplierAttackRange: 0.1
   _baseAttackRate: 3
   _multiplierAttackRate: 0.2
   _costBuild: 115

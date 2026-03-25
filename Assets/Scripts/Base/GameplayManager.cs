@@ -2,6 +2,8 @@ using NavMeshPlus.Components;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public static partial class TD_API
@@ -30,8 +32,15 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private EconomyManager economyManager;
     [SerializeField] private float BaseBuildStateDuration = 60;
 
+    [Space(25)]
+    [SerializeField] private Canvas MainMenu;
+    [SerializeField] private Image readyButton;
+    [SerializeField] private bool instantPlay = true;
+
     private RoundPerformance currentRoundPerformance;
     private float buildPhaseDuration;
+    private bool isActive = false;
+    private int rewardQuestionAnswered = 0;
     
     [Header("Enemy Wave")]
     public EnemyWave currentEnemyWave;
@@ -46,6 +55,7 @@ public class GameplayManager : MonoBehaviour
     public Vector3 DestinationPos { get; private set; }
     public float currentBuildPhaseDuration { get; private set; }
     public MainBase MainBase => mainBase;
+    public bool IsActive => isActive;
     public enum State
     {
         Building,
@@ -60,17 +70,12 @@ public class GameplayManager : MonoBehaviour
         if(instance == null)
         {
             instance = this;
-            GameState = State.Building;
-            currentBuildPhaseDuration = BaseBuildStateDuration;
-            buildPhaseDuration = currentBuildPhaseDuration;
-            
-            mainBase.OnDeath += GameOver;
-            DestinationPos = mainBase.transform.position;
-
             InitializedAPI();
             InitializedWave();
-
-            TowerActionSO.ActionInvoke += TowerActionInvoke;
+            if (instantPlay)
+            {
+                StartGame();
+            }
         }
     }
     private void OnDestroy()
@@ -79,6 +84,7 @@ public class GameplayManager : MonoBehaviour
     }
     private void Update()
     {
+        if (!isActive) return;
         switch (GameState)
         {
             case State.Building:
@@ -90,6 +96,42 @@ public class GameplayManager : MonoBehaviour
                 break;
         }
     }
+    public void StartGame()
+    {
+        if(isActive) return;
+        isActive = true;
+        currentBuildPhaseDuration = BaseBuildStateDuration;
+        buildPhaseDuration = currentBuildPhaseDuration;
+
+        mainBase.OnDeath += GameOver;
+        DestinationPos = mainBase.transform.position;
+
+        TowerActionSO.ActionInvoke += TowerActionInvoke;
+        MainMenu.gameObject.SetActive(false);
+        ChangeState(State.Building);
+
+        problemPosingGenerator.OnAnsweredQuestion += (bool isCorrect) =>
+        {
+            if (isCorrect)
+            {
+                economyManager.GainMoney(rewardQuestionAnswered);
+            }
+        };
+        arithmeticGeneration.OnCorrectAnswer += () =>
+        {
+            economyManager.GainMoney(rewardQuestionAnswered);
+        };
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
     private void InitializedWave()
     {
         string resourcePath = "Demo Waves";
@@ -130,6 +172,7 @@ public class GameplayManager : MonoBehaviour
     private void ChangeState(State newState)
     {
         GameState = newState;
+        readyButton.gameObject.SetActive(GameState == State.Building);
         onchangedState?.Invoke(GameState);
     }
     private void TowerActionInvoke(TowerActionType actionType)
@@ -172,6 +215,7 @@ public class GameplayManager : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("Game Over!");
+        isActive = false;
         ChangeState(State.GameOver);
     }
     public void DefendsOver()
@@ -193,6 +237,7 @@ public class GameplayManager : MonoBehaviour
         buildPhaseDuration = currentBuildPhaseDuration;
         if (currentWave > enemyWaves.Count)
         {
+            isActive = false;
             ChangeState(State.Win);
         }
         else
@@ -205,12 +250,16 @@ public class GameplayManager : MonoBehaviour
             {
                 float randomValue = Random.value;
                 Debug.Log("Random Value: " + randomValue);
+                int totalReward = 100 + (50 * currentWaveIndex);
                 if (randomValue > 0.5f)
                 {
-                    arithmeticGeneration.GenerateProblem(6);
+                    int totalQuestion = 6 + currentWaveIndex;
+                    rewardQuestionAnswered = totalReward / totalQuestion;
+                    arithmeticGeneration.GenerateProblem(totalQuestion);
                 }
                 else
                 {
+                    rewardQuestionAnswered = totalReward;
                     problemPosingGenerator.GenerateProblem();
                 }
             }

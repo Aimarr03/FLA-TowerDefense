@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerData
   TowerName: Archer Tower
   Description: Archer Tower Desc
-  _baseDamage: 5
+  _baseDamage: 3
   _multiplierDamage: 0.5
   _baseAttackRange: 6
   _multiplierAttackRange: 0.3

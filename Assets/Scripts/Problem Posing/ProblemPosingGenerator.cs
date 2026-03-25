@@ -17,6 +17,7 @@ public class ProblemPosingGenerator : MonoBehaviour
 
     List<ProblemPosingSentence> sentences;
     ProblemPosingSentence[] chosenSentence;
+    public Action<bool> OnAnsweredQuestion;
     private void Awake()
     {
         questions = Resources.LoadAll<ProblemPosingQuestion>("Problem Posing").ToList();
@@ -27,10 +28,10 @@ public class ProblemPosingGenerator : MonoBehaviour
     private void Update()
     {
         /// For testing purposes, we can toggle the problem posing generator with the space key.
-        
+
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
-        //    InvokeQuestion();
+        //    GenerateProblem();
         //}
     }
     public void GenerateProblem()
@@ -141,10 +142,7 @@ public class ProblemPosingGenerator : MonoBehaviour
         }
 
         gameObject.SetActive(false);
-        if (isCorrect)
-        {
-            TD_API.Economy.GainMoney(100);
-        }
         Debug.Log($"Is Correct: {isCorrect}");
+        OnAnsweredQuestion?.Invoke(isCorrect);
     }
 }

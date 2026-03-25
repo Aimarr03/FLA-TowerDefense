@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   EnemyName: Slime
   EnemyDesc: 
-  MaxHealth: 65
+  MaxHealth: 60
   MovementSpeed: 1
   Damage: 3
   AttackRate: 1.5

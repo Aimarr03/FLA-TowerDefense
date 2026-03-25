@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerData
   TowerName: Mage Tower
   Description: Mage Tower Desc
-  _baseDamage: 15
+  _baseDamage: 10
   _multiplierDamage: 1
   _baseAttackRange: 7
   _multiplierAttackRange: 0.15

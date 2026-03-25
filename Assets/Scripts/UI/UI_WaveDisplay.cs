@@ -18,6 +18,7 @@ public class UI_WaveDisplay : MonoBehaviour
     }
     private void OnChangeState(GameplayManager.State newState)
     {
+        if (!GameplayManager.instance.IsActive) return;
         if (newState == GameplayManager.State.Defending)
         {
             tmp_enemyWaves.gameObject.SetActive(false);

@@ -14,8 +14,6 @@ public class UI_MoneyDisplay : MonoBehaviour
     private void Start()
     {
         TD_API.Economy.OnMoneyChange += UpdateDisplayMoney;
-        UpdateDisplayMoney(TD_API.Economy.CurrentMoney);
-
     }
     private void OnDestroy()
     {
