@@ -9,7 +9,7 @@ public class UI_MoneyDisplay : MonoBehaviour
     private int bufferMoney = 0;
     private void Awake()
     {
-        moneyText = GetComponent<TextMeshProUGUI>();
+        moneyText = GetComponentInChildren<TextMeshProUGUI>();
     }
     private void Start()
     {
