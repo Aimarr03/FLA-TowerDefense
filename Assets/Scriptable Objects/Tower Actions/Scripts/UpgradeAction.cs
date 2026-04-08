@@ -11,7 +11,7 @@ public class UpgradeAction : TowerActionSO
         bool moneyCondition = TD_API.Economy.IsEnough(upgradeCost);
         
         bool fullCondition = towerCondition && moneyCondition;
-        Debug.Log($"Upgrade Action: {fullCondition}");
+        //Debug.Log($"Upgrade Action: {fullCondition}");
         return fullCondition;
     }
 

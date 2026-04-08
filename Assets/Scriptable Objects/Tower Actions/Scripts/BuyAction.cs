@@ -12,7 +12,7 @@ public class BuyAction : TowerActionSO
         
         bool fullCondition = towerCondition && moneyCondition;
         
-        Debug.Log($"Buy Condition :{fullCondition}");
+        //Debug.Log($"Buy Condition :{fullCondition}");
         return fullCondition;
     }
 

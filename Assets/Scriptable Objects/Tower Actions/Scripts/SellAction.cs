@@ -7,7 +7,7 @@ public class SellAction : TowerActionSO
     public override bool ExecutableConditions(Tower tower)
     {
         bool condition = tower.CurrentState == Tower.State.Built && tower.Level > 0;
-        Debug.Log("Sell Conditions: " + condition);
+        //Debug.Log("Sell Conditions: " + condition);
         return condition;
     }
 
