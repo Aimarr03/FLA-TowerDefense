@@ -8,6 +8,7 @@ public class EnemyData : ScriptableObject
     
     public float MaxHealth = 20;
     public float MovementSpeed = 5f;
+    public int bounty = 10;
 
     public float Damage = 10;
     [Range(0.33f, 2f)] public float AttackRate = 1.1f;

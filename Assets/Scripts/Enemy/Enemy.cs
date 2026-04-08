@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour
 
     private float currentAttackTick = 0f;
     private Vector2 direction;
+    private int bounty = 10;
 
     public bool isDeath => currentHealh <= 0;
     public Action<bool> OnDie;
@@ -72,6 +73,7 @@ public class Enemy : MonoBehaviour
         
         currentHealh = maxHealth;
         characterMovement.MovementSpeed = movementSpeed;
+        bounty = enemyData.bounty;
     }
     private void StopAction()
     {
@@ -123,6 +125,7 @@ public class Enemy : MonoBehaviour
             StopAction();
             OnDie?.Invoke(false);
             enemyAnimation.OnDie();
+            TD_API.Economy.GainMoney(bounty);
             //gameObject.SetActive(false);
         }
         else

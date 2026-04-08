@@ -16,7 +16,8 @@ MonoBehaviour:
   EnemyDesc: 
   MaxHealth: 25
   MovementSpeed: 4
-  Damage: 10
+  bounty: 10
+  Damage: 15
   AttackRate: 1
   enemyGroundType: 2
   enemyType: 3
