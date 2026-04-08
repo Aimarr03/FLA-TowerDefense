@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class TowerActionButton : MonoBehaviour
 {
     [SerializeField] private Image iconRenderer;
     [SerializeField] private Material material;
+    [SerializeField] private TextMeshProUGUI moneyText;
 
     public Func<bool> isExecutable;
 
@@ -46,7 +48,9 @@ public class TowerActionButton : MonoBehaviour
     }
     public void SetConfirmIcon() => iconRenderer.sprite = iconConfirm;
     public void SetActionIcon() => iconRenderer.sprite = iconAction;
-
+    public void EnableMoneyText() => moneyText.gameObject.SetActive(true);
+    public void DisableMoneyText() => moneyText.gameObject.SetActive(false);
+    public void SetMoneyText(int money) => moneyText.text = money.ToString();
     public void SetUninterractableVisual()
     {
         instanceMaterial.SetColor("_Color", new Color(0.6f, 0.6f, 0.6f));

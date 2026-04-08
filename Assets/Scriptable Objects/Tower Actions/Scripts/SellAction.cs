@@ -19,12 +19,17 @@ public class SellAction : TowerActionSO
 
     public override ActionContext GetActionContext(Tower tower)
     {
+        int sellCost = (int) tower.TowerData.SellCost(tower.Level);
+
         var actionContext = new ActionContext();
         actionContext.actionName = $"Sell Tower";
-        actionContext.actionDescription = $"Sell Tower for ${tower.TowerData.SellCost(tower.Level)}";
+        actionContext.actionDescription = $"Sell Tower for ${sellCost}";
         actionContext.isExecutable = () => ExecutableConditions(tower);
         actionContext.clickEvent = () => Executes(tower);
         actionContext.actionIcon = sellIcon;
+
+        actionContext.useMoney = false;
+        actionContext.actionCost = sellCost;
         return actionContext;
     }
 }

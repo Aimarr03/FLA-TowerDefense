@@ -61,7 +61,16 @@ public class UIAction : MonoBehaviour
             button.Button.onClick.AddListener(() => OnActionClicked(context, button));
             button.SetActionIcon();
             button.isExecutable = context.isExecutable;
-            
+
+            if (context.useMoney)
+            {
+                button.EnableMoneyText();
+                button.SetMoneyText(context.actionCost);
+            }
+            else
+            {
+                button.DisableMoneyText();
+            }
 
             float angle = stepAngle * index;
             float radians = (angle + 90f) * Mathf.Deg2Rad;

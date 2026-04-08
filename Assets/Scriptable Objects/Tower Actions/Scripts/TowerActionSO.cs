@@ -20,6 +20,7 @@ public class ActionContext
     public Action clickEvent;
     public string actionDescription;
     public Func<bool> isExecutable;
+    public bool useMoney = false;
 }
 public enum TowerActionType
 {

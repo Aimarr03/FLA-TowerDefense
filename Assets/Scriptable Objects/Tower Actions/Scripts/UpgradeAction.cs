@@ -29,6 +29,8 @@ public class UpgradeAction : TowerActionSO
         actionContext.isExecutable = () => ExecutableConditions(tower);
         actionContext.clickEvent = () => Executes(tower);
         actionContext.actionIcon = upgradeIcon;
+        actionContext.useMoney = true;
+        actionContext.actionCost = (int)tower.TowerData.UpgradeCost(tower.Level + 1);
         return actionContext;
     }
 }

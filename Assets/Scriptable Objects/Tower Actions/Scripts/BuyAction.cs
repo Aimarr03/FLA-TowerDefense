@@ -32,6 +32,7 @@ public class BuyAction : TowerActionSO
         actionContext.actionIcon = towerData.iconSprites[0];
         actionContext.actionCost = (int) towerData.CostBuild();
         actionContext.actionType = TowerActionType.Buy;
+        actionContext.useMoney = true;
         return actionContext;
     }
 }

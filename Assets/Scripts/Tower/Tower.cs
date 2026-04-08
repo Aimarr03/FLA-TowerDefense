@@ -78,14 +78,18 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         
         if (other.TryGetComponent(out Enemy enemy))
         {
-            if (!IsEnemyAttackable(enemy)) return;
-            
-            enemiesInRange.Add(enemy);
-            enemy.OnDie += (bool reachDestination) => 
-            { 
-                OnEnemyDie(enemy); 
-            };
+            TryAddEnemy(enemy);
         }
+    }
+    private void TryAddEnemy(Enemy enemy)
+    {
+        if (!IsEnemyAttackable(enemy)) return;
+
+        enemiesInRange.Add(enemy);
+        enemy.OnDie += (bool reachDestination) =>
+        {
+            OnEnemyDie(enemy);
+        };
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -99,7 +103,18 @@ public class Tower : MonoBehaviour, I_MouseInteractable
                 target = null;
         }
     }
+    private void DetectEnemiesInRange()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRange);
 
+        foreach (var hit in hits)
+        {
+            if (hit.TryGetComponent(out Enemy enemy))
+            {
+                TryAddEnemy(enemy);
+            }
+        }
+    }
     private void SelectPrimalTarget()
     {
         enemiesInRange.RemoveAll(e => e == null);
@@ -183,6 +198,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         animator.runtimeAnimatorController = towerData.animatorController;
         animator.Play($"Upgrade_{level}");
         UpdateData();
+
+        DetectEnemiesInRange();
     }
     public void Sell()
     {
@@ -215,8 +232,9 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         attackRange = 0;
         attackDamage = 0;
         attackRate = 0;
-        
+
         TowerData = null;
+        OnMouseDeselect();
     }
     public void Upgrade()
     {
@@ -229,6 +247,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         TD_API.Economy.UseMoney((int)upgradeCost);
         animator.Play($"Upgrade_{level}");
         UpdateData();
+
+        DetectEnemiesInRange();
     }
     private void UpdateData()
     {

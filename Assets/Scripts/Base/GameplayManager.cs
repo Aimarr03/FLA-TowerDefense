@@ -246,23 +246,27 @@ public class GameplayManager : MonoBehaviour
             currentEnemyWave = enemyWaves[index];
             currentRoundPerformance = roundPerformances[index];
             ChangeState(State.Building);
-            if (currentWaveIndex > 0)
-            {
-                float randomValue = Random.value;
-                Debug.Log("Random Value: " + randomValue);
-                int totalReward = 100 + (50 * currentWaveIndex);
-                if (randomValue > 0.5f)
-                {
-                    int totalQuestion = 6 + currentWaveIndex;
-                    rewardQuestionAnswered = totalReward / totalQuestion;
-                    arithmeticGeneration.GenerateProblem(totalQuestion);
-                }
-                else
-                {
-                    rewardQuestionAnswered = totalReward;
-                    problemPosingGenerator.GenerateProblem();
-                }
-            }
+
+            /// This is because it use arithmetic or  problem posing for getting currency, 
+            /// now it is on hold and need further discussion for whether it is needed to be kept or not.
+            /// If so, need to know which approach is better
+            //if (currentWaveIndex > 0)
+            //{
+            //    float randomValue = Random.value;
+            //    Debug.Log("Random Value: " + randomValue);
+            //    int totalReward = 100 + (50 * currentWaveIndex);
+            //    if (randomValue > 0.5f)
+            //    {
+            //        int totalQuestion = 6 + currentWaveIndex;
+            //        rewardQuestionAnswered = totalReward / totalQuestion;
+            //        arithmeticGeneration.GenerateProblem(totalQuestion);
+            //    }
+            //    else
+            //    {
+            //        rewardQuestionAnswered = totalReward;
+            //        problemPosingGenerator.GenerateProblem();
+            //    }
+            //}
         }
     }
     public void StartDefending()
