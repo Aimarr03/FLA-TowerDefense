@@ -138,3 +138,27 @@ public class EnemySpawner : MonoBehaviour
         currentSpawn++;
     }
 }
+
+public static class PseudoRandom
+{
+    public static T GetWeightedRandom<T>(List<(T item, float weight)> items)
+    {
+        float totalWeight = 0f;
+        foreach (var item in items)
+        {
+            totalWeight += item.weight;
+        }
+        float randomValue = UnityEngine.Random.Range(0, totalWeight);
+        float cumulativeWeight = 0f;
+        foreach (var item in items)
+        {
+            cumulativeWeight += item.weight;
+            if (randomValue < cumulativeWeight)
+            {
+                return item.item;
+            }
+        }
+        
+        return default(T); // Should never reach here if weights are properly defined
+    }
+}

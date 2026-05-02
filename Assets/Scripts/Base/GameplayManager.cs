@@ -19,6 +19,7 @@ public class GameplayManager : MonoBehaviour
     [Header("Main Componene")]
     [SerializeField] private ArithmeticGeneration arithmeticGeneration;
     [SerializeField] private ProblemPosingGenerator problemPosingGenerator;
+    [SerializeField] private EnemySpawnLoader enemyLoader;
 
     [Space(25)]
     [SerializeField] private List<TowerActionSO> towerActions;
@@ -36,6 +37,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private Canvas MainMenu;
     [SerializeField] private Image readyButton;
     [SerializeField] private bool instantPlay = true;
+    [SerializeField] private bool numberBase = false;
 
     private RoundPerformance currentRoundPerformance;
     private float buildPhaseDuration;
@@ -140,21 +142,17 @@ public class GameplayManager : MonoBehaviour
 
     private void InitializedWave()
     {
-        string resourcePath = "Demo Waves";
-        var waves = Resources.LoadAll<TextAsset>(resourcePath);
-
-        enemyWaves = new List<EnemyWave>();
+        enemyLoader.LoadData();   
+        enemyWaves = numberBase ? enemyLoader.enemyWaves : enemyLoader.randomizedEnemyWaves;
         roundPerformances = new();
-        foreach (TextAsset wave in waves)
+        foreach (var wave in enemyWaves)
         {
-            string waveString = wave.text;
-            EnemyWave enemyWave = JsonUtility.FromJson<EnemyWave>(waveString);
-            enemyWaves.Add(enemyWave);
             roundPerformances.Add(new RoundPerformance());
         }
-
+        
         currentWaveIndex = 0;
         int index = Mathf.Clamp(currentWaveIndex, 0, enemyWaves.Count - 1);
+        
         currentEnemyWave = enemyWaves[index];
         currentRoundPerformance = roundPerformances[index];
     }

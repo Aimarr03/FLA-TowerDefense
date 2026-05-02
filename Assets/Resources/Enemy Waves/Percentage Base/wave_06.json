@@ -1,0 +1,20 @@
+{
+    "EnemyWaves" : [
+        {
+            "type": 0,
+            "percentage": 20
+        },
+        {
+            "type": 1,
+            "percentage": 20 
+        },
+        {
+            "type": 2,
+            "percentage": 50
+        },
+        {
+            "type": 3,
+            "percentage": 10
+        }
+    ]
+}

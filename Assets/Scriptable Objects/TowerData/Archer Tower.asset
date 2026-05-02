@@ -22,8 +22,7 @@ MonoBehaviour:
   _multiplierAttackRate: 0.15
   _costBuild: 70
   _multiplierCost: 0.7
-  TowerAttackBehaviours:
-  - rid: 934252278042591327
+  TowerAttackBehaviours: []
   TowerAttackEffects: []
   towerSprites:
   - {fileID: -855298285791758126, guid: b8c22662b1526c3439f75dd20e4c30c1, type: 3}
@@ -37,7 +36,4 @@ MonoBehaviour:
   animatorController: {fileID: 9100000, guid: 1c9203eadbd75b940a3774aa9e5a9121, type: 2}
   references:
     version: 2
-    RefIds:
-    - rid: 934252278042591327
-      type: {class: DoubleAttack, ns: , asm: Assembly-CSharp}
-      data: 
+    RefIds: []
