@@ -110,17 +110,23 @@ public class GameplayManager : MonoBehaviour
         MainMenu.gameObject.SetActive(false);
         ChangeState(State.Building);
 
-        problemPosingGenerator.OnAnsweredQuestion += (bool isCorrect) =>
+        if(problemPosingGenerator != null)
         {
-            if (isCorrect)
+            problemPosingGenerator.OnAnsweredQuestion += (bool isCorrect) =>
+            {
+                if (isCorrect)
+                {
+                    economyManager.GainMoney(rewardQuestionAnswered);
+                }
+            };
+        }
+        if (arithmeticGeneration != null)
+        {
+            arithmeticGeneration.OnCorrectAnswer += () =>
             {
                 economyManager.GainMoney(rewardQuestionAnswered);
-            }
-        };
-        arithmeticGeneration.OnCorrectAnswer += () =>
-        {
-            economyManager.GainMoney(rewardQuestionAnswered);
-        };
+            };
+        }
     }
 
     public void RestartGame()
@@ -231,6 +237,9 @@ public class GameplayManager : MonoBehaviour
         currentRoundPerformance.RemainingEnemy = spawner.EnemyReachDestination;
         currentRoundPerformance.EnemyRemainingHealth = spawner.EnemyRemainingHealth;
         currentRoundPerformance.EnemyTotalHealth = spawner.EnemyTotalHealth;
+        
+        currentRoundPerformance.RemainingHealth = (int)mainBase.CurrentHealth;
+        currentRoundPerformance.AttackNumber = currentWave;
 
         currentWaveIndex++;
         currentBuildPhaseDuration = BaseBuildStateDuration;
@@ -297,6 +306,8 @@ public class RoundPerformance
 
     public int TotalEnemy;
     public int RemainingEnemy;
+    public int RemainingHealth;
+    public int AttackNumber;
 
     public ActionMetrics ActionMetric = new();
     public float normalizedEnemyCount => RemainingEnemy / TotalEnemy;

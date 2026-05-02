@@ -3,16 +3,19 @@ using UnityEngine;
 
 public class MainBase : MonoBehaviour, I_MouseInteractable
 {
-    [SerializeField] private float MaxHealth = 100f;
-    [SerializeField] private float CurrentHealth;
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float currentHealth;
 
     HealthBar healthBar;
     public Action OnDeath;
     public Action<(int maxHealth, int currentHealth)> OnUpdatedHealth;
+
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => maxHealth;
     private void Awake()
     {
         healthBar = GetComponentInChildren<HealthBar>(true);
-        CurrentHealth = MaxHealth;
+        currentHealth = maxHealth;
     }
     private void Start()
     {
@@ -31,11 +34,11 @@ public class MainBase : MonoBehaviour, I_MouseInteractable
     }
     public void TakeDamage(float damage)
     {
-        CurrentHealth -= damage;
-        CurrentHealth = Mathf.Max(CurrentHealth, 0);
-        healthBar.UpdateHealth(CurrentHealth / MaxHealth);
-        OnUpdatedHealth?.Invoke(((int)MaxHealth, (int)CurrentHealth));
-        if (CurrentHealth <= 0)
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(currentHealth, 0);
+        healthBar.UpdateHealth(currentHealth / maxHealth);
+        OnUpdatedHealth?.Invoke(((int)maxHealth, (int)currentHealth));
+        if (currentHealth <= 0)
         {
             OnDeath?.Invoke();
             OnDeath = null;
