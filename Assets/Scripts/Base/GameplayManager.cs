@@ -20,6 +20,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private ArithmeticGeneration arithmeticGeneration;
     [SerializeField] private ProblemPosingGenerator problemPosingGenerator;
     [SerializeField] private EnemySpawnLoader enemyLoader;
+    [SerializeField] private FLA fla;
 
     [Space(25)]
     [SerializeField] private List<TowerActionSO> towerActions;
@@ -39,6 +40,9 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private bool instantPlay = true;
     [SerializeField] private bool numberBase = false;
 
+    [Space(25)]
+    [SerializeField] private int initHealth = 30;
+    
     private RoundPerformance currentRoundPerformance;
     private float buildPhaseDuration;
     private bool isActive = false;
@@ -72,6 +76,10 @@ public class GameplayManager : MonoBehaviour
         if(instance == null)
         {
             instance = this;
+            fla = GetComponent<FLA>();
+            mainBase.Setup(initHealth);
+            fla.Setup(initHealth);
+
             InitializedAPI();
             InitializedWave();
             if (instantPlay)
@@ -239,9 +247,30 @@ public class GameplayManager : MonoBehaviour
         currentRoundPerformance.RemainingHealth = (int)mainBase.CurrentHealth;
         currentRoundPerformance.AttackNumber = currentWave;
 
+
+        Debug.Log($"No. Current Wave Clear: {currentWave}");
+        if(currentWave > 1)
+        {
+            RoundPerformance previousRoundPerformance = roundPerformances[Mathf.Clamp(currentWaveIndex - 1, 0, enemyWaves.Count - 1)];
+            if (previousRoundPerformance != null)
+            {
+                fla.UpdateFLA(currentRoundPerformance, previousRoundPerformance);
+            }
+        }
+        else if(currentWave == 1)
+        {
+            RoundPerformance initPerformance = new RoundPerformance
+            {
+                RemainingHealth = initHealth,
+            };
+            fla.UpdateFLA(currentRoundPerformance, initPerformance);
+        }
+
+
         currentWaveIndex++;
         currentBuildPhaseDuration = BaseBuildStateDuration;
         buildPhaseDuration = currentBuildPhaseDuration;
+        
         if (currentWave > enemyWaves.Count)
         {
             isActive = false;

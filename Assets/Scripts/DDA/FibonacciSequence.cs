@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class FibonacciSequence
 {
+    public int currentSequence = 0;
+
+    public int Value => GetValue(currentSequence);
     public static int GetValue(int number)
     {
         if (number <= 0)

@@ -6,16 +6,20 @@ public class MainBase : MonoBehaviour, I_MouseInteractable
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float currentHealth;
 
-    HealthBar healthBar;
+    [Header("UI")]
+    [SerializeField] HealthBar healthBar;
+    [Space]
     public Action OnDeath;
     public Action<(int maxHealth, int currentHealth)> OnUpdatedHealth;
 
     public float CurrentHealth => currentHealth;
     public float MaxHealth => maxHealth;
-    private void Awake()
+    public void Setup(float maxHealth)
     {
-        healthBar = GetComponentInChildren<HealthBar>(true);
+        this.maxHealth = maxHealth;
         currentHealth = maxHealth;
+        healthBar.UpdateHealth(1f);
+        OnUpdatedHealth?.Invoke(((int)maxHealth, (int)currentHealth));
     }
     private void Start()
     {

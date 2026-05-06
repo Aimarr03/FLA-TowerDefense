@@ -14,13 +14,15 @@ public class Classifier
         Medium,
         Low
     }
-    public void Classify(RoundPerformance currentRound, RoundPerformance previousRound)
+    public PlayerClassify Classify(RoundPerformance currentRound, RoundPerformance previousRound)
     {
         int currentRoundHealth = currentRound.RemainingHealth;
         int previousRoundHealth = previousRound.RemainingHealth;
 
         int healthDifference = previousRoundHealth - currentRoundHealth;
+        Debug.Log($"[Classifier] Health Difference: {healthDifference} (Previous: {previousRoundHealth}, Current: {currentRoundHealth})");
         PlayerClassify classifcationHealth = ClassifyBasedOnHealth(healthDifference);
+        return classifcationHealth;
     }
     private PlayerClassify ClassifyBasedOnHealth (int difference)
     {
