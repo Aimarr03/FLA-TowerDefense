@@ -20,9 +20,35 @@ public class Classifier
         int previousRoundHealth = previousRound.RemainingHealth;
 
         int healthDifference = previousRoundHealth - currentRoundHealth;
-        Debug.Log($"[Classifier] Health Difference: {healthDifference} (Previous: {previousRoundHealth}, Current: {currentRoundHealth})");
         PlayerClassify classifcationHealth = ClassifyBasedOnHealth(healthDifference);
-        return classifcationHealth;
+        Debug.Log($"[Classifier] Health Difference: {healthDifference} (Previous: {previousRoundHealth}, Current: {currentRoundHealth})");
+        
+        
+        PlayerClassify classificationEnemy = ClassifyBasedOnEnemyRemaining(currentRound);
+        
+        return classificationEnemy;
+    }
+    private PlayerClassify ClassifyBasedOnEnemyRemaining(RoundPerformance roundPerformance)
+    {
+        int remainingEnemies = roundPerformance.RemainingEnemy;
+        int totalEnemies = roundPerformance.TotalEnemy;
+        float delta = ((float)remainingEnemies) / totalEnemies;
+        
+        PlayerClassify classification = PlayerClassify.Medium;
+        if (delta >= 0.7f)
+        {
+            classification = PlayerClassify.Low;
+        }
+        else if (delta >= 0.3f)
+        {
+            classification = PlayerClassify.Medium;
+        }
+        else
+        {
+            classification = PlayerClassify.High;
+        }
+        Debug.Log($"[Classifier] Enemy Remaining: {remainingEnemies}/{totalEnemies} (Delta: {delta:F2}) => Classification: {classification}");
+        return classification;
     }
     private PlayerClassify ClassifyBasedOnHealth (int difference)
     {
