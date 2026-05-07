@@ -33,9 +33,9 @@ public class UI_WaveDisplay : MonoBehaviour
             int maxWaves = GameplayManager.instance.MaxWave;
             tmp_enemyWaves.text = $"Enemy Waves: {enemyWave}/{maxWaves}";
 
-            var enemyWaveData = GameplayManager.instance.currentEnemyWave;
+            var enemyWaveData = GameplayManager.instance.enemySpawnInfos;
             StringBuilder sb = new StringBuilder();
-            foreach (var wave in enemyWaveData.enemies)
+            foreach (var wave in enemyWaveData)
             {
                 sb.AppendLine($"{wave.type.ToString()}: {wave.amount}");
             }

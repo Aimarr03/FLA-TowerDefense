@@ -48374,8 +48374,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameplayManager
   arithmeticGeneration: {fileID: 0}
   problemPosingGenerator: {fileID: 0}
-  enemyLoader: {fileID: 1857650230}
   fla: {fileID: 747893286}
+  enemyLoader: {fileID: 1857650230}
+  enemySpawner: {fileID: 1857650229}
   towerActions:
   - {fileID: 11400000, guid: 6b9c37ac55d3b504b9bcab869760347b, type: 2}
   - {fileID: 11400000, guid: 92dc62322252dd94886e92d73be9fb0e, type: 2}
@@ -48390,7 +48391,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 51b3209d5841fe444a3b1f55da72a849, type: 2}
   Surface2D: {fileID: 1780679856}
   mainBase: {fileID: 705281854}
-  spawner: {fileID: 1857650229}
   economyManager:
     currentMoney: 200
   BaseBuildStateDuration: 45
@@ -48399,8 +48399,7 @@ MonoBehaviour:
   instantPlay: 1
   spawnType: 2
   initHealth: 30
-  currentEnemyWave:
-    enemies: []
+  enemySpawnInfos: []
 --- !u!4 &747893284
 Transform:
   m_ObjectHideFlags: 0
@@ -59127,6 +59126,7 @@ MonoBehaviour:
     enemies: []
   spawnEvents: []
   enemySpawnLoader: {fileID: 1857650230}
+  enemySpawnInfos: []
 --- !u!114 &1857650230
 MonoBehaviour:
   m_ObjectHideFlags: 0

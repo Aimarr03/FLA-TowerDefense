@@ -60,11 +60,11 @@ public static class EnemyWaveBuilder
                     spawnEvents.Add(spawnEvent);
                     currentTime += interval;
                     
-                    Debug.Log($"[EnemyWaveBuilder] Scheduled spawn of {enemyData.EnemyName} at time {currentTime}");
+                    //Debug.Log($"[EnemyWaveBuilder] Scheduled spawn of {enemyData.EnemyName} at time {currentTime}");
                 }
             }
             currentTime += subWave.duration;
-            Debug.Log($"[EnemyWaveBuilder] Subwave completed. Current time: {currentTime}");
+            //Debug.Log($"[EnemyWaveBuilder] Subwave completed. Current time: {currentTime}");
         }
         
         // Shuffle the spawn events to add randomness

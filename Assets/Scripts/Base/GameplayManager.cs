@@ -19,8 +19,11 @@ public class GameplayManager : MonoBehaviour
     [Header("Main Componene")]
     [SerializeField] private ArithmeticGeneration arithmeticGeneration;
     [SerializeField] private ProblemPosingGenerator problemPosingGenerator;
-    [SerializeField] private EnemySpawnLoader enemyLoader;
     [SerializeField] private FLA fla;
+
+    [Header("Enemy Spawner")]
+    [SerializeField] private EnemySpawnLoader enemyLoader;
+    [SerializeField] private EnemySpawner enemySpawner; 
 
     [Space(25)]
     [SerializeField] private List<TowerActionSO> towerActions;
@@ -30,7 +33,6 @@ public class GameplayManager : MonoBehaviour
     [Space(25)]
     [SerializeField] private NavMeshSurface Surface2D;
     [SerializeField] private MainBase mainBase;
-    [SerializeField] private EnemySpawner spawner; 
     [SerializeField] private EconomyManager economyManager;
     [SerializeField] private float BaseBuildStateDuration = 60;
 
@@ -47,18 +49,17 @@ public class GameplayManager : MonoBehaviour
     private float buildPhaseDuration;
     private bool isActive = false;
     private int rewardQuestionAnswered = 0;
+    private int maxWave = 0;
     
     [Header("Enemy Wave")]
-    public EnemyWave currentEnemyWave;
-    private List<EnemyWave> enemyWaves;
-
+    public List<EnemySpawnInfo> enemySpawnInfos;
     private List<RoundPerformance> roundPerformances;
+    public int MaxWave => maxWave;
 
 
     public State GameState { get; private set; }
     public int CurrentWaveIndex { get; private set; }
     public int CurrentWave => CurrentWaveIndex + 1;
-    public int MaxWave => enemyWaves.Count;
     public Vector3 DestinationPos { get; private set; }
     public float CurrentBuildPhaseDuration { get; private set; }
     public MainBase MainBase => mainBase;
@@ -167,17 +168,22 @@ public class GameplayManager : MonoBehaviour
     private void InitializedWave()
     {
         enemyLoader.LoadData();
-        enemyWaves = spawnType == SpawnType.NumberBase ? enemyLoader.enemyWaves : enemyLoader.randomizedEnemyWaves;
-        roundPerformances = new();
-        foreach (var wave in enemyWaves)
-        {
-            roundPerformances.Add(new RoundPerformance());
-        }
-        CurrentWaveIndex = 0;
-        int index = Mathf.Clamp(CurrentWaveIndex, 0, enemyWaves.Count - 1);
+        maxWave = enemyLoader.GetMaxInfoWave(spawnType);
         
-        currentEnemyWave = enemyWaves[index];
+        roundPerformances = new();
+        for(int i = 0; i < maxWave; i++)
+            roundPerformances.Add(new RoundPerformance());
+        
+        CurrentWaveIndex = 0;
+        int index = Mathf.Clamp(CurrentWaveIndex, 0, maxWave - 1);
         currentRoundPerformance = roundPerformances[index];
+        
+        UpdateWave();
+    }
+    private void UpdateWave()
+    {
+        enemySpawner.GetEnemyWave();
+        enemySpawnInfos = enemySpawner.EnemySpawnInfos;
     }
     private void InitializedAPI()
     {
@@ -253,52 +259,22 @@ public class GameplayManager : MonoBehaviour
             _ => false
         };
         if (!condition) return;
-        
-        currentRoundPerformance.TotalEnemy = spawner.TotalEnemy;
-        currentRoundPerformance.RemainingEnemy = spawner.EnemyReachDestination;
-        currentRoundPerformance.EnemyRemainingHealth = spawner.EnemyRemainingHealth;
-        currentRoundPerformance.EnemyTotalHealth = spawner.EnemyTotalHealth;
-        
-        currentRoundPerformance.RemainingHealth = (int)mainBase.CurrentHealth;
-        currentRoundPerformance.AttackNumber = CurrentWave;
-
-
-        Debug.Log($"No. Current Wave Clear: {CurrentWave}");
-        if(CurrentWave > 1)
-        {
-            RoundPerformance previousRoundPerformance = roundPerformances[Mathf.Clamp(CurrentWaveIndex - 1, 0, enemyWaves.Count - 1)];
-            if (previousRoundPerformance != null)
-            {
-                fla.UpdateFLA(currentRoundPerformance, previousRoundPerformance);
-            }
-        }
-        else if(CurrentWave == 1)
-        {
-            RoundPerformance initPerformance = new RoundPerformance
-            {
-                RemainingHealth = initHealth,
-            };
-            fla.UpdateFLA(currentRoundPerformance, initPerformance);
-        }
-
-        MultiplierGold = fla.FinalMultiplierGold;
-        MultiplierSpeed = fla.FinalMultiplierSpeed;
-        MultiplierDuration = fla.FinalMultiplierDuration;
+        CalculatePerformance();
 
         CurrentWaveIndex++;
         CurrentBuildPhaseDuration = BaseBuildStateDuration * MultiplierDuration;
         buildPhaseDuration = CurrentBuildPhaseDuration;
 
-        if (CurrentWave > enemyWaves.Count)
+        if (CurrentWave > maxWave)
         {
             isActive = false;
             ChangeState(State.Win);
         }
         else
         {
-            int index = Mathf.Clamp(CurrentWaveIndex, 0, enemyWaves.Count - 1);
-            currentEnemyWave = enemyWaves[index];
+            int index = Mathf.Clamp(CurrentWaveIndex, 0, maxWave - 1);
             currentRoundPerformance = roundPerformances[index];
+            UpdateWave();
             ChangeState(State.Building);
 
             /// This is because it use arithmetic or  problem posing for getting currency, 
@@ -332,12 +308,45 @@ public class GameplayManager : MonoBehaviour
         };
 
         if (!condition) return;
-        ChangeState(State.Defending);
-        CurrentBuildPhaseDuration = 0;
-
         
         currentRoundPerformance.BuildPhaseDuration = buildPhaseDuration;
         currentRoundPerformance.RemainingbuildPhaseDuration = CurrentBuildPhaseDuration;
+        
+        ChangeState(State.Defending);
+        CurrentBuildPhaseDuration = 0;
+    }
+    private void CalculatePerformance()
+    {
+        currentRoundPerformance.TotalEnemy = enemySpawner.TotalEnemy;
+        currentRoundPerformance.RemainingEnemy = enemySpawner.EnemyReachDestination;
+        currentRoundPerformance.EnemyRemainingHealth = enemySpawner.EnemyRemainingHealth;
+        currentRoundPerformance.EnemyTotalHealth = enemySpawner.EnemyTotalHealth;
+
+        currentRoundPerformance.RemainingHealth = (int)mainBase.CurrentHealth;
+        currentRoundPerformance.AttackNumber = CurrentWave;
+
+
+        Debug.Log($"No. Current Wave Clear: {CurrentWave}");
+        if (CurrentWave > 1)
+        {
+            RoundPerformance previousRoundPerformance = roundPerformances[Mathf.Clamp(CurrentWaveIndex - 1, 0, maxWave - 1)];
+            if (previousRoundPerformance != null)
+            {
+                fla.UpdateFLA(currentRoundPerformance, previousRoundPerformance);
+            }
+        }
+        else if (CurrentWave == 1)
+        {
+            RoundPerformance initPerformance = new RoundPerformance
+            {
+                RemainingHealth = initHealth,
+            };
+            fla.UpdateFLA(currentRoundPerformance, initPerformance);
+        }
+
+        MultiplierGold = fla.FinalMultiplierGold;
+        MultiplierSpeed = fla.FinalMultiplierSpeed;
+        MultiplierDuration = fla.FinalMultiplierDuration;
     }
 }
 [Serializable]

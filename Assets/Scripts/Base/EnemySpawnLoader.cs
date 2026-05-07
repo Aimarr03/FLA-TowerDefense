@@ -13,6 +13,21 @@ public class EnemySpawnLoader : MonoBehaviour
     public List<EnemyWave> enemyWaves = new List<EnemyWave>();
     public List<EnemyWave> randomizedEnemyWaves = new List<EnemyWave>();
     public List<PatternEnemyWave> patternEnemyWaves = new List<PatternEnemyWave>();
+
+    public int GetMaxInfoWave(GameplayManager.SpawnType spawnType)
+    {
+        switch (spawnType)
+        {
+            case GameplayManager.SpawnType.NumberBase:
+                return enemyWaves.Count;
+            case GameplayManager.SpawnType.PercentageBase:
+                return randomizedEnemyWaves.Count;
+            case GameplayManager.SpawnType.SubWaveBase:
+                return patternEnemyWaves.Count;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(spawnType), spawnType, null);
+        }
+    }
     public void LoadData()
     {
         LoadSubWaveData();

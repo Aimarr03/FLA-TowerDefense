@@ -9,6 +9,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private EnemyWave enemyWave;
     [SerializeField] private List<SpawnEvent> spawnEvents;
     [SerializeField] private EnemySpawnLoader enemySpawnLoader;
+    [SerializeField] private List<EnemySpawnInfo> enemySpawnInfos = new List<EnemySpawnInfo>();
+
+    public List<EnemySpawnInfo> EnemySpawnInfos => enemySpawnInfos;
 
     /// <summary>
     /// Obsolete, use spawnEvents instead. 
@@ -23,6 +26,7 @@ public class EnemySpawner : MonoBehaviour
     int currentIndex = 0;
     float timer = 0f;
 
+    
     public int TotalEnemy => enemyRemaining;
     public int EnemyReachDestination { get; private set; }
     public int EnemyDied { get; private set; }
@@ -66,25 +70,28 @@ public class EnemySpawner : MonoBehaviour
                 currentIndex = 0;
                 timer = 0f;
                 isActive = true;
-
-                GetEnemyWave();
                 break;
         }
     }
-    private void GetEnemyWave()
+    public void GetEnemyWave()
     {
         GameplayManager.SpawnType spawnType = GameplayManager.instance.SpawnMode;
         int waveIndex = GameplayManager.instance.CurrentWaveIndex;
         Debug.Log($"[Spawner] Getting Enemy Wave for wave {waveIndex} with spawn type {spawnType}");
+        
         switch (GameplayManager.instance.SpawnMode)
         {
             case GameplayManager.SpawnType.NumberBase:
                 EnemyWave normalWave = enemySpawnLoader.enemyWaves[waveIndex];
                 spawnEvents = EnemyWaveBuilder.NormalBuild(normalWave, 1f);
+                
+                enemySpawnInfos = normalWave.enemies;
                 break;
             case GameplayManager.SpawnType.SubWaveBase:
                 PatternEnemyWave subpatternWave = enemySpawnLoader.patternEnemyWaves[waveIndex];
                 spawnEvents = EnemyWaveBuilder.SubwaveBuild(subpatternWave);
+                
+                enemySpawnInfos = subpatternWave.GetTotalEnemySpawn();
                 break;
         }
         enemyRemaining = spawnEvents.Count;
