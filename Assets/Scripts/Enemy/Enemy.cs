@@ -72,7 +72,9 @@ public class Enemy : MonoBehaviour
         enemyType = enemyData.enemyType;
         
         currentHealh = maxHealth;
-        characterMovement.MovementSpeed = movementSpeed;
+
+        float finalMovementSpeed = movementSpeed * GameplayManager.instance.MultiplierSpeed;
+        characterMovement.MovementSpeed = finalMovementSpeed;
         bounty = enemyData.bounty;
     }
     private void StopAction()
@@ -125,7 +127,9 @@ public class Enemy : MonoBehaviour
             StopAction();
             OnDie?.Invoke(false);
             enemyAnimation.OnDie();
-            TD_API.Economy.GainMoney(bounty);
+
+            int finalBounty = (int) (bounty * GameplayManager.instance.MultiplierGold);
+            TD_API.Economy.GainMoney(finalBounty);
             //gameObject.SetActive(false);
         }
         else

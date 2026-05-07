@@ -15,7 +15,7 @@ MonoBehaviour:
   EnemyName: Goblin
   EnemyDesc: 
   MaxHealth: 35
-  MovementSpeed: 2
+  MovementSpeed: 1
   bounty: 6
   Damage: 4
   AttackRate: 1.5

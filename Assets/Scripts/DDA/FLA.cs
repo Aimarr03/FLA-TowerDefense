@@ -20,7 +20,6 @@ public class FLA : MonoBehaviour
 
     FibonacciSequence fibonacciSequence;
     Classifier classifier;
-
     private void Awake()
     {
         
@@ -32,7 +31,8 @@ public class FLA : MonoBehaviour
     }
     public void UpdateFLA(RoundPerformance currentRound, RoundPerformance previousRound)
     {
-        Classifier.PlayerClassify playerClassify = classifier.Classify(currentRound, previousRound);
+        Classifier.ClassificationResult result = classifier.Classify(currentRound, previousRound);
+        Classifier.PlayerClassify playerClassify = result.HealthClassification;
         int difficultyDelta = playerClassify switch
         {
             Classifier.PlayerClassify.High => +2,
@@ -43,8 +43,8 @@ public class FLA : MonoBehaviour
         fibonacciSequence.currentSequence += difficultyDelta;
         int currentFibonacciValue = fibonacciSequence.Value;
 
-        finalMultiplierGold = baseMultiplierGold + (currentFibonacciValue * goldScale);
-        finalMultiplierDuration = baseMultiplierDuration + (currentFibonacciValue * durationScale);
+        finalMultiplierGold = baseMultiplierGold - (currentFibonacciValue * goldScale);
+        finalMultiplierDuration = baseMultiplierDuration - (currentFibonacciValue * durationScale);
         finalMultiplierSpeed = baseMultiplierSpeed + (currentFibonacciValue * speedScale);
 
         Debug.Log($"[FLA] Classification Result: {playerClassify}");

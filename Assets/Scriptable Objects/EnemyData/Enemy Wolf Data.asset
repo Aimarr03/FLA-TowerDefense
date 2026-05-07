@@ -15,7 +15,7 @@ MonoBehaviour:
   EnemyName: Wolf
   EnemyDesc: 
   MaxHealth: 25
-  MovementSpeed: 6
+  MovementSpeed: 4
   bounty: 14
   Damage: 8
   AttackRate: 1.1

@@ -54,6 +54,7 @@ public class GameplayManager : MonoBehaviour
 
     private List<RoundPerformance> roundPerformances;
 
+
     public State GameState { get; private set; }
     public int currentWaveIndex { get; private set; }
     public int currentWave => currentWaveIndex + 1;
@@ -62,6 +63,9 @@ public class GameplayManager : MonoBehaviour
     public float currentBuildPhaseDuration { get; private set; }
     public MainBase MainBase => mainBase;
     public bool IsActive => isActive;
+    public float MultiplierSpeed { get; private set; }
+    public float MultiplierGold { get; private set; }
+    public float MultiplierDuration { get; private set; }
     public enum State
     {
         Building,
@@ -79,6 +83,10 @@ public class GameplayManager : MonoBehaviour
             fla = GetComponent<FLA>();
             mainBase.Setup(initHealth);
             fla.Setup(initHealth);
+
+            MultiplierDuration = 1f;
+            MultiplierGold = 1f;
+            MultiplierSpeed = 1f;
 
             InitializedAPI();
             InitializedWave();
@@ -266,11 +274,14 @@ public class GameplayManager : MonoBehaviour
             fla.UpdateFLA(currentRoundPerformance, initPerformance);
         }
 
+        MultiplierGold = fla.FinalMultiplierGold;
+        MultiplierSpeed = fla.FinalMultiplierSpeed;
+        MultiplierDuration = fla.FinalMultiplierDuration;
 
         currentWaveIndex++;
-        currentBuildPhaseDuration = BaseBuildStateDuration;
+        currentBuildPhaseDuration = BaseBuildStateDuration * MultiplierDuration;
         buildPhaseDuration = currentBuildPhaseDuration;
-        
+
         if (currentWave > enemyWaves.Count)
         {
             isActive = false;

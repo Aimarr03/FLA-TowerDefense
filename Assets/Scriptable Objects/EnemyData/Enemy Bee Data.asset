@@ -15,7 +15,7 @@ MonoBehaviour:
   EnemyName: Bee
   EnemyDesc: 
   MaxHealth: 25
-  MovementSpeed: 4
+  MovementSpeed: 2
   bounty: 10
   Damage: 15
   AttackRate: 1

@@ -14,7 +14,7 @@ public class Classifier
         Medium,
         Low
     }
-    public PlayerClassify Classify(RoundPerformance currentRound, RoundPerformance previousRound)
+    public ClassificationResult Classify(RoundPerformance currentRound, RoundPerformance previousRound)
     {
         int currentRoundHealth = currentRound.RemainingHealth;
         int previousRoundHealth = previousRound.RemainingHealth;
@@ -25,8 +25,11 @@ public class Classifier
         
         
         PlayerClassify classificationEnemy = ClassifyBasedOnEnemyRemaining(currentRound);
-        
-        return classificationEnemy;
+        return new ClassificationResult
+        {
+            HealthClassification = classifcationHealth,
+            EnemyClassification = classificationEnemy
+        };
     }
     private PlayerClassify ClassifyBasedOnEnemyRemaining(RoundPerformance roundPerformance)
     {
@@ -59,5 +62,10 @@ public class Classifier
             _ => PlayerClassify.High
         };
         return classification;
+    }
+    public struct ClassificationResult
+    {
+        public PlayerClassify HealthClassification;
+        public PlayerClassify EnemyClassification;
     }
 }
