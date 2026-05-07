@@ -1,0 +1,27 @@
+{
+    "defaultInterval" : 0.5,
+    "subWaves" : [
+        {
+            "useDefaultInterval" : false,
+            "interval" : 0.5,
+            "duration" : 5,
+            "enemies" : [
+                {
+                    "type" : 0,
+                    "amount" : 15
+                }
+            ]
+        },
+        {
+            "useDefaultInterval" : true,
+            "interval" : 1,
+            "duration" : 5,
+            "enemies" : [
+                {
+                    "type" : 3,
+                    "amount" : 5
+                }
+            ]
+        }
+    ]
+}

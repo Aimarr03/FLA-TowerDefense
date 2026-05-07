@@ -8,15 +8,16 @@ public class EnemySpawnLoader : MonoBehaviour
 {
     [SerializeField] private string PathNumberBase = "Enemy Waves/Number Base";
     [SerializeField] private string PathPercentageBase = "Enemy Waves/Percentage Base";
+    [SerializeField] private string PathSubWaveBase = "Enemy Waves/Subwave Base";
 
     public List<EnemyWave> enemyWaves = new List<EnemyWave>();
     public List<EnemyWave> randomizedEnemyWaves = new List<EnemyWave>();
-
+    public List<PatternEnemyWave> patternEnemyWaves = new List<PatternEnemyWave>();
     public void LoadData()
     {
+        LoadSubWaveData();
         var waves = Resources.LoadAll<TextAsset>(PathNumberBase);
         var percentageWaves = Resources.LoadAll<TextAsset>(PathPercentageBase);
-
         enemyWaves = new();
         foreach (var wave in waves)
         {
@@ -47,6 +48,17 @@ public class EnemySpawnLoader : MonoBehaviour
                 });
             }
             randomizedEnemyWaves.Add(enemyWave);
+        }
+    }
+    private void LoadSubWaveData()
+    {
+        var subWaveBases = Resources.LoadAll<TextAsset>(PathSubWaveBase);
+        patternEnemyWaves = new();
+        foreach (var subWaveBase in subWaveBases)
+        {
+            string subWaveBaseString = subWaveBase.text;
+            PatternEnemyWave patternEnemyWave = JsonUtility.FromJson<PatternEnemyWave>(subWaveBaseString);
+            patternEnemyWaves.Add(patternEnemyWave);
         }
     }
     public void ConvertPercentageAndUpdateDic(Dictionary<EnemyType, int> container, PercentageEnemySpawn percentageEnemyWave, int amount)

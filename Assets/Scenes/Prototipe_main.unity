@@ -1373,7 +1373,7 @@ GameObject:
   - component: {fileID: 242819766}
   - component: {fileID: 242819765}
   m_Layer: 0
-  m_Name: Triangle (1)
+  m_Name: End Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48352,7 +48352,6 @@ GameObject:
   m_Component:
   - component: {fileID: 747893284}
   - component: {fileID: 747893283}
-  - component: {fileID: 747893285}
   - component: {fileID: 747893286}
   m_Layer: 0
   m_Name: GameplayManager
@@ -48375,7 +48374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameplayManager
   arithmeticGeneration: {fileID: 0}
   problemPosingGenerator: {fileID: 0}
-  enemyLoader: {fileID: 747893285}
+  enemyLoader: {fileID: 1857650230}
   fla: {fileID: 747893286}
   towerActions:
   - {fileID: 11400000, guid: 6b9c37ac55d3b504b9bcab869760347b, type: 2}
@@ -48398,7 +48397,7 @@ MonoBehaviour:
   MainMenu: {fileID: 1994403865}
   readyButton: {fileID: 258330655}
   instantPlay: 1
-  numberBase: 1
+  spawnType: 2
   initHealth: 30
   currentEnemyWave:
     enemies: []
@@ -48417,22 +48416,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &747893285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 747893282}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12c485a3616389345864da05fa87a001, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnLoader
-  PathNumberBase: Enemy Waves/Number Base
-  PathPercentageBase: Enemy Waves/Percentage Base
-  enemyWaves: []
-  randomizedEnemyWaves: []
 --- !u!114 &747893286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49582,7 +49565,7 @@ GameObject:
   - component: {fileID: 903358460}
   - component: {fileID: 903358459}
   m_Layer: 0
-  m_Name: Triangle
+  m_Name: Starting Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59103,6 +59086,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1857650228}
   - component: {fileID: 1857650229}
+  - component: {fileID: 1857650230}
   m_Layer: 0
   m_Name: Enemy Spawner
   m_TagString: Untagged
@@ -59137,11 +59121,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ab274e6ab4546646816eac16ad1fd88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemy: {fileID: 4939059281517140074, guid: d5c6081d87cebb746b7325125f0c0941, type: 3}
   interval: 1
-  totalEnemySpawn: 10
+  enemyRemaining: 10
   enemyWave:
     enemies: []
+  spawnEvents: []
+  enemySpawnLoader: {fileID: 1857650230}
+--- !u!114 &1857650230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1857650227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12c485a3616389345864da05fa87a001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnLoader
+  PathNumberBase: Enemy Waves/Number Base
+  PathPercentageBase: Enemy Waves/Percentage Base
+  PathSubWaveBase: Enemy Waves/Subwave Base
+  enemyWaves: []
+  randomizedEnemyWaves: []
+  patternEnemyWaves: []
 --- !u!1 &1872939925
 GameObject:
   m_ObjectHideFlags: 0

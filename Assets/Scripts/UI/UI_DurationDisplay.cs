@@ -21,7 +21,7 @@ public class UI_DurationDisplay : MonoBehaviour
         {
             case GameplayManager.State.Building:
                 gameObject.SetActive(true);
-                baseDuration = GameplayManager.instance.currentBuildPhaseDuration;
+                baseDuration = GameplayManager.instance.CurrentBuildPhaseDuration;
                 currentDuration = baseDuration;
                 fillDuration.fillAmount = 1;
                 break;

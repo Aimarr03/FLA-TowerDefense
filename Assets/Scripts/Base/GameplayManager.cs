@@ -38,7 +38,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private Canvas MainMenu;
     [SerializeField] private Image readyButton;
     [SerializeField] private bool instantPlay = true;
-    [SerializeField] private bool numberBase = false;
+    [SerializeField] private SpawnType spawnType = SpawnType.SubWaveBase;
 
     [Space(25)]
     [SerializeField] private int initHealth = 30;
@@ -56,22 +56,30 @@ public class GameplayManager : MonoBehaviour
 
 
     public State GameState { get; private set; }
-    public int currentWaveIndex { get; private set; }
-    public int currentWave => currentWaveIndex + 1;
-    public int maxWave => enemyWaves.Count;
+    public int CurrentWaveIndex { get; private set; }
+    public int CurrentWave => CurrentWaveIndex + 1;
+    public int MaxWave => enemyWaves.Count;
     public Vector3 DestinationPos { get; private set; }
-    public float currentBuildPhaseDuration { get; private set; }
+    public float CurrentBuildPhaseDuration { get; private set; }
     public MainBase MainBase => mainBase;
     public bool IsActive => isActive;
     public float MultiplierSpeed { get; private set; }
     public float MultiplierGold { get; private set; }
     public float MultiplierDuration { get; private set; }
+    public SpawnType SpawnMode => spawnType;
+    
     public enum State
     {
         Building,
         Defending,
         Win,
         GameOver,
+    }
+    public enum SpawnType
+    {
+        NumberBase,
+        PercentageBase,
+        SubWaveBase,
     }
 
     public Action<State> onchangedState;
@@ -106,8 +114,8 @@ public class GameplayManager : MonoBehaviour
         switch (GameState)
         {
             case State.Building:
-                currentBuildPhaseDuration -= Time.deltaTime;
-                if (currentBuildPhaseDuration <= 0)
+                CurrentBuildPhaseDuration -= Time.deltaTime;
+                if (CurrentBuildPhaseDuration <= 0)
                 {
                     StartDefending();
                 }
@@ -118,8 +126,8 @@ public class GameplayManager : MonoBehaviour
     {
         if(isActive) return;
         isActive = true;
-        currentBuildPhaseDuration = BaseBuildStateDuration;
-        buildPhaseDuration = currentBuildPhaseDuration;
+        CurrentBuildPhaseDuration = BaseBuildStateDuration;
+        buildPhaseDuration = CurrentBuildPhaseDuration;
 
         mainBase.OnDeath += GameOver;
         DestinationPos = mainBase.transform.position;
@@ -158,16 +166,15 @@ public class GameplayManager : MonoBehaviour
 
     private void InitializedWave()
     {
-        enemyLoader.LoadData();   
-        enemyWaves = numberBase ? enemyLoader.enemyWaves : enemyLoader.randomizedEnemyWaves;
+        enemyLoader.LoadData();
+        enemyWaves = spawnType == SpawnType.NumberBase ? enemyLoader.enemyWaves : enemyLoader.randomizedEnemyWaves;
         roundPerformances = new();
         foreach (var wave in enemyWaves)
         {
             roundPerformances.Add(new RoundPerformance());
         }
-        
-        currentWaveIndex = 0;
-        int index = Mathf.Clamp(currentWaveIndex, 0, enemyWaves.Count - 1);
+        CurrentWaveIndex = 0;
+        int index = Mathf.Clamp(CurrentWaveIndex, 0, enemyWaves.Count - 1);
         
         currentEnemyWave = enemyWaves[index];
         currentRoundPerformance = roundPerformances[index];
@@ -253,19 +260,19 @@ public class GameplayManager : MonoBehaviour
         currentRoundPerformance.EnemyTotalHealth = spawner.EnemyTotalHealth;
         
         currentRoundPerformance.RemainingHealth = (int)mainBase.CurrentHealth;
-        currentRoundPerformance.AttackNumber = currentWave;
+        currentRoundPerformance.AttackNumber = CurrentWave;
 
 
-        Debug.Log($"No. Current Wave Clear: {currentWave}");
-        if(currentWave > 1)
+        Debug.Log($"No. Current Wave Clear: {CurrentWave}");
+        if(CurrentWave > 1)
         {
-            RoundPerformance previousRoundPerformance = roundPerformances[Mathf.Clamp(currentWaveIndex - 1, 0, enemyWaves.Count - 1)];
+            RoundPerformance previousRoundPerformance = roundPerformances[Mathf.Clamp(CurrentWaveIndex - 1, 0, enemyWaves.Count - 1)];
             if (previousRoundPerformance != null)
             {
                 fla.UpdateFLA(currentRoundPerformance, previousRoundPerformance);
             }
         }
-        else if(currentWave == 1)
+        else if(CurrentWave == 1)
         {
             RoundPerformance initPerformance = new RoundPerformance
             {
@@ -278,18 +285,18 @@ public class GameplayManager : MonoBehaviour
         MultiplierSpeed = fla.FinalMultiplierSpeed;
         MultiplierDuration = fla.FinalMultiplierDuration;
 
-        currentWaveIndex++;
-        currentBuildPhaseDuration = BaseBuildStateDuration * MultiplierDuration;
-        buildPhaseDuration = currentBuildPhaseDuration;
+        CurrentWaveIndex++;
+        CurrentBuildPhaseDuration = BaseBuildStateDuration * MultiplierDuration;
+        buildPhaseDuration = CurrentBuildPhaseDuration;
 
-        if (currentWave > enemyWaves.Count)
+        if (CurrentWave > enemyWaves.Count)
         {
             isActive = false;
             ChangeState(State.Win);
         }
         else
         {
-            int index = Mathf.Clamp(currentWaveIndex, 0, enemyWaves.Count - 1);
+            int index = Mathf.Clamp(CurrentWaveIndex, 0, enemyWaves.Count - 1);
             currentEnemyWave = enemyWaves[index];
             currentRoundPerformance = roundPerformances[index];
             ChangeState(State.Building);
@@ -326,11 +333,11 @@ public class GameplayManager : MonoBehaviour
 
         if (!condition) return;
         ChangeState(State.Defending);
-        currentBuildPhaseDuration = 0;
+        CurrentBuildPhaseDuration = 0;
 
         
         currentRoundPerformance.BuildPhaseDuration = buildPhaseDuration;
-        currentRoundPerformance.RemainingbuildPhaseDuration = currentBuildPhaseDuration;
+        currentRoundPerformance.RemainingbuildPhaseDuration = CurrentBuildPhaseDuration;
     }
 }
 [Serializable]

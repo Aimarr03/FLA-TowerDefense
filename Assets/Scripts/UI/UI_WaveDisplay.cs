@@ -29,8 +29,8 @@ public class UI_WaveDisplay : MonoBehaviour
             tmp_enemyWaves.gameObject.SetActive(true);
             tmp_detailWave.gameObject.SetActive(true);
 
-            int enemyWave = GameplayManager.instance.currentWave;
-            int maxWaves = GameplayManager.instance.maxWave;
+            int enemyWave = GameplayManager.instance.CurrentWave;
+            int maxWaves = GameplayManager.instance.MaxWave;
             tmp_enemyWaves.text = $"Enemy Waves: {enemyWave}/{maxWaves}";
 
             var enemyWaveData = GameplayManager.instance.currentEnemyWave;
