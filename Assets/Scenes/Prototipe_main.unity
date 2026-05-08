@@ -48353,6 +48353,7 @@ GameObject:
   - component: {fileID: 747893284}
   - component: {fileID: 747893283}
   - component: {fileID: 747893286}
+  - component: {fileID: 747893287}
   m_Layer: 0
   m_Name: GameplayManager
   m_TagString: Untagged
@@ -48375,6 +48376,7 @@ MonoBehaviour:
   arithmeticGeneration: {fileID: 0}
   problemPosingGenerator: {fileID: 0}
   fla: {fileID: 747893286}
+  configLoader: {fileID: 0}
   enemyLoader: {fileID: 1857650230}
   enemySpawner: {fileID: 1857650229}
   towerActions:
@@ -48433,6 +48435,23 @@ MonoBehaviour:
   goldScale: 0.05
   durationScale: 0.05
   speedScale: 0.05
+--- !u!114 &747893287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747893282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550de61aa0da3dd4aa25d337896fa10a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConfigLoader
+  gameConfig:
+    filePath: 
+    scenarioMode: 
+    spawnMode: 
+    cycleMode: 
 --- !u!1 &752473687
 GameObject:
   m_ObjectHideFlags: 0

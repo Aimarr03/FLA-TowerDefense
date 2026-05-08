@@ -20,6 +20,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private ArithmeticGeneration arithmeticGeneration;
     [SerializeField] private ProblemPosingGenerator problemPosingGenerator;
     [SerializeField] private FLA fla;
+    [SerializeField] private ConfigLoader configLoader;
 
     [Header("Enemy Spawner")]
     [SerializeField] private EnemySpawnLoader enemyLoader;
@@ -40,7 +41,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private Canvas MainMenu;
     [SerializeField] private Image readyButton;
     [SerializeField] private bool instantPlay = true;
-    [SerializeField] private SpawnType spawnType = SpawnType.SubWaveBase;
+    [SerializeField] private SpawnType spawnType = SpawnType.Subwave;
 
     [Space(25)]
     [SerializeField] private int initHealth = 30;
@@ -78,9 +79,9 @@ public class GameplayManager : MonoBehaviour
     }
     public enum SpawnType
     {
-        NumberBase,
-        PercentageBase,
-        SubWaveBase,
+        Number,
+        Percentage,
+        Subwave,
     }
 
     public Action<State> onchangedState;
@@ -90,20 +91,40 @@ public class GameplayManager : MonoBehaviour
         {
             instance = this;
             fla = GetComponent<FLA>();
-            mainBase.Setup(initHealth);
-            fla.Setup(initHealth);
-
+            configLoader = GetComponent<ConfigLoader>();
+            
             MultiplierDuration = 1f;
             MultiplierGold = 1f;
             MultiplierSpeed = 1f;
-
+            
             InitializedAPI();
-            InitializedWave();
+            LoadConfig();
+            
+            mainBase.Setup(initHealth);
+            fla.Setup(initHealth);
             if (instantPlay)
             {
                 StartGame();
             }
         }
+    }
+    private void LoadConfig()
+    {
+        if(configLoader == null)
+        {
+            configLoader = GetComponent<ConfigLoader>();
+            if(configLoader == null)
+            {
+                Debug.LogError("Config Loader is not found, try again!");
+                return;
+            }
+        }
+        configLoader.Init();
+
+        var config = configLoader.gameConfig;
+        configLoader.TryParseSpawnType(config.spawnMode, out spawnType);
+        
+        InitializedWave();
     }
     private void OnDestroy()
     {
@@ -167,8 +188,8 @@ public class GameplayManager : MonoBehaviour
 
     private void InitializedWave()
     {
-        enemyLoader.LoadData();
-        maxWave = enemyLoader.GetMaxInfoWave(spawnType);
+        enemyLoader.TryLoadData(configLoader.gameConfig.filePath ,spawnType);
+        maxWave = enemyLoader.MaxWaveCount;
         
         roundPerformances = new();
         for(int i = 0; i < maxWave; i++)

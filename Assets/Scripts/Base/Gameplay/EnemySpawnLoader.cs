@@ -10,6 +10,9 @@ public class EnemySpawnLoader : MonoBehaviour
     [SerializeField] private string PathPercentageBase = "Enemy Waves/Percentage Base";
     [SerializeField] private string PathSubWaveBase = "Enemy Waves/Subwave Base";
 
+    private GameplayManager.SpawnType spawnType;
+    public int MaxWaveCount => GetMaxInfoWave(spawnType);
+
     public List<EnemyWave> enemyWaves = new List<EnemyWave>();
     public List<EnemyWave> randomizedEnemyWaves = new List<EnemyWave>();
     public List<PatternEnemyWave> patternEnemyWaves = new List<PatternEnemyWave>();
@@ -18,19 +21,26 @@ public class EnemySpawnLoader : MonoBehaviour
     {
         switch (spawnType)
         {
-            case GameplayManager.SpawnType.NumberBase:
+            case GameplayManager.SpawnType.Number:
                 return enemyWaves.Count;
-            case GameplayManager.SpawnType.PercentageBase:
+            case GameplayManager.SpawnType.Percentage:
                 return randomizedEnemyWaves.Count;
-            case GameplayManager.SpawnType.SubWaveBase:
+            case GameplayManager.SpawnType.Subwave:
                 return patternEnemyWaves.Count;
             default:
                 throw new ArgumentOutOfRangeException(nameof(spawnType), spawnType, null);
         }
     }
+
+    public void TryLoadData(string path, GameplayManager.SpawnType spawnType)
+    {
+        LoadSubWaveData(path);
+        this.spawnType = spawnType;
+    }
+    [Obsolete("Use TryLoadData instead")]
     public void LoadData()
     {
-        LoadSubWaveData();
+        LoadSubWaveData(PathSubWaveBase);
         var waves = Resources.LoadAll<TextAsset>(PathNumberBase);
         var percentageWaves = Resources.LoadAll<TextAsset>(PathPercentageBase);
         enemyWaves = new();
@@ -65,9 +75,9 @@ public class EnemySpawnLoader : MonoBehaviour
             randomizedEnemyWaves.Add(enemyWave);
         }
     }
-    private void LoadSubWaveData()
+    private void LoadSubWaveData(string path)
     {
-        var subWaveBases = Resources.LoadAll<TextAsset>(PathSubWaveBase);
+        var subWaveBases = Resources.LoadAll<TextAsset>(path);
         patternEnemyWaves = new();
         foreach (var subWaveBase in subWaveBases)
         {

@@ -81,13 +81,13 @@ public class EnemySpawner : MonoBehaviour
         
         switch (GameplayManager.instance.SpawnMode)
         {
-            case GameplayManager.SpawnType.NumberBase:
+            case GameplayManager.SpawnType.Number:
                 EnemyWave normalWave = enemySpawnLoader.enemyWaves[waveIndex];
                 spawnEvents = EnemyWaveBuilder.NormalBuild(normalWave, 1f);
                 
                 enemySpawnInfos = normalWave.enemies;
                 break;
-            case GameplayManager.SpawnType.SubWaveBase:
+            case GameplayManager.SpawnType.Subwave:
                 PatternEnemyWave subpatternWave = enemySpawnLoader.patternEnemyWaves[waveIndex];
                 spawnEvents = EnemyWaveBuilder.SubwaveBuild(subpatternWave);
                 
