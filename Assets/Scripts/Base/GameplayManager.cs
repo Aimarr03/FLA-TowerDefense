@@ -182,7 +182,7 @@ public class GameplayManager : MonoBehaviour
     }
     private void UpdateWave()
     {
-        enemySpawner.GetEnemyWave();
+        enemySpawner.GetEnemyWave(); 
         enemySpawnInfos = enemySpawner.EnemySpawnInfos;
     }
     private void InitializedAPI()
