@@ -17,7 +17,7 @@ public class FLA : MonoBehaviour
     public float FinalMultiplierGold => finalMultiplierGold;
     public float FinalMultiplierDuration => finalMultiplierDuration;
     public float FinalMultiplierSpeed => finalMultiplierSpeed;
-
+ 
     FibonacciSequence fibonacciSequence;
     Classifier classifier;
     private void Awake()
