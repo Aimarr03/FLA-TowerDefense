@@ -8,6 +8,8 @@ public class ConfigLoader : MonoBehaviour
     string defaultScenario = "dda";
     string defaultSpawn = "subwave";
     string defaultCycle = "normal";
+    int defaultMoney = 300;
+    float defaultBaseDuration = 30;
     string defaultNameFile = "gameconfig.yaml";
 
     public GameConfig gameConfig;
@@ -40,7 +42,9 @@ public class ConfigLoader : MonoBehaviour
             filePath = defaultPath,
             cycleMode = defaultCycle,
             scenarioMode = defaultScenario,
-            spawnMode = defaultSpawn
+            spawnMode = defaultSpawn,
+            startingMoney = defaultMoney,
+            baseDuration = defaultBaseDuration
         };
 
         SaveConfig(config);

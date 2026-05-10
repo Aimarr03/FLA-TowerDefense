@@ -48376,7 +48376,7 @@ MonoBehaviour:
   arithmeticGeneration: {fileID: 0}
   problemPosingGenerator: {fileID: 0}
   fla: {fileID: 747893286}
-  configLoader: {fileID: 0}
+  configLoader: {fileID: 747893287}
   enemyLoader: {fileID: 1857650230}
   enemySpawner: {fileID: 1857650229}
   towerActions:
@@ -48452,6 +48452,8 @@ MonoBehaviour:
     scenarioMode: 
     spawnMode: 
     cycleMode: 
+    startingMoney: 0
+    baseDuration: 0
 --- !u!1 &752473687
 GameObject:
   m_ObjectHideFlags: 0

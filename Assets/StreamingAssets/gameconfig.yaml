@@ -2,4 +2,5 @@ filePath: Enemy Waves/Subwave Base
 scenarioMode: dda
 spawnMode: subwave
 cycleMode: normal
-
+startingMoney: 350
+baseDuration: 30

@@ -9,6 +9,12 @@ public class EconomyManager
 
     public int CurrentMoney => currentMoney;
 
+    public EconomyManager(int startingMoney)
+    {
+        OnMoneyChange = null;
+        currentMoney = startingMoney;
+    }
+    public void UpdateInfo() => OnMoneyChange?.Invoke(currentMoney);
     public bool IsEnough(int amount)
     {
         bool condition = currentMoney >= amount;

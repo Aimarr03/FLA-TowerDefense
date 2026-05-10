@@ -8,4 +8,7 @@ public class GameConfig
     public string scenarioMode;
     public string spawnMode;
     public string cycleMode;
+    public int startingMoney;
+    public float baseDuration;
+    
 }

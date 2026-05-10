@@ -1,5 +1,6 @@
 using NavMeshPlus.Components;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -97,7 +98,6 @@ public class GameplayManager : MonoBehaviour
             MultiplierGold = 1f;
             MultiplierSpeed = 1f;
             
-            InitializedAPI();
             LoadConfig();
             
             mainBase.Setup(initHealth);
@@ -124,6 +124,10 @@ public class GameplayManager : MonoBehaviour
         var config = configLoader.gameConfig;
         configLoader.TryParseSpawnType(config.spawnMode, out spawnType);
         
+        economyManager = new EconomyManager(config.startingMoney);
+        BaseBuildStateDuration = config.baseDuration;
+
+        InitializedAPI();
         InitializedWave();
     }
     private void OnDestroy()
@@ -157,24 +161,13 @@ public class GameplayManager : MonoBehaviour
         TowerActionSO.ActionInvoke += TowerActionInvoke;
         MainMenu.gameObject.SetActive(false);
         ChangeState(State.Building);
-
-        if(problemPosingGenerator != null)
+        
+        IEnumerator DelayUpdateEconomy()
         {
-            problemPosingGenerator.OnAnsweredQuestion += (bool isCorrect) =>
-            {
-                if (isCorrect)
-                {
-                    economyManager.GainMoney(rewardQuestionAnswered);
-                }
-            };
+            yield return new WaitForSeconds(1f);
+            economyManager.GainMoney(0);
         }
-        if (arithmeticGeneration != null)
-        {
-            arithmeticGeneration.OnCorrectAnswer += () =>
-            {
-                economyManager.GainMoney(rewardQuestionAnswered);
-            };
-        }
+        StartCoroutine(DelayUpdateEconomy());
     }
 
     public void RestartGame()
