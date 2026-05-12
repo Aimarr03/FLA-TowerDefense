@@ -35,4 +35,8 @@ public class BuyAction : TowerActionSO
         actionContext.useMoney = true;
         return actionContext;
     }
+    public int GetBuildCost()
+    {
+        return (int) towerData.CostBuild();
+    }
 }

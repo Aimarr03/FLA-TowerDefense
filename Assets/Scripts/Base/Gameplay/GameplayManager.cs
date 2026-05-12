@@ -18,8 +18,7 @@ public class GameplayManager : MonoBehaviour
 {
     public static GameplayManager instance;
     [Header("Main Componene")]
-    [SerializeField] private ArithmeticGeneration arithmeticGeneration;
-    [SerializeField] private ProblemPosingGenerator problemPosingGenerator;
+    [SerializeField] private BotController bot;
     [SerializeField] private FLA fla;
     [SerializeField] private ConfigLoader configLoader;
 
@@ -93,7 +92,7 @@ public class GameplayManager : MonoBehaviour
             instance = this;
             fla = GetComponent<FLA>();
             configLoader = GetComponent<ConfigLoader>();
-            
+
             MultiplierDuration = 1f;
             MultiplierGold = 1f;
             MultiplierSpeed = 1f;
@@ -102,6 +101,8 @@ public class GameplayManager : MonoBehaviour
             
             mainBase.Setup(initHealth);
             fla.Setup(initHealth);
+
+            bot.Init();
             if (instantPlay)
             {
                 StartGame();
