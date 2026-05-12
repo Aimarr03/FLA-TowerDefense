@@ -22,8 +22,34 @@ public class BotController : MonoBehaviour
         }
 
         currentInterval = 0;
+        GameplayManager.instance.onchangedState += Gameplay_ChangeState;
+        TD_API.Economy.OnMoneyChange += OnMoneyChange;
     }
 
+    private void Gameplay_ChangeState(GameplayManager.State state)
+    {
+        if(!isActive) return;
+        
+        bool gameEnd = state switch
+        {
+            GameplayManager.State.Win => true,
+            GameplayManager.State.GameOver => true,
+            _ => false
+        };
+        
+        if (gameEnd)
+        {
+            GameplayManager.instance.onchangedState -= Gameplay_ChangeState;
+            TD_API.Economy.OnMoneyChange -= OnMoneyChange;
+            isActive = false;
+            return;
+        }
+
+    }
+    private void OnMoneyChange(int currentMoney)
+    {
+        
+    }
     // Update is called once per frame
     void Update()
     {
@@ -34,7 +60,24 @@ public class BotController : MonoBehaviour
         {
             currentInterval = 0;
             Build();
+            TryStartingDefend();
         }
+    }
+    private void TryStartingDefend()
+    {
+        if(GameplayManager.instance.GameState == GameplayManager.State.Building)
+        {
+            if (!CheckBuildActionLeft())
+            {
+                GameplayManager.instance.StartDefending();
+            }    
+        }
+    }
+    private bool CheckBuildActionLeft()
+    {
+        var buildAction = GetRandomSufficientTowerBuild();
+        bool canBuildAgain = buildAction != null;
+        return canBuildAgain;
     }
     private void Build()
     {
