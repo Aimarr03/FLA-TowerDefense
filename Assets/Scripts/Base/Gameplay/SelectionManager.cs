@@ -15,6 +15,7 @@ public class SelectionManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] Vector2 worldPoint;
     [SerializeField] bool isOnUI;
+    private bool isActive = true;
 
 
     [Header("Selection")]
@@ -26,11 +27,18 @@ public class SelectionManager : MonoBehaviour
     private void Awake()
     {
         TD_API.selectionManager = this;
+        isActive = true;
     }
     void Update()
     {
+        if(!isActive) return;
+        
         HoveringLogic();
         LeftClickAction();
+    }
+    public void DisableSelectionManager()
+    {
+        isActive = false;
     }
     private void HoveringLogic()
     {
@@ -122,7 +130,7 @@ public class SelectionManager : MonoBehaviour
 
             foreach (var result in results)
             {
-                Debug.Log($"• {result.gameObject.name} | Canvas: {result.gameObject.GetComponentInParent<Canvas>()?.name}");
+                Debug.Log($"ï¿½ {result.gameObject.name} | Canvas: {result.gameObject.GetComponentInParent<Canvas>()?.name}");
             }
 
             Debug.Log($"TOP UI: {results[0].gameObject.name}");

@@ -8,8 +8,15 @@ public class BotController : MonoBehaviour
     private List<Tower> allTower;
     private List<BuyAction> buyActions;
     private bool isActive = false;
-    float intervalDecision = 0.5f;
+    [SerializeField] float intervalDecision = 1.5f;
     float currentInterval = 0f;
+
+    /// <summary>
+    /// Build Probability Variable
+    /// </summary>
+    float buildChance = 0.2f;
+    float buildAccumulator = 0f;
+    public bool IsActive => isActive;
     public void Init()
     {
         allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
@@ -79,8 +86,25 @@ public class BotController : MonoBehaviour
         bool canBuildAgain = buildAction != null;
         return canBuildAgain;
     }
+    private bool TryBuildTrigger()
+    {
+        buildAccumulator += buildChance;
+
+        float roll = Random.value;
+
+        if (roll < buildAccumulator)
+        {
+            buildAccumulator = 0f;
+            return true;
+        }
+
+        return false;
+    }
+    
     private void Build()
     {
+        if(!TryBuildTrigger()) return;
+        
         Tower tower = GetRandomUnBuiltTower();
         TowerActionSO buildAction = GetRandomSufficientTowerBuild();
         if(tower == null || buildAction == null) return;
@@ -95,7 +119,7 @@ public class BotController : MonoBehaviour
             return null;
         
         int randomIndex = Random.Range(0, maxIndex + 1);
-        Tower randomNotBuiltTower = emptyTower[maxIndex];
+        Tower randomNotBuiltTower = emptyTower[randomIndex];
         return randomNotBuiltTower;
     }
     private TowerActionSO GetRandomSufficientTowerBuild()

@@ -21,6 +21,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private BotController bot;
     [SerializeField] private FLA fla;
     [SerializeField] private ConfigLoader configLoader;
+    [SerializeField] private SelectionManager selectionManager;
 
     [Header("Enemy Spawner")]
     [SerializeField] private EnemySpawnLoader enemyLoader;
@@ -103,6 +104,10 @@ public class GameplayManager : MonoBehaviour
             fla.Setup(initHealth);
 
             bot.Init();
+            if (bot.IsActive)
+            {
+                selectionManager.DisableSelectionManager();
+            }
             if (instantPlay)
             {
                 StartGame();

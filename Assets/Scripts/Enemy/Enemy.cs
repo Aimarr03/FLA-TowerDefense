@@ -52,12 +52,6 @@ public class Enemy : MonoBehaviour
         characterMovement.MovementSpeed = movementSpeed;
         currentHealh = maxHealth;
     }
-    private void Start()
-    {
-        target = GameplayManager.instance.MainBase;
-        target.OnDeath += StopAction;
-        PreMove();
-    }
     private void Update()
     {
         currentAction?.Invoke();
@@ -76,6 +70,10 @@ public class Enemy : MonoBehaviour
         float finalMovementSpeed = movementSpeed * GameplayManager.instance.MultiplierSpeed;
         characterMovement.MovementSpeed = finalMovementSpeed;
         bounty = enemyData.bounty;
+
+        target = GameplayManager.instance.MainBase;
+        target.OnDeath += StopAction;
+        PreMove();
     }
     private void StopAction()
     {

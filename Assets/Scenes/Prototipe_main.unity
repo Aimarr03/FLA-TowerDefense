@@ -1590,6 +1590,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 244990941}
   m_CullTransparentMesh: 1
+--- !u!1 &255797123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 255797125}
+  - component: {fileID: 255797124}
+  m_Layer: 0
+  m_Name: Bot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &255797124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255797123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b0ae93a2045094883eb7b16a636d0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BotController
+  intervalDecision: 0.5
+--- !u!4 &255797125
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255797123}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &258330652
 GameObject:
   m_ObjectHideFlags: 0
@@ -47937,7 +47982,7 @@ Transform:
   m_GameObject: {fileID: 705281851}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.92, y: 23.07, z: 0}
+  m_LocalPosition: {x: -0.92, y: 14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -48373,10 +48418,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e0738e192bf5ce4bb75ffb841a7011b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameplayManager
-  arithmeticGeneration: {fileID: 0}
-  problemPosingGenerator: {fileID: 0}
+  bot: {fileID: 255797124}
   fla: {fileID: 747893286}
   configLoader: {fileID: 747893287}
+  selectionManager: {fileID: 1596761087}
   enemyLoader: {fileID: 1857650230}
   enemySpawner: {fileID: 1857650229}
   towerActions:
@@ -61759,7 +61804,7 @@ Transform:
   m_GameObject: {fileID: 1956628807}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -8.8, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -63637,6 +63682,7 @@ SceneRoots:
   - {fileID: 1857650228}
   - {fileID: 747893284}
   - {fileID: 1596761086}
+  - {fileID: 255797125}
   - {fileID: 1643834935}
   - {fileID: 1442442795}
   - {fileID: 1994403866}
