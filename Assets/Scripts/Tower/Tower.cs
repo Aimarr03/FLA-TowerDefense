@@ -18,6 +18,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer attackRangeEffect;
 
+    [Header("Bot Property")]
+    [SerializeField, Range(1,10)] private int preferenceScore;
     private AreaDetection rangeDetection;
     private UIAction uiAction;
 
@@ -31,6 +33,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
 
     public int Level => level;
     public bool IsMax => level >= maxLevel;
+    public int PreferenceScore => preferenceScore;
     public State CurrentState => towerState;
     public enum State
     {
@@ -38,6 +41,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         Built
     }
     public TowerData TowerData { get; private set; }
+    [Header("Behaviour Property")]
     [SerializeReference] private List<TowerAttackBehaviour> AttackBehaviours;
     [SerializeReference] private List<TowerAttackEffect> AttackEffects;
 

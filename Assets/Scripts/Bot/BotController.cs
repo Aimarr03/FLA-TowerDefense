@@ -16,7 +16,11 @@ public class BotController : MonoBehaviour
     /// </summary>
     float buildChance = 0.2f;
     float buildAccumulator = 0f;
+    float buildInterval = 0f;
+    float buildCooldown = 3f;
+    bool canBuild => buildInterval >= buildCooldown;
     public bool IsActive => isActive;
+    
     public void Init()
     {
         allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
@@ -63,6 +67,7 @@ public class BotController : MonoBehaviour
         if (!isActive) return;
 
         currentInterval += Time.deltaTime;
+        buildInterval += Time.deltaTime;
         if(currentInterval > intervalDecision)
         {
             currentInterval = 0;
@@ -103,13 +108,42 @@ public class BotController : MonoBehaviour
     
     private void Build()
     {
-        if(!TryBuildTrigger()) return;
+        if(!canBuild)
+            return;
         
-        Tower tower = GetRandomUnBuiltTower();
+        if(!TryBuildTrigger()) 
+            return;
+        
+        buildInterval = 0f;
+        Tower tower = GetRandomizedPreferenceTower();
         TowerActionSO buildAction = GetRandomSufficientTowerBuild();
         if(tower == null || buildAction == null) return;
 
         buildAction.Executes(tower);
+    }
+    private Tower GetRandomizedPreferenceTower(int count = 3)
+    {
+        List<Tower> emptyTower = allTower.Where(tower => tower.CurrentState == Tower.State.None).ToList();
+        if(count >= emptyTower.Count)
+        {
+            count = emptyTower.Count;
+        }
+        List<Tower> highestTower = emptyTower
+        .OrderByDescending(tower => tower.PreferenceScore)
+        .Take(count)
+        .ToList();
+
+        int maxIndex = highestTower.Count - 1;
+        int randomIndex = Random.Range(0, maxIndex + 1);
+        Tower randomizedPreferenceTower = highestTower[randomIndex];
+
+        return randomizedPreferenceTower;
+    }
+    private Tower GetBestPreferenceTower()
+    {
+        List<Tower> emptyTower = allTower.Where(tower => tower.CurrentState == Tower.State.None).ToList();
+        Tower towerHighestScore = allTower.OrderByDescending(tower => tower.PreferenceScore).First();
+        return towerHighestScore;
     }
     private Tower GetRandomUnBuiltTower()
     {
