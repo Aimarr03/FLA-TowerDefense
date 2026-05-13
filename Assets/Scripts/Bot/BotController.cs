@@ -2,13 +2,37 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System;
 
+[Serializable]
+public class BotProperty
+{
+    public BotController.Capability botType;
+    [Header("Weighted Property Strategy")]
+    [Range(1, 100)] public int RandomWeight = 50;
+    [Range(1, 100)] public int RandomBestWeight = 35;
+    [Range(1, 100)] public int BestWeight = 10;
+}
+public enum BotTowerSelectionStrategy
+{
+    PureRandom,
+    RandomBestPreference,
+    BestPreference
+}
 public class BotController : MonoBehaviour
 {
+    public enum Capability
+    {
+        Low,
+        Medium,
+        High
+    }
     private List<Tower> allTower;
     private List<BuyAction> buyActions;
     private bool isActive = false;
     [SerializeField] float intervalDecision = 1.5f;
+    [SerializeField] private Capability botType = Capability.Low;
+    [SerializeField] private BotProperty botProperty;
     float currentInterval = 0f;
 
     /// <summary>
@@ -61,7 +85,6 @@ public class BotController : MonoBehaviour
     {
         
     }
-    // Update is called once per frame
     void Update()
     {
         if (!isActive) return;
@@ -115,12 +138,42 @@ public class BotController : MonoBehaviour
             return;
         
         buildInterval = 0f;
-        Tower tower = GetRandomizedPreferenceTower();
+        BotTowerSelectionStrategy stratType = GetStrategyWeighted();
+        Debug.Log($"[BOT] Randomized Strats: {stratType}");
+
+        Tower tower = stratType switch 
+        { 
+            BotTowerSelectionStrategy.PureRandom => GetRandomUnBuiltTower(),
+            BotTowerSelectionStrategy.RandomBestPreference => GetRandomizedPreferenceTower(),
+            BotTowerSelectionStrategy.BestPreference => GetBestPreferenceTower(),
+            _ => null
+        };
         TowerActionSO buildAction = GetRandomSufficientTowerBuild();
         if(tower == null || buildAction == null) return;
 
         buildAction.Executes(tower);
     }
+    private BotTowerSelectionStrategy GetStrategyWeighted()
+    {
+        float totalWeight = botProperty.RandomWeight +
+            botProperty.RandomBestWeight +
+            botProperty.BestWeight;
+        
+        float roll = Random.value * totalWeight;
+        Debug.Log($"[Debug] Roll: {roll} with totalWeight of {totalWeight}");
+        if(roll < botProperty.RandomWeight)
+        {
+            return BotTowerSelectionStrategy.PureRandom;
+        }
+        roll -= botProperty.RandomWeight;
+
+        if(roll < botProperty.RandomBestWeight)
+        {
+            return BotTowerSelectionStrategy.RandomBestPreference;
+        }
+        return BotTowerSelectionStrategy.BestPreference;
+    }
+
     private Tower GetRandomizedPreferenceTower(int count = 3)
     {
         List<Tower> emptyTower = allTower.Where(tower => tower.CurrentState == Tower.State.None).ToList();
