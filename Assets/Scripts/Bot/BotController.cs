@@ -3,21 +3,31 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System;
+using UnityEngine.Rendering;
 
 [Serializable]
 public class BotProperty
 {
     public BotController.Capability botType;
     [Header("Weighted Property Strategy")]
-    [Range(1, 100)] public int RandomWeight = 50;
-    [Range(1, 100)] public int RandomBestWeight = 35;
-    [Range(1, 100)] public int BestWeight = 10;
+    [Range(1, 100)] public int BuildRandomWeight = 50;
+    [Range(1, 100)] public int BuildRandomBestWeight = 35;
+    [Range(1, 100)] public int BuildBestWeight = 10;
+    
+    [Header("Weighted Property Type")]
+    [Range(1, 100)] public int TowerTypeRandomWeight = 50;
+    [Range(1, 100)] public int TowerTypeObservingWeight = 25;
 }
-public enum BotTowerSelectionStrategy
+public enum BotTowerSelectionStrat
 {
     PureRandom,
     RandomBestPreference,
     BestPreference
+}
+public enum BotTowerTypeStrat
+{
+    PureRandom,
+    Observation
 }
 public class BotController : MonoBehaviour
 {
@@ -45,6 +55,7 @@ public class BotController : MonoBehaviour
     bool canBuild => buildInterval >= buildCooldown;
     public bool IsActive => isActive;
     
+    private List<EnemySpawnInfo> enemySpawnInfos;
     public void Init()
     {
         allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
@@ -59,6 +70,7 @@ public class BotController : MonoBehaviour
         currentInterval = 0;
         GameplayManager.instance.onchangedState += Gameplay_ChangeState;
         TD_API.Economy.OnMoneyChange += OnMoneyChange;
+        enemySpawnInfos = new();
     }
 
     private void Gameplay_ChangeState(GameplayManager.State state)
@@ -79,7 +91,21 @@ public class BotController : MonoBehaviour
             isActive = false;
             return;
         }
-
+        else
+        {
+            if(state == GameplayManager.State.Building)
+            {
+                if(enemySpawnInfos == null)
+                    enemySpawnInfos = new();
+                
+                enemySpawnInfos.Clear();
+                enemySpawnInfos.AddRange(GameplayManager.instance.enemySpawnInfos);
+            }
+            else if(state == GameplayManager.State.Defending)
+            {
+                
+            }
+        }
     }
     private void OnMoneyChange(int currentMoney)
     {
@@ -110,8 +136,8 @@ public class BotController : MonoBehaviour
     }
     private bool CheckBuildActionLeft()
     {
-        var buildAction = GetRandomSufficientTowerBuild();
-        bool canBuildAgain = buildAction != null;
+        var actions = buyActions.Where(tower => TD_API.Economy.IsEnough(tower.GetBuildCost())).ToList();
+        bool canBuildAgain = actions != null && actions.Count > 0;
         return canBuildAgain;
     }
     private bool TryBuildTrigger()
@@ -138,40 +164,41 @@ public class BotController : MonoBehaviour
             return;
         
         buildInterval = 0f;
-        BotTowerSelectionStrategy stratType = GetStrategyWeighted();
-        Debug.Log($"[BOT] Randomized Strats: {stratType}");
+        BotTowerSelectionStrat stratType = GetStrategyWeighted();
+        Debug.Log($"[BOT] Randomized Get Unbuild Tower Strats: {stratType}");
 
         Tower tower = stratType switch 
         { 
-            BotTowerSelectionStrategy.PureRandom => GetRandomUnBuiltTower(),
-            BotTowerSelectionStrategy.RandomBestPreference => GetRandomizedPreferenceTower(),
-            BotTowerSelectionStrategy.BestPreference => GetBestPreferenceTower(),
+            BotTowerSelectionStrat.PureRandom => GetRandomUnBuiltTower(),
+            BotTowerSelectionStrat.RandomBestPreference => GetRandomizedPreferenceTower(),
+            BotTowerSelectionStrat.BestPreference => GetBestPreferenceTower(),
             _ => null
         };
-        TowerActionSO buildAction = GetRandomSufficientTowerBuild();
+        TowerActionSO buildAction = GetTowerType();
         if(tower == null || buildAction == null) return;
 
         buildAction.Executes(tower);
     }
-    private BotTowerSelectionStrategy GetStrategyWeighted()
+    private BotTowerSelectionStrat GetStrategyWeighted()
     {
-        float totalWeight = botProperty.RandomWeight +
-            botProperty.RandomBestWeight +
-            botProperty.BestWeight;
+        float totalWeight = botProperty.BuildRandomWeight +
+            botProperty.BuildRandomBestWeight +
+            botProperty.BuildBestWeight;
         
         float roll = Random.value * totalWeight;
+        Debug.Log($"[Debug] Strat of Get unbuild Tower");
         Debug.Log($"[Debug] Roll: {roll} with totalWeight of {totalWeight}");
-        if(roll < botProperty.RandomWeight)
+        if(roll < botProperty.BuildRandomWeight)
         {
-            return BotTowerSelectionStrategy.PureRandom;
+            return BotTowerSelectionStrat.PureRandom;
         }
-        roll -= botProperty.RandomWeight;
+        roll -= botProperty.BuildRandomWeight;
 
-        if(roll < botProperty.RandomBestWeight)
+        if(roll < botProperty.TowerTypeObservingWeight)
         {
-            return BotTowerSelectionStrategy.RandomBestPreference;
+            return BotTowerSelectionStrat.RandomBestPreference;
         }
-        return BotTowerSelectionStrategy.BestPreference;
+        return BotTowerSelectionStrat.BestPreference;
     }
 
     private Tower GetRandomizedPreferenceTower(int count = 3)
@@ -209,21 +236,106 @@ public class BotController : MonoBehaviour
         Tower randomNotBuiltTower = emptyTower[randomIndex];
         return randomNotBuiltTower;
     }
-    private TowerActionSO GetRandomSufficientTowerBuild()
+
+    /// <summary>
+    /// This segment is for function of calling what kind of tower
+    /// the bot is going to build
+    /// </summary>
+    private BotTowerTypeStrat GetTowerTypeStrat()
+    {
+        float totalWeight = botProperty.TowerTypeRandomWeight
+            + botProperty.TowerTypeObservingWeight;
+        
+        float roll = Random.value * totalWeight;
+
+        Debug.Log($"[Debug] Strat of Get Tower Type");
+        Debug.Log($"[Debug] Roll: {roll} with totalWeight of {totalWeight}");
+
+        if(roll < botProperty.TowerTypeRandomWeight)
+        {
+            return BotTowerTypeStrat.PureRandom;
+        }
+        return BotTowerTypeStrat.Observation;
+    }
+    // private TowerActionSO GetRandomSufficientTowerBlueprint()
+    // {
+    //     var actions = buyActions.Where(tower => TD_API.Economy.IsEnough(tower.GetBuildCost())).ToList();
+
+        
+    //     BotTowerTypeStrat methodGetTowerType = GetTowerTypeStrat();
+    //     Debug.Log($"[BOT] Randomized Get Type Strats: {methodGetTowerType}");
+    //     TowerActionSO blueprint = methodGetTowerType switch
+    //     {
+    //         BotTowerTypeStrat.PureRandom =>  GetRandomTowerBuildBlueprint(actions),
+    //         BotTowerTypeStrat.Observation => GetBuildingObservastionBasedTowerBuildBlueprint(actions),
+    //         _ => null
+    //     };
+
+    //     return GetRandomTowerBuildBlueprint(actions);
+    // }
+    private TowerActionSO GetTowerType()
     {
         var actions = buyActions.Where(tower => TD_API.Economy.IsEnough(tower.GetBuildCost())).ToList();
-        return GetRandomBuildTowerAction(actions);
+
+        BotTowerTypeStrat methodGetTowerType = GetTowerTypeStrat();
+        Debug.Log($"[BOT] Randomized Get Type Strats: {methodGetTowerType}");
+        TowerActionSO blueprint = methodGetTowerType switch
+        {
+            BotTowerTypeStrat.PureRandom =>  GetRandomTowerBuildBlueprint(actions),
+            BotTowerTypeStrat.Observation => GetObservationBasedTowerBuildBlueprint(actions),
+            _ => null
+        };
+
+        return GetRandomTowerBuildBlueprint(actions);
     }
-    private TowerActionSO GetRandomBuildTowerAction(List<BuyAction> actions)
+    private TowerActionSO GetRandomTowerBuildBlueprint(List<BuyAction> blueprints)
     {
-        if(actions.Count == 0)
+        if(blueprints.Count == 0)
         {
             return null;
         }
-        int maxIndex = actions.Count - 1;
+        int maxIndex = blueprints.Count - 1;
         int randomIndex = Random.Range(0, maxIndex + 1);
 
-        TowerActionSO randomBuildAction = actions[randomIndex];
+        TowerActionSO randomBuildAction = blueprints[randomIndex];
         return randomBuildAction;
+    }
+    private TowerActionSO GetObservationBasedTowerBuildBlueprint(List<BuyAction> blueprints)
+    {
+        if(GameplayManager.instance.GameState == GameplayManager.State.Defending)
+        {
+            return null;   
+        }
+        else if(GameplayManager.instance.GameState == GameplayManager.State.Building)
+        {
+            return GetBuildingObservastionBasedTowerBuildBlueprint(blueprints);
+        }
+        else return null;
+    }
+    private TowerActionSO GetBuildingObservastionBasedTowerBuildBlueprint(List<BuyAction> blueprints)
+    {
+        if(blueprints.Count == 0)
+        {
+            return null;
+        }
+
+        if(enemySpawnInfos.Count == 0)
+            return null;
+
+        var sortedHighestSpawn = enemySpawnInfos.OrderBy(enemy => enemy.amount).ToList();
+        var highestSpawn = sortedHighestSpawn[0];
+
+        Dictionary<string, BuyAction> dictionaryTower = blueprints.ToDictionary(towerData => towerData.GetName(), towerData => towerData);
+
+        var towerData = highestSpawn.type switch
+        {
+            EnemyType.Bee => dictionaryTower["Archer Tower"],
+            EnemyType.Goblin => dictionaryTower["Mortar Tower"],
+            EnemyType.Wolf => dictionaryTower["Archer Tower"],
+            EnemyType.Slime => dictionaryTower["Mage Tower"],
+            _ => null
+        };
+
+        return towerData;
     }
 }

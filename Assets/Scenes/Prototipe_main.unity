@@ -1621,6 +1621,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BotController
   intervalDecision: 0.5
   botType: 0
+  botProperty:
+    botType: 0
+    BuildRandomWeight: 50
+    BuildRandomBestWeight: 35
+    BuildBestWeight: 10
+    TowerTypeRandomWeight: 50
+    TowerTypeObservingWeight: 15
 --- !u!4 &255797125
 Transform:
   m_ObjectHideFlags: 0

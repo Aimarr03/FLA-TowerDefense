@@ -39,4 +39,8 @@ public class BuyAction : TowerActionSO
     {
         return (int) towerData.CostBuild();
     }
+    public string GetName()
+    {
+        return towerData.TowerName;
+    }
 }
