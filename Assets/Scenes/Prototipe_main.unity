@@ -1623,11 +1623,15 @@ MonoBehaviour:
   botType: 0
   botProperty:
     botType: 0
+    ActionWeightBuild: 75
+    ActionWeightUpgrade: 25
+    ActionWeightDefend: 15
     BuildRandomWeight: 50
     BuildRandomBestWeight: 35
     BuildBestWeight: 10
     TowerTypeRandomWeight: 50
     TowerTypeObservingWeight: 15
+  enemySpawner: {fileID: 0}
 --- !u!4 &255797125
 Transform:
   m_ObjectHideFlags: 0

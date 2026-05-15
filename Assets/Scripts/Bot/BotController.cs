@@ -9,6 +9,11 @@ using UnityEngine.Rendering;
 public class BotProperty
 {
     public BotController.Capability botType;
+    [Header("Weighted Action Property")]
+    [Range(1, 100)] public int ActionWeightBuild = 75;
+    [Range(1, 100)] public int ActionWeightUpgrade = 25;
+    [Range(1, 100)] public int ActionWeightDefend = 15;
+    
     [Header("Weighted Property Strategy")]
     [Range(1, 100)] public int BuildRandomWeight = 50;
     [Range(1, 100)] public int BuildRandomBestWeight = 35;
@@ -37,12 +42,30 @@ public class BotController : MonoBehaviour
         Medium,
         High
     }
+    public enum ActionType
+    {
+        None,
+        Build,
+        Upgrade,
+        Sell,
+        Defend
+    }
     private List<Tower> allTower;
     private List<BuyAction> buyActions;
     private bool isActive = false;
+    private ActionType currentActionType = ActionType.None;
     [SerializeField] float intervalDecision = 1.5f;
     [SerializeField] private Capability botType = Capability.Low;
     [SerializeField] private BotProperty botProperty;
+    [SerializeField] private EnemySpawner enemySpawner;
+
+
+    private List<Tower> upgradableTower = new();
+    private List<Tower> buildableTower = new();
+
+    private bool canUpgrade = false;
+    private bool canBuild = false;
+    //private bool shouldDefend = false;
     float currentInterval = 0f;
 
     /// <summary>
@@ -52,7 +75,8 @@ public class BotController : MonoBehaviour
     float buildAccumulator = 0f;
     float buildInterval = 0f;
     float buildCooldown = 3f;
-    bool canBuild => buildInterval >= buildCooldown;
+    float upgradeInterval = 0f;
+    float upgradeCooldown = 3f;
     public bool IsActive => isActive;
     
     private List<EnemySpawnInfo> enemySpawnInfos;
@@ -117,12 +141,78 @@ public class BotController : MonoBehaviour
 
         currentInterval += Time.deltaTime;
         buildInterval += Time.deltaTime;
+        upgradeCooldown += Time.deltaTime;
         if(currentInterval > intervalDecision)
         {
             currentInterval = 0;
-            Build();
+            UpdateActionCondition();
+            DecideAction();
+
+            switch (currentActionType)
+            {
+                case ActionType.Build:
+                    BuildAction();
+                    break;
+                case ActionType.Upgrade:
+                    UpgradeAction();
+                    break;
+            }
+            currentActionType = ActionType.None;
             TryStartingDefend();
         }
+    }
+    private void UpdateActionCondition()
+    {
+        if (!canBuild)
+        {
+            bool buildCooldownCondition = buildInterval >= buildCooldown;
+            bool buildRandomCondition = TryBuildChanceTrigger();
+            bool buildMoneyCondition = CheckBuildActionLeft();
+
+            var buildableLeft = allTower.Where(tower => tower.CurrentState == Tower.State.None);
+            buildableTower.Clear();
+            buildableTower.AddRange(buildableLeft.ToList());
+
+            bool buildableTowerCondition = buildableTower.Count > 0;
+            
+            canBuild = buildCooldownCondition && buildRandomCondition 
+            && buildMoneyCondition && buildableTowerCondition;       
+        }
+
+        if (!canUpgrade)
+        {
+            UpdateUpgradableTowerList();
+            bool upgradeCooldownCondition = upgradeInterval >= upgradeCooldown;
+            bool upgradeTowerConditoin = upgradableTower.Count > 0;
+            canUpgrade = upgradeTowerConditoin && upgradeTowerConditoin;    
+        }
+    }
+    private void DecideAction()
+    {
+        int totalWeight = botProperty.ActionWeightBuild 
+        + botProperty.ActionWeightUpgrade;
+
+        float roll = Random.value * totalWeight;
+        Debug.Log($"[Debug] Strat of Get Action Tower");
+        Debug.Log($"[Debug] Roll: {roll} with totalWeight of {totalWeight}");
+
+        if(roll < botProperty.ActionWeightBuild && canBuild)
+        {
+            currentActionType = ActionType.Build;
+            Debug.Log($"[Debug] Bot go with Build");
+            return;
+        }
+
+        roll -= botProperty.ActionWeightBuild;
+        if(roll < botProperty.ActionWeightUpgrade && canUpgrade)
+        {
+            currentActionType = ActionType.Upgrade;
+            Debug.Log($"[Debug] Bot go with Upgrade");
+            return;
+        }
+        roll -= botProperty.ActionWeightUpgrade;
+
+        currentActionType = ActionType.None;
     }
     private void TryStartingDefend()
     {
@@ -136,11 +226,11 @@ public class BotController : MonoBehaviour
     }
     private bool CheckBuildActionLeft()
     {
-        var actions = buyActions.Where(tower => TD_API.Economy.IsEnough(tower.GetBuildCost())).ToList();
+        var actions = buyActions.Where(buyAction => TD_API.Economy.IsEnough(buyAction.GetBuildCost())).ToList();
         bool canBuildAgain = actions != null && actions.Count > 0;
         return canBuildAgain;
     }
-    private bool TryBuildTrigger()
+    private bool TryBuildChanceTrigger()
     {
         buildAccumulator += buildChance;
 
@@ -155,12 +245,9 @@ public class BotController : MonoBehaviour
         return false;
     }
     
-    private void Build()
+    private void BuildAction()
     {
         if(!canBuild)
-            return;
-        
-        if(!TryBuildTrigger()) 
             return;
         
         buildInterval = 0f;
@@ -178,6 +265,7 @@ public class BotController : MonoBehaviour
         if(tower == null || buildAction == null) return;
 
         buildAction.Executes(tower);
+        canBuild = false;
     }
     private BotTowerSelectionStrat GetStrategyWeighted()
     {
@@ -304,13 +392,52 @@ public class BotController : MonoBehaviour
     {
         if(GameplayManager.instance.GameState == GameplayManager.State.Defending)
         {
-            return null;   
+            return GetDefendingObservationBasedTowerBuildBlueprint(blueprints);
         }
         else if(GameplayManager.instance.GameState == GameplayManager.State.Building)
         {
             return GetBuildingObservastionBasedTowerBuildBlueprint(blueprints);
         }
         else return null;
+    }
+    private TowerActionSO GetDefendingObservationBasedTowerBuildBlueprint(List<BuyAction> blueprints)
+    {
+        if(blueprints.Count == 0)
+        {
+            return null;
+        }
+
+        if(enemySpawner == null)
+        {
+            Debug.LogWarning("Enemy Spawner is not referenced! Try Again");
+            enemySpawner = FindFirstObjectByType<EnemySpawner>();
+            if(enemySpawner == null)
+            {
+                Debug.LogError("Enemy Spawner not found!");
+                return null;
+            }
+        }
+        List<EnemySpawnInfo> currentEnemy = enemySpawner.EnemySpawnInfos;
+        if(currentEnemy.Count == 0)
+        {
+            return null;
+        }
+
+        var sortedHighestSpawn = currentEnemy.OrderBy(enemy => enemy.amount).ToList();
+        var highestSpawn = currentEnemy[0];
+
+        Dictionary<string, BuyAction> dictionaryTower = blueprints.ToDictionary(towerData => towerData.GetName(), towerData => towerData);
+
+        var towerData = highestSpawn.type switch
+        {
+            EnemyType.Bee => dictionaryTower["Archer Tower"],
+            EnemyType.Goblin => dictionaryTower["Mortar Tower"],
+            EnemyType.Wolf => dictionaryTower["Archer Tower"],
+            EnemyType.Slime => dictionaryTower["Mage Tower"],
+            _ => null
+        };
+
+        return towerData;
     }
     private TowerActionSO GetBuildingObservastionBasedTowerBuildBlueprint(List<BuyAction> blueprints)
     {
@@ -337,5 +464,44 @@ public class BotController : MonoBehaviour
         };
 
         return towerData;
+    }
+
+    private List<Tower> GetBuiltTower() => allTower.Where(tower => tower.CurrentState == Tower.State.Built).ToList();
+
+    
+    private void UpdateUpgradableTowerList()
+    {
+        List<Tower> builtTower = GetBuiltTower();
+        if(builtTower == null || builtTower.Count == 0)
+            return;
+
+        upgradableTower.Clear();
+        foreach(var tower in builtTower)
+        {
+            TowerData towerData = tower.TowerData;
+            int upgradeCost = (int)towerData.UpgradeCost(tower.Level);
+            bool isUpgradable = !tower.IsMax && TD_API.Economy.IsEnough(upgradeCost);
+            if(isUpgradable)
+                upgradableTower.Add(tower);
+        }
+    }
+    private void UpgradeAction()
+    {
+        if(upgradableTower.Count == 0)
+            return;
+        
+        upgradeInterval = 0;
+        UpgradeRandomTower(upgradableTower);
+
+        canUpgrade = false;
+    }
+    private void UpgradeRandomTower(List<Tower> upgradableTower)
+    {
+        int maxIndex = upgradableTower.Count - 1;
+        int randomIndex = Random.Range(0, maxIndex + 1);
+
+        Tower randomTower = upgradableTower[randomIndex];
+        Debug.Log($"[Bot] Random Upgrade Index of: {randomTower.TowerData.TowerName}");
+        randomTower.Upgrade();
     }
 }
