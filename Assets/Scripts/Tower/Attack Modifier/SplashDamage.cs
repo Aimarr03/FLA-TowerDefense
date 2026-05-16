@@ -12,11 +12,17 @@ public class SplashDamage : TowerAttackEffect
             radius
         );
 
+        EnemyTraverseType attackable = context.Source.TowerData.AttackableType;
+
         foreach (var hit in hits)
         {
             if(hit.TryGetComponent(out Enemy enemy) && enemy != context.Target)
             {
-                enemy.TakeDamage(context.Damage);
+                EnemyTraverseType enemyType = enemy.Type;
+                if ((attackable & enemyType) == enemyType)
+                {
+                    enemy.TakeDamage(context.Damage);
+                }
             }
         }
     }

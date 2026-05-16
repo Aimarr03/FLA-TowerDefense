@@ -1,0 +1,469 @@
+version=1
+
+# This file caches language service data to improve the performance of C# Dev Kit.
+# It is not intended for manual editing. It can safely be deleted and will be
+# regenerated automatically. For more information, see https://aka.ms/lscache
+#
+# To control where cache files are stored, use the following VS Code setting:
+#   "dotnet.projectsystem.cacheInProjectFolder": true
+
+[project]
+language=C#
+primary
+lastDtbSucceeded
+
+[properties]
+AssemblyName=YamlDotNet
+CommandLineArgsForDesignTimeEvaluation=-langversion:9.0 -define:UNITY_6000_3_1;UNITY_6000_3;UNITY_6000;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;UNITY_2022_3_OR_NEWER;UNITY_2023_1_OR_NEWER;UNITY_2023_2_OR_NEWER;UNITY_2023_3_OR_NEWER;UNITY_6000_0_OR_NEWER;UNITY_6000_1_OR_NEWER;UNITY_6000_2_OR_NEWER;UNITY_6000_3_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_AUDIO_SCRIPTABLE_PIPELINE;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_UNITY_CONSENT;ENABLE_UNITY_CLOUD_IDENTIFIERS;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_MARSHALLING_TESTS;ENABLE_VIDEO;ENABLE_NAVIGATION_OFFMESHLINK_TO_NAVMESHLINK;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;ENABLE_ACCESSIBILITY_SCREEN_READER;TEXTCORE_1_0_OR_NEWER;EDITOR_ONLY_NAVMESH_BUILDER_DEPRECATED;PLATFORM_STANDALONE_WIN;PLATFORM_STANDALONE;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_NVIDIA;ENABLE_AMD;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_CLOUD_SERVICES_ENGINE_DIAGNOSTICS;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;PLATFORM_USES_EXPLICIT_MEMORY_MANAGER_INITIALIZER;PLATFORM_SUPPORTS_WAIT_FOR_PRESENTATION;PLATFORM_SUPPORTS_SPLIT_GRAPHICS_JOBS;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_INPUT_SYSTEM;ENABLE_LEGACY_INPUT_MANAGER;TEXTCORE_FONT_ENGINE_1_5_OR_NEWER;TEXTCORE_TEXT_ENGINE_1_5_OR_NEWER;TEXTCORE_FONT_ENGINE_1_6_OR_NEWER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER
+CompilerGeneratedFilesOutputPath=
+MaxSupportedLangVersion=8.0
+ProjectAssetsFile=<PATH>Temp/obj/YamlDotNet/project.assets.json
+RootNamespace=
+RunAnalyzers=
+RunAnalyzersDuringLiveAnalysis=
+SolutionPath=<PATH>My project.slnx
+TargetFrameworkIdentifier=.NETStandard
+TargetPath=<PATH>Temp/bin/Debug/YamlDotNet.dll
+TargetRefPath=
+TemporaryDependencyNodeTargetIdentifier=netstandard2.1
+
+[commandLineArguments]
+/noconfig
+/unsafe-
+/checked-
+/nowarn:0169,USG0001,1701,1702
+/fullpaths
+/nostdlib+
+/errorreport:prompt
+/define:UNITY_6000_3_1;UNITY_6000_3;UNITY_6000;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;UNITY_2022_3_OR_NEWER;UNITY_2023_1_OR_NEWER;UNITY_2023_2_OR_NEWER;UNITY_2023_3_OR_NEWER;UNITY_6000_0_OR_NEWER;UNITY_6000_1_OR_NEWER;UNITY_6000_2_OR_NEWER;UNITY_6000_3_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_AUDIO_SCRIPTABLE_PIPELINE;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_UNITY_CONSENT;ENABLE_UNITY_CLOUD_IDENTIFIERS;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_MARSHALLING_TESTS;ENABLE_VIDEO;ENABLE_NAVIGATION_OFFMESHLINK_TO_NAVMESHLINK;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;ENABLE_ACCESSIBILITY_SCREEN_READER;TEXTCORE_1_0_OR_NEWER;EDITOR_ONLY_NAVMESH_BUILDER_DEPRECATED;PLATFORM_STANDALONE_WIN;PLATFORM_STANDALONE;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_NVIDIA;ENABLE_AMD;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_CLOUD_SERVICES_ENGINE_DIAGNOSTICS;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;PLATFORM_USES_EXPLICIT_MEMORY_MANAGER_INITIALIZER;PLATFORM_SUPPORTS_WAIT_FOR_PRESENTATION;PLATFORM_SUPPORTS_SPLIT_GRAPHICS_JOBS;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_INPUT_SYSTEM;ENABLE_LEGACY_INPUT_MANAGER;TEXTCORE_FONT_ENGINE_1_5_OR_NEWER;TEXTCORE_TEXT_ENGINE_1_5_OR_NEWER;TEXTCORE_FONT_ENGINE_1_6_OR_NEWER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER;DEBUG;NETSTANDARD;NETSTANDARD2_1;NETSTANDARD1_0_OR_GREATER;NETSTANDARD1_1_OR_GREATER;NETSTANDARD1_2_OR_GREATER;NETSTANDARD1_3_OR_GREATER;NETSTANDARD1_4_OR_GREATER;NETSTANDARD1_5_OR_GREATER;NETSTANDARD1_6_OR_GREATER;NETSTANDARD2_0_OR_GREATER;NETSTANDARD2_1_OR_GREATER
+/highentropyva+
+/debug+
+/debug:portable
+/filealign:512
+/optimize-
+/out:Temp\obj\YamlDotNet\YamlDotNet.dll
+/target:library
+/warnaserror-
+/utf8output
+/deterministic+
+/langversion:9.0
+/warnaserror+:NU1605
+
+[sourceFiles]
+Assets/YamlDotNet/Core/
+ AnchorName.cs
+ AnchorNotFoundException.cs
+ CharacterAnalyzer.cs
+ Constants.cs
+ Cursor.cs
+ Emitter.cs
+ EmitterSettings.cs
+ EmitterState.cs
+ Events/
+  AnchorAlias.cs
+  Comment.cs
+  DocumentEnd.cs
+  DocumentStart.cs
+  EventType.cs
+  IParsingEventVisitor.cs
+  MappingEnd.cs
+  MappingStart.cs
+  MappingStyle.cs
+  NodeEvent.cs
+  ParsingEvent.cs
+  Scalar.cs
+  SequenceEnd.cs
+  SequenceStart.cs
+  SequenceStyle.cs
+  StreamEnd.cs
+  StreamStart.cs
+ ForwardAnchorNotSupportedException.cs
+ HashCode.cs
+ IEmitter.cs
+ ILookAheadBuffer.cs
+ InsertionQueue.cs
+ IParser.cs
+ IScanner.cs
+ LookAheadBuffer.cs
+ Mark.cs
+ MaximumRecursionLevelReachedException.cs
+ MergingParser.cs
+ ObjectPool/
+  DefaultObjectPool.cs
+  DefaultPooledObjectPolicy.cs
+  IPooledObjectPolicy.cs
+  IResettable.cs
+  ObjectPool.cs
+  StringBuilderPool.cs
+  StringBuilderPooledObjectPolicy.cs
+  StringLookAheadBufferPool.cs
+ Parser.cs
+ ParserExtensions.cs
+ ParserState.cs
+ RecursionLevel.cs
+ ScalarStyle.cs
+ Scanner.cs
+ SemanticErrorException.cs
+ SimpleKey.cs
+ StringLookAheadBuffer.cs
+ SyntaxErrorException.cs
+ TagDirectiveCollection.cs
+ TagName.cs
+ Tokens/
+  Anchor.cs
+  AnchorAlias.cs
+  BlockEnd.cs
+  BlockEntry.cs
+  BlockMappingStart.cs
+  BlockSequenceStart.cs
+  Comment.cs
+  DocumentEnd.cs
+  DocumentStart.cs
+  Error.cs
+  FlowEntry.cs
+  FlowMappingEnd.cs
+  FlowMappingStart.cs
+  FlowSequenceEnd.cs
+  FlowSequenceStart.cs
+  Key.cs
+  Scalar.cs
+  StreamEnd.cs
+  StreamStart.cs
+  Tag.cs
+  TagDirective.cs
+  Token.cs
+  Value.cs
+  VersionDirective.cs
+ Version.cs
+ YamlException.cs
+Assets/YamlDotNet/
+ CultureInfoAdapter.cs
+ Helpers/
+  DictionaryExtensions.cs
+  ExpressionExtensions.cs
+  FsharpHelper.cs
+  GenericCollectionToNonGenericAdapter.cs
+  GenericDictionaryToNonGenericAdapter.cs
+  IOrderedDictionary.cs
+  NumberExtensions.cs
+  OrderedDictionary.cs
+  Polyfills.cs
+  ReadOnlyCollectionExtensions.cs
+  ThrowHelper.cs
+ PropertyInfoExtensions.cs
+ ReflectionExtensions.cs
+ RepresentationModel/
+  DocumentLoadingState.cs
+  EmitterState.cs
+  IYamlVisitor.cs
+  LibYamlEventStream.cs
+  YamlAliasNode.cs
+  YamlDocument.cs
+  YamlMappingNode.cs
+  YamlNode.cs
+  YamlNodeIdentityEqualityComparer.cs
+  YamlNodeType.cs
+  YamlScalarNode.cs
+  YamlSequenceNode.cs
+  YamlStream.cs
+  YamlVisitor.cs
+  YamlVisitorBase.cs
+ Serialization/BufferedDeserialization/
+  ITypeDiscriminatingNodeDeserializerOptions.cs
+  ParserBuffer.cs
+  TypeDiscriminatingNodeDeserializer.cs
+  TypeDiscriminatingNodeDeserializerOptions.cs
+  TypeDiscriminators/
+   IValueTypeDiscriminator.cs
+   KeyValueTypeDiscriminator.cs
+   UniqueKeyTypeDiscriminator.cs
+ Serialization/
+  BuilderSkeleton.cs
+  Callbacks/
+   OnDeserializedAttribute.cs
+   OnDeserializingAttribute.cs
+   OnSerializedAttribute.cs
+   OnSerializingAttribute.cs
+  Converters/
+   DateOnlyConverter.cs
+   DateTime8601Converter.cs
+   DateTimeConverter.cs
+   DateTimeOffsetConverter.cs
+   GuidConverter.cs
+   SystemTypeConverter.cs
+   TimeOnlyConverter.cs
+  DefaultValuesHandling.cs
+  Deserializer.cs
+  DeserializerBuilder.cs
+  EmissionPhaseObjectGraphVisitorArgs.cs
+  EventEmitters/
+   ChainedEventEmitter.cs
+   JsonEventEmitter.cs
+   TypeAssigningEventEmitter.cs
+   WriterEventEmitter.cs
+  EventInfo.cs
+  IAliasProvider.cs
+  IDeserializer.cs
+  IEventEmitter.cs
+  INamingConvention.cs
+  INodeDeserializer.cs
+  INodeTypeResolver.cs
+  IObjectAccessor.cs
+  IObjectDescriptor.cs
+  IObjectFactory.cs
+  IObjectGraphTraversalStrategy.cs
+  IObjectGraphVisitor.cs
+  IPropertyDescriptor.cs
+  IRegistrationLocationSelectionSyntax.cs
+  ISerializer.cs
+  ITypeInspector.cs
+  ITypeResolver.cs
+  IValueDeserializer.cs
+  IValuePromise.cs
+  IValueSerializer.cs
+  IYamlConvertible.cs
+  IYamlSerializable.cs
+  IYamlTypeConverter.cs
+  LazyComponentRegistrationList.cs
+  LazyComponentRegistrationListExtensions.cs
+  NamingConventions/
+   CamelCaseNamingConvention.cs
+   HyphenatedNamingConvention.cs
+   LowerCaseNamingConvention.cs
+   NullNamingConvention.cs
+   PascalCaseNamingConvention.cs
+   UnderscoredNamingConvention.cs
+  NodeDeserializers/
+   ArrayNodeDeserializer.cs
+   CollectionDeserializer.cs
+   CollectionNodeDeserializer.cs
+   DictionaryDeserializer.cs
+   DictionaryNodeDeserializer.cs
+   EnumerableNodeDeserializer.cs
+   FsharpListNodeDeserializer.cs
+   NullNodeDeserializer.cs
+   ObjectNodeDeserializer.cs
+   ScalarNodeDeserializer.cs
+   StaticArrayNodeDeserializer.cs
+   StaticCollectionNodeDeserializer.cs
+   StaticDictionaryNodeDeserializer.cs
+   TypeConverterNodeDeserializer.cs
+   YamlConvertibleNodeDeserializer.cs
+   YamlSerializableNodeDeserializer.cs
+  NodeTypeResolvers/
+   DefaultContainersNodeTypeResolver.cs
+   MappingNodeTypeResolver.cs
+   RejectUnknownTagsNodeTypeResolver.cs
+   TagNodeTypeResolver.cs
+   TypeNameInTagNodeTypeResolver.cs
+   YamlConvertibleTypeResolver.cs
+   YamlSerializableTypeResolver.cs
+  Nothing.cs
+  ObjectDescriptor.cs
+  ObjectFactories/
+   DefaultObjectFactory.cs
+   LambdaObjectFactory.cs
+   ObjectFactoryBase.cs
+   StaticObjectFactory.cs
+  ObjectGraphTraversalStrategies/
+   FullObjectGraphTraversalStrategy.cs
+   RoundtripObjectGraphTraversalStrategy.cs
+  ObjectGraphTraversalStrategyFactory.cs
+  ObjectGraphVisitors/
+   AnchorAssigner.cs
+   AnchorAssigningObjectGraphVisitor.cs
+   ChainedObjectGraphVisitor.cs
+   CommentsObjectGraphVisitor.cs
+   CustomSerializationObjectGraphVisitor.cs
+   DefaultExclusiveObjectGraphVisitor.cs
+   DefaultValuesObjectGraphVisitor.cs
+   EmittingObjectGraphVisitor.cs
+   PreProcessingPhaseObjectGraphVisitorSkeleton.cs
+  PropertyDescriptor.cs
+  Schemas/FailsafeSchema.cs
+  Serializer.cs
+  SerializerBuilder.cs
+  Settings.cs
+  StaticBuilderSkeleton.cs
+  StaticContext.cs
+  StaticDeserializerBuilder.cs
+  StaticSerializerBuilder.cs
+  StreamFragment.cs
+  TagMappings.cs
+  TypeInspectors/
+   CachedTypeInspector.cs
+   CompositeTypeInspector.cs
+   NamingConventionTypeInspector.cs
+   ReadableAndWritablePropertiesTypeInspector.cs
+   ReadableFieldsTypeInspector.cs
+   ReadablePropertiesTypeInspector.cs
+   ReflectionTypeInspector.cs
+   TypeInspectorSkeleton.cs
+   WritablePropertiesTypeInspector.cs
+  TypeResolvers/
+   DynamicTypeResolver.cs
+   StaticTypeResolver.cs
+  Utilities/
+   IPostDeserializationCallback.cs
+   ITypeConverter.cs
+   NullTypeConverter.cs
+   ObjectAnchorCollection.cs
+   ReflectionTypeConverter.cs
+   SerializerState.cs
+   StringExtensions.cs
+   TypeConverter.cs
+   TypeConverterCache.cs
+  ValueDeserializers/
+   AliasValueDeserializer.cs
+   NodeValueDeserializer.cs
+  YamlAttributeOverrides.cs
+  YamlAttributeOverridesInspector.cs
+  YamlAttributesTypeInspector.cs
+  YamlConverterAttribute.cs
+  YamlFormatter.cs
+  YamlIgnoreAttribute.cs
+  YamlMemberAttribute.cs
+  YamlSerializable.cs
+  YamlStaticContextAttribute.cs
+ StandardRegexOptions.cs
+Temp/obj/YamlDotNet/.NETStandard,Version=v2.1.AssemblyAttributes.cs
+
+[metadataReferences]
+C:/Program Files/Unity/Hub/Editor/6000.3.1f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/
+ mscorlib.dll
+ System.ComponentModel.Composition.dll
+ System.Core.dll
+ System.Data.dll
+ System.dll
+ System.Drawing.dll
+ System.IO.Compression.FileSystem.dll
+ System.Net.dll
+ System.Numerics.dll
+ System.Runtime.Serialization.dll
+ System.ServiceModel.Web.dll
+ System.Transactions.dll
+ System.Web.dll
+ System.Windows.dll
+ System.Xml.dll
+ System.Xml.Linq.dll
+ System.Xml.Serialization.dll
+C:/Program Files/Unity/Hub/Editor/6000.3.1f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/
+ Microsoft.Win32.Primitives.dll
+ System.AppContext.dll
+ System.Buffers.dll
+ System.Collections.Concurrent.dll
+ System.Collections.dll
+ System.Collections.NonGeneric.dll
+ System.Collections.Specialized.dll
+ System.ComponentModel.dll
+ System.ComponentModel.EventBasedAsync.dll
+ System.ComponentModel.Primitives.dll
+ System.ComponentModel.TypeConverter.dll
+ System.Console.dll
+ System.Data.Common.dll
+ System.Diagnostics.Contracts.dll
+ System.Diagnostics.Debug.dll
+ System.Diagnostics.FileVersionInfo.dll
+ System.Diagnostics.Process.dll
+ System.Diagnostics.StackTrace.dll
+ System.Diagnostics.TextWriterTraceListener.dll
+ System.Diagnostics.Tools.dll
+ System.Diagnostics.TraceSource.dll
+ System.Diagnostics.Tracing.dll
+ System.Drawing.Primitives.dll
+ System.Dynamic.Runtime.dll
+ System.Globalization.Calendars.dll
+ System.Globalization.dll
+ System.Globalization.Extensions.dll
+ System.IO.Compression.dll
+ System.IO.Compression.ZipFile.dll
+ System.IO.dll
+ System.IO.FileSystem.dll
+ System.IO.FileSystem.DriveInfo.dll
+ System.IO.FileSystem.Primitives.dll
+ System.IO.FileSystem.Watcher.dll
+ System.IO.IsolatedStorage.dll
+ System.IO.MemoryMappedFiles.dll
+ System.IO.Pipes.dll
+ System.IO.UnmanagedMemoryStream.dll
+ System.Linq.dll
+ System.Linq.Expressions.dll
+ System.Linq.Parallel.dll
+ System.Linq.Queryable.dll
+ System.Memory.dll
+ System.Net.Http.dll
+ System.Net.NameResolution.dll
+ System.Net.NetworkInformation.dll
+ System.Net.Ping.dll
+ System.Net.Primitives.dll
+ System.Net.Requests.dll
+ System.Net.Security.dll
+ System.Net.Sockets.dll
+ System.Net.WebHeaderCollection.dll
+ System.Net.WebSockets.Client.dll
+ System.Net.WebSockets.dll
+ System.Numerics.Vectors.dll
+ System.ObjectModel.dll
+ System.Reflection.DispatchProxy.dll
+ System.Reflection.dll
+ System.Reflection.Emit.dll
+ System.Reflection.Emit.ILGeneration.dll
+ System.Reflection.Emit.Lightweight.dll
+ System.Reflection.Extensions.dll
+ System.Reflection.Primitives.dll
+ System.Resources.Reader.dll
+ System.Resources.ResourceManager.dll
+ System.Resources.Writer.dll
+ System.Runtime.CompilerServices.VisualC.dll
+ System.Runtime.dll
+ System.Runtime.Extensions.dll
+ System.Runtime.Handles.dll
+ System.Runtime.InteropServices.dll
+ System.Runtime.InteropServices.RuntimeInformation.dll
+ System.Runtime.Numerics.dll
+ System.Runtime.Serialization.Formatters.dll
+ System.Runtime.Serialization.Json.dll
+ System.Runtime.Serialization.Primitives.dll
+ System.Runtime.Serialization.Xml.dll
+ System.Security.Claims.dll
+ System.Security.Cryptography.Algorithms.dll
+ System.Security.Cryptography.Csp.dll
+ System.Security.Cryptography.Encoding.dll
+ System.Security.Cryptography.Primitives.dll
+ System.Security.Cryptography.X509Certificates.dll
+ System.Security.Principal.dll
+ System.Security.SecureString.dll
+ System.Text.Encoding.dll
+ System.Text.Encoding.Extensions.dll
+ System.Text.RegularExpressions.dll
+ System.Threading.dll
+ System.Threading.Overlapped.dll
+ System.Threading.Tasks.dll
+ System.Threading.Tasks.Extensions.dll
+ System.Threading.Tasks.Parallel.dll
+ System.Threading.Thread.dll
+ System.Threading.ThreadPool.dll
+ System.Threading.Timer.dll
+ System.ValueTuple.dll
+ System.Xml.ReaderWriter.dll
+ System.Xml.XDocument.dll
+ System.Xml.XmlDocument.dll
+ System.Xml.XmlSerializer.dll
+ System.Xml.XPath.dll
+ System.Xml.XPath.XDocument.dll
+C:/Program Files/Unity/Hub/Editor/6000.3.1f1/Editor/Data/NetStandard/
+ Extensions/2.0.0/System.Runtime.InteropServices.WindowsRuntime.dll
+ ref/2.1.0/netstandard.dll
+C:/Program Files/Unity/Hub/Editor/6000.3.1f1/Editor/Data/PlaybackEngines/AndroidPlayer/
+ Unity.Android.Gradle.dll
+ Unity.Android.Types.dll
+
+[analyzerReferences]
+C:/Program Files/Unity/Hub/Editor/6000.3.1f1/Editor/Data/Tools/BuildPipeline/Unity.SourceGenerators/
+ Unity.Properties.SourceGenerator.dll
+ Unity.SourceGenerators.dll
+ Unity.UIToolkit.SourceGenerator.dll
+C:/Users/USER/.vscode/extensions/visualstudiotoolsforunity.vstuc-1.2.2/Analyzers/Microsoft.Unity.Analyzers.dll
+
+[analyzerConfigFiles]
+Temp/obj/YamlDotNet/YamlDotNet.GeneratedMSBuildEditorConfig.editorconfig

@@ -13,6 +13,7 @@ public class BotProperty
     [Range(1, 100)] public int ActionWeightBuild = 75;
     [Range(1, 100)] public int ActionWeightUpgrade = 25;
     [Range(1, 100)] public int ActionWeightDefend = 15;
+    [Range(1, 100)] public int ActionWeightSell = 5;
     
     [Header("Weighted Property Strategy")]
     [Range(1, 100)] public int BuildRandomWeight = 50;
@@ -62,9 +63,11 @@ public class BotController : MonoBehaviour
 
     private List<Tower> upgradableTower = new();
     private List<Tower> buildableTower = new();
+    private List<Tower> sellableTower = new();
 
     private bool canUpgrade = false;
     private bool canBuild = false;
+    private bool canSell = false;
     //private bool shouldDefend = false;
     float currentInterval = 0f;
 
@@ -77,6 +80,8 @@ public class BotController : MonoBehaviour
     float buildCooldown = 3f;
     float upgradeInterval = 0f;
     float upgradeCooldown = 3f;
+    float sellInterval = 0f;
+    float sellCooldown = 30f;
     public bool IsActive => isActive;
     
     private List<EnemySpawnInfo> enemySpawnInfos;
@@ -141,7 +146,8 @@ public class BotController : MonoBehaviour
 
         currentInterval += Time.deltaTime;
         buildInterval += Time.deltaTime;
-        upgradeCooldown += Time.deltaTime;
+        upgradeInterval += Time.deltaTime;
+        sellInterval += Time.deltaTime;
         if(currentInterval > intervalDecision)
         {
             currentInterval = 0;
@@ -155,6 +161,12 @@ public class BotController : MonoBehaviour
                     break;
                 case ActionType.Upgrade:
                     UpgradeAction();
+                    break;
+                case ActionType.Sell:
+                    SellAction();
+                    break;
+                case ActionType.None:
+                    Debug.Log("[BOT] Decide to do none!");
                     break;
             }
             currentActionType = ActionType.None;
@@ -186,6 +198,13 @@ public class BotController : MonoBehaviour
             bool upgradeTowerConditoin = upgradableTower.Count > 0;
             canUpgrade = upgradeTowerConditoin && upgradeTowerConditoin;    
         }
+        if (!canSell)
+        {
+            UpdateSellableTower();
+            bool sellCooldownCondition = sellInterval >= sellCooldown;
+            bool sellTowerCondition = sellableTower.Count > 0;
+            canSell = sellCooldownCondition && sellTowerCondition;
+        }
     }
     private void DecideAction()
     {
@@ -195,7 +214,7 @@ public class BotController : MonoBehaviour
         float roll = Random.value * totalWeight;
         Debug.Log($"[Debug] Strat of Get Action Tower");
         Debug.Log($"[Debug] Roll: {roll} with totalWeight of {totalWeight}");
-
+        Debug.Log($"[Debug] conditons for buy: {canBuild} || upgrade: {canUpgrade} || sell: {canSell}");
         if(roll < botProperty.ActionWeightBuild && canBuild)
         {
             currentActionType = ActionType.Build;
@@ -211,6 +230,14 @@ public class BotController : MonoBehaviour
             return;
         }
         roll -= botProperty.ActionWeightUpgrade;
+
+        if(roll < botProperty.ActionWeightSell && canSell)
+        {
+            currentActionType = ActionType.Sell;
+            Debug.Log($"[Debug] Bot go with Sell");
+            return;
+        }
+        roll -= botProperty.ActionWeightSell;
 
         currentActionType = ActionType.None;
     }
@@ -503,5 +530,36 @@ public class BotController : MonoBehaviour
         Tower randomTower = upgradableTower[randomIndex];
         Debug.Log($"[Bot] Random Upgrade Index of: {randomTower.TowerData.TowerName}");
         randomTower.Upgrade();
+    }
+    private void UpdateSellableTower()
+    {
+        List<Tower> builtTower = GetBuiltTower();
+        if(builtTower == null || builtTower.Count == 0)
+        {
+            return;
+        }
+        sellableTower.Clear();
+
+        foreach(var tower in builtTower)
+        {
+            bool isSellable = tower.CurrentState == Tower.State.Built && tower.Level > 0;
+            if(isSellable)
+                upgradableTower.Add(tower);
+        }
+    }
+    private void SellAction()
+    {
+        if(sellableTower.Count == 0)
+            return;
+        
+        sellInterval = 0;
+        RandomIndexSell();
+    }
+    private void RandomIndexSell()
+    {
+        int maxIndex = sellableTower.Count - 1;
+        int randomIndex = Random.Range(0, maxIndex + 1);
+        Tower tower = sellableTower[randomIndex];
+        tower.Sell();
     }
 }
