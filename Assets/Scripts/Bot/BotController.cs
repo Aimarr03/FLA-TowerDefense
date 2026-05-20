@@ -14,6 +14,7 @@ public class BotProperty
     [Range(1, 100)] public int ActionWeightUpgrade = 25;
     [Range(1, 100)] public int ActionWeightDefend = 15;
     [Range(1, 100)] public int ActionWeightSell = 5;
+    [Range(1, 100)] public int ActionWeightNone = 35;
     
     [Header("Weighted Property Strategy")]
     [Range(1, 100)] public int BuildRandomWeight = 50;
@@ -27,6 +28,7 @@ public class BotProperty
     [Header("Weighted Upgrade Type")]
     [Range(1, 100)] public int TowerUpgradeRandom = 30;
     [Range(1, 100)] public int TowerUpgradePerformance = 60;
+    [Range(0, 1.5f)] public float SellThreshold = 0.75f;
     
     [Header("Weighted Sell Type")]
     [Range(1, 100)] public int TowerSellRandom = 30;
@@ -184,7 +186,6 @@ public class BotController : MonoBehaviour
                     SellAction();
                     break;
                 case ActionType.None:
-                    Debug.Log("[BOT] Decide to do none!");
                     break;
             }
             canBuild = false;
@@ -223,21 +224,46 @@ public class BotController : MonoBehaviour
         if (!canSell)
         {
             UpdateSellableTower();
+            bool anyZeroTower = sellableTower.Any(tower => tower.performance.currentScore == 0);
+            bool shouldSell = false;
+            if (anyZeroTower)
+            {
+                canSell = false;    
+                return;
+            }
+
+            if(sellableTower.Count > 0)
+            {
+                var worstTower = sellableTower.OrderBy(tower => tower.performance.currentScore).First();    
+                shouldSell = worstTower.performance.currentScore <= botProperty.SellThreshold;
+            }
+            
             bool sellCooldownCondition = sellInterval >= sellCooldown;
             bool sellTowerCondition = sellableTower.Count > 1;
-            canSell = sellCooldownCondition && sellTowerCondition;
+            canSell = sellCooldownCondition && sellTowerCondition && shouldSell;
         }
     }
     private void DecideAction()
     {
         int totalWeight = botProperty.ActionWeightBuild 
         + botProperty.ActionWeightUpgrade
-        + botProperty.ActionWeightSell;
+        + botProperty.ActionWeightSell
+        + botProperty.ActionWeightNone;
 
         float roll = Random.value * totalWeight;
         Debug.Log($"[Debug] Strat of Get Action Tower");
         Debug.Log($"[Debug] Roll: {roll} with totalWeight of {totalWeight}");
         Debug.Log($"[Debug] conditons for buy: {canBuild} || upgrade: {canUpgrade} || sell: {canSell}");
+        
+        if(roll < botProperty.ActionWeightNone)
+        {
+            Debug.Log($"[Debug] Check rolls: {roll} < {botProperty.ActionWeightNone}");
+            currentActionType = ActionType.None;
+            Debug.Log($"[Debug] Bot go with none");
+            return;
+        }
+        roll -= botProperty.ActionWeightNone;
+        
         if(roll < botProperty.ActionWeightBuild && canBuild)
         {
             currentActionType = ActionType.Build;
@@ -260,8 +286,9 @@ public class BotController : MonoBehaviour
             Debug.Log($"[Debug] Bot go with Sell");
             return;
         }
+        
         roll -= botProperty.ActionWeightSell;
-
+        Debug.Log($"[Debug] Bot go with none");
         currentActionType = ActionType.None;
     }
     private void TryStartingDefend()
@@ -311,7 +338,12 @@ public class BotController : MonoBehaviour
             BotTowerSelectionStrat.BestPreference => GetBestPreferenceTower(),
             _ => null
         };
-        TowerActionSO buildAction = GetTowerType();
+        BuyAction buildAction = GetTowerType();
+        bool isMoneyEnough = TD_API.Economy.IsEnough(buildAction.GetBuildCost());
+        if (!isMoneyEnough)
+        {
+            return;
+        }
         if(tower == null || buildAction == null) return;
 
         buildAction.Executes(tower);
@@ -359,7 +391,7 @@ public class BotController : MonoBehaviour
     private Tower GetBestPreferenceTower()
     {
         List<Tower> emptyTower = allTower.Where(tower => tower.CurrentState == Tower.State.None).ToList();
-        Tower towerHighestScore = allTower.OrderByDescending(tower => tower.PreferenceScore).First();
+        Tower towerHighestScore = emptyTower.OrderByDescending(tower => tower.PreferenceScore).First();
         return towerHighestScore;
     }
     private Tower GetRandomUnBuiltTower()
@@ -410,22 +442,22 @@ public class BotController : MonoBehaviour
 
     //     return GetRandomTowerBuildBlueprint(actions);
     // }
-    private TowerActionSO GetTowerType()
+    private BuyAction GetTowerType()
     {
-        var actions = buyActions.Where(tower => TD_API.Economy.IsEnough(tower.GetBuildCost())).ToList();
+        //var actions = buyActions.Where(tower => TD_API.Economy.IsEnough(tower.GetBuildCost())).ToList();
 
         BotTowerTypeStrat methodGetTowerType = GetTowerTypeStrat();
         Debug.Log($"[BOT] Randomized Get Type Strats: {methodGetTowerType}");
-        TowerActionSO blueprint = methodGetTowerType switch
+        BuyAction blueprint = methodGetTowerType switch
         {
-            BotTowerTypeStrat.PureRandom =>  GetRandomTowerBuildBlueprint(actions),
-            BotTowerTypeStrat.Observation => GetObservationBasedTowerBuildBlueprint(actions),
+            BotTowerTypeStrat.PureRandom =>  GetRandomTowerBuildBlueprint(buyActions),
+            BotTowerTypeStrat.Observation => GetObservationBasedTowerBuildBlueprint(buyActions),
             _ => null
         };
 
         return blueprint;
     }
-    private TowerActionSO GetRandomTowerBuildBlueprint(List<BuyAction> blueprints)
+    private BuyAction GetRandomTowerBuildBlueprint(List<BuyAction> blueprints)
     {
         if(blueprints.Count == 0)
         {
@@ -434,10 +466,10 @@ public class BotController : MonoBehaviour
         int maxIndex = blueprints.Count - 1;
         int randomIndex = Random.Range(0, maxIndex + 1);
 
-        TowerActionSO randomBuildAction = blueprints[randomIndex];
+        BuyAction randomBuildAction = blueprints[randomIndex];
         return randomBuildAction;
     }
-    private TowerActionSO GetObservationBasedTowerBuildBlueprint(List<BuyAction> blueprints)
+    private BuyAction GetObservationBasedTowerBuildBlueprint(List<BuyAction> blueprints)
     {
         if(GameplayManager.instance.GameState == GameplayManager.State.Defending)
         {
@@ -449,7 +481,7 @@ public class BotController : MonoBehaviour
         }
         else return null;
     }
-    private TowerActionSO GetDefendingObservationBasedTowerBuildBlueprint(List<BuyAction> blueprints)
+    private BuyAction GetDefendingObservationBasedTowerBuildBlueprint(List<BuyAction> blueprints)
     {
         if(blueprints.Count == 0)
         {
@@ -474,21 +506,44 @@ public class BotController : MonoBehaviour
 
         var sortedHighestSpawn = currentEnemy.OrderBy(enemy => enemy.amount).ToList();
         var highestSpawn = currentEnemy[0];
-
         Dictionary<string, BuyAction> dictionaryTower = blueprints.ToDictionary(towerData => towerData.GetName(), towerData => towerData);
-
-        var towerData = highestSpawn.type switch
+        
+        var roll = Random.value;
+        if(roll > 0.5)
         {
-            EnemyType.Bee => dictionaryTower["Archer Tower"],
-            EnemyType.Goblin => dictionaryTower["Mortar Tower"],
-            EnemyType.Wolf => dictionaryTower["Archer Tower"],
-            EnemyType.Slime => dictionaryTower["Mage Tower"],
-            _ => null
-        };
+            
+            var towerData = highestSpawn.type switch
+            {
+                EnemyType.Bee => dictionaryTower["Archer Tower"],
+                EnemyType.Goblin => dictionaryTower["Mortar Tower"],
+                EnemyType.Wolf => dictionaryTower["Archer Tower"],
+                EnemyType.Slime => dictionaryTower["Mage Tower"],
+                _ => null
+            };
 
-        return towerData;
+            return towerData;    
+        }
+        else
+        {
+            if(currentEnemy.Any(enemy => enemy.type == EnemyType.Bee))
+            {
+                return dictionaryTower["Archer Tower"];
+            }
+            else if(currentEnemy.Any(enemy => enemy.type == EnemyType.Slime))
+            {
+                return dictionaryTower["Mage Tower"];
+            }
+            else if(currentEnemy.Any(enemy => enemy.type == EnemyType.Wolf))
+            {
+                return dictionaryTower["Archer Tower"];
+            }
+            else
+            {
+                return dictionaryTower["Mortar Tower"];
+            }
+        }
     }
-    private TowerActionSO GetBuildingObservastionBasedTowerBuildBlueprint(List<BuyAction> blueprints)
+    private BuyAction GetBuildingObservastionBasedTowerBuildBlueprint(List<BuyAction> blueprints)
     {
         if(blueprints.Count == 0)
         {
@@ -528,7 +583,7 @@ public class BotController : MonoBehaviour
         foreach(var tower in builtTower)
         {
             TowerData towerData = tower.TowerData;
-            int upgradeCost = (int)towerData.UpgradeCost(tower.Level);
+            int upgradeCost = (int)towerData.UpgradeCost(tower.Level + 1);
             bool isUpgradable = !tower.IsMax && TD_API.Economy.IsEnough(upgradeCost);
             if(isUpgradable)
                 upgradableTower.Add(tower);
@@ -544,8 +599,6 @@ public class BotController : MonoBehaviour
         float totalWeight = botProperty.TowerUpgradeRandom + botProperty.TowerUpgradePerformance;
         float roll = Random.value * totalWeight;
 
-        UpgradeBestTower(upgradableTower);
-        return;
         if(roll < botProperty.TowerUpgradeRandom)
         {
             UpgradeRandomTower(upgradableTower);    
@@ -600,8 +653,6 @@ public class BotController : MonoBehaviour
         float totalWeight = botProperty.TowerSellRandom + botProperty.TowerSellPerformance;
         float roll = Random.value * totalWeight;
         
-        SellWorstTower(sellableTower);
-        return;
         if(roll < botProperty.TowerSellRandom)
         {
             RandomIndexSell(sellableTower);
@@ -641,7 +692,7 @@ public class BotController : MonoBehaviour
         }
         
         var previousRoundPerformance = RoundPerformances[previousWaveIndex];
-        int totalEnemy = previousRoundPerformance.TotalEnemy;
+        float totalEnemy = previousRoundPerformance.TotalEnemy;
         float totalEnemyHealth = previousRoundPerformance.EnemyTotalHealth;
         
         foreach(var tower in builtTower)
@@ -649,10 +700,13 @@ public class BotController : MonoBehaviour
             if(tower.CurrentState == Tower.State.None) continue;
             
             var currentTowerPerformance = tower.performance;
-            var towerDamageDealt = currentTowerPerformance.damageDealt;
-            var towerEnemySlain = currentTowerPerformance.enemySlain;
-            float currentTowerScore = ((float)towerDamageDealt / totalEnemyHealth) + (((float)towerEnemySlain / totalEnemy) * 2);
+            float towerDamageDealt = currentTowerPerformance.damageDealt;
+            float towerEnemySlain = currentTowerPerformance.enemySlain;
+            
+            float enemyScoreSlain = (towerEnemySlain / totalEnemy) * 2;
+            enemyScoreSlain = Mathf.Clamp(enemyScoreSlain, 0, float.MaxValue);
 
+            float currentTowerScore = (towerDamageDealt / totalEnemyHealth) + enemyScoreSlain;
             currentTowerPerformance.currentScore = currentTowerScore;
         }
     }
