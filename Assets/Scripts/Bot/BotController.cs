@@ -23,6 +23,14 @@ public class BotProperty
     [Header("Weighted Property Type")]
     [Range(1, 100)] public int TowerTypeRandomWeight = 50;
     [Range(1, 100)] public int TowerTypeObservingWeight = 25;
+
+    [Header("Weighted Upgrade Type")]
+    [Range(1, 100)] public int TowerUpgradeRandom = 30;
+    [Range(1, 100)] public int TowerUpgradePerformance = 60;
+    
+    [Header("Weighted Sell Type")]
+    [Range(1, 100)] public int TowerSellRandom = 30;
+    [Range(1, 100)] public int TowerSellPerformance = 30;
 }
 public enum BotTowerSelectionStrat
 {
@@ -51,6 +59,7 @@ public class BotController : MonoBehaviour
         Sell,
         Defend
     }
+    private Dictionary<Capability, BotProperty> ListBot = new();
     private List<Tower> allTower;
     private List<BuyAction> buyActions;
     private bool isActive = false;
@@ -68,8 +77,8 @@ public class BotController : MonoBehaviour
     private bool canUpgrade = false;
     private bool canBuild = false;
     private bool canSell = false;
-    //private bool shouldDefend = false;
     float currentInterval = 0f;
+    //private bool shouldDefend = false;
 
     /// <summary>
     /// Build Probability Variable
@@ -81,12 +90,20 @@ public class BotController : MonoBehaviour
     float upgradeInterval = 0f;
     float upgradeCooldown = 3f;
     float sellInterval = 0f;
-    float sellCooldown = 30f;
+    float sellCooldown = 15f;
     public bool IsActive => isActive;
-    
-    private List<EnemySpawnInfo> enemySpawnInfos;
-    public void Init()
+    void Awake()
     {
+        ListBot = new();   
+    }
+    private List<EnemySpawnInfo> enemySpawnInfos;
+    public void Init(BotUsage botUsage)
+    {
+        if (!botUsage.useBot)
+        {
+            isActive = false;
+            return;
+        }
         allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
         isActive = true;
         
@@ -122,6 +139,7 @@ public class BotController : MonoBehaviour
         }
         else
         {
+            EvaluatePreviousRound();
             if(state == GameplayManager.State.Building)
             {
                 if(enemySpawnInfos == null)
@@ -169,6 +187,10 @@ public class BotController : MonoBehaviour
                     Debug.Log("[BOT] Decide to do none!");
                     break;
             }
+            canBuild = false;
+            canSell = false;
+            canUpgrade = false;
+
             currentActionType = ActionType.None;
             TryStartingDefend();
         }
@@ -195,21 +217,22 @@ public class BotController : MonoBehaviour
         {
             UpdateUpgradableTowerList();
             bool upgradeCooldownCondition = upgradeInterval >= upgradeCooldown;
-            bool upgradeTowerConditoin = upgradableTower.Count > 0;
-            canUpgrade = upgradeTowerConditoin && upgradeTowerConditoin;    
+            bool upgradeTowerCondition = upgradableTower.Count > 0;
+            canUpgrade = upgradeCooldownCondition && upgradeTowerCondition;    
         }
         if (!canSell)
         {
             UpdateSellableTower();
             bool sellCooldownCondition = sellInterval >= sellCooldown;
-            bool sellTowerCondition = sellableTower.Count > 0;
+            bool sellTowerCondition = sellableTower.Count > 1;
             canSell = sellCooldownCondition && sellTowerCondition;
         }
     }
     private void DecideAction()
     {
         int totalWeight = botProperty.ActionWeightBuild 
-        + botProperty.ActionWeightUpgrade;
+        + botProperty.ActionWeightUpgrade
+        + botProperty.ActionWeightSell;
 
         float roll = Random.value * totalWeight;
         Debug.Log($"[Debug] Strat of Get Action Tower");
@@ -292,7 +315,6 @@ public class BotController : MonoBehaviour
         if(tower == null || buildAction == null) return;
 
         buildAction.Executes(tower);
-        canBuild = false;
     }
     private BotTowerSelectionStrat GetStrategyWeighted()
     {
@@ -401,7 +423,7 @@ public class BotController : MonoBehaviour
             _ => null
         };
 
-        return GetRandomTowerBuildBlueprint(actions);
+        return blueprint;
     }
     private TowerActionSO GetRandomTowerBuildBlueprint(List<BuyAction> blueprints)
     {
@@ -518,9 +540,24 @@ public class BotController : MonoBehaviour
             return;
         
         upgradeInterval = 0;
-        UpgradeRandomTower(upgradableTower);
 
-        canUpgrade = false;
+        float totalWeight = botProperty.TowerUpgradeRandom + botProperty.TowerUpgradePerformance;
+        float roll = Random.value * totalWeight;
+
+        UpgradeBestTower(upgradableTower);
+        return;
+        if(roll < botProperty.TowerUpgradeRandom)
+        {
+            UpgradeRandomTower(upgradableTower);    
+            return;
+        }
+        roll -= botProperty.TowerUpgradeRandom;
+        if(roll < botProperty.TowerUpgradePerformance)
+        {
+            UpgradeBestTower(upgradableTower);
+            return;
+        }
+        
     }
     private void UpgradeRandomTower(List<Tower> upgradableTower)
     {
@@ -530,6 +567,12 @@ public class BotController : MonoBehaviour
         Tower randomTower = upgradableTower[randomIndex];
         Debug.Log($"[Bot] Random Upgrade Index of: {randomTower.TowerData.TowerName}");
         randomTower.Upgrade();
+    }
+    private void UpgradeBestTower(List<Tower> upgradableTower)
+    {
+        List<Tower> bestTowerList = upgradableTower.OrderByDescending(tower => tower.performance.currentScore).ToList();
+        Tower bestTower = bestTowerList[0];
+        bestTower.Upgrade();
     }
     private void UpdateSellableTower()
     {
@@ -544,7 +587,7 @@ public class BotController : MonoBehaviour
         {
             bool isSellable = tower.CurrentState == Tower.State.Built && tower.Level > 0;
             if(isSellable)
-                upgradableTower.Add(tower);
+                sellableTower.Add(tower);
         }
     }
     private void SellAction()
@@ -553,13 +596,64 @@ public class BotController : MonoBehaviour
             return;
         
         sellInterval = 0;
-        RandomIndexSell();
+
+        float totalWeight = botProperty.TowerSellRandom + botProperty.TowerSellPerformance;
+        float roll = Random.value * totalWeight;
+        
+        SellWorstTower(sellableTower);
+        return;
+        if(roll < botProperty.TowerSellRandom)
+        {
+            RandomIndexSell(sellableTower);
+            return;
+        }
+        roll -= botProperty.TowerSellRandom;
+        
+        if(roll < botProperty.TowerSellPerformance)
+        {
+            SellWorstTower(sellableTower);
+            return;
+        }
     }
-    private void RandomIndexSell()
+    private void RandomIndexSell(List<Tower> towers)
     {
-        int maxIndex = sellableTower.Count - 1;
+        int maxIndex = towers.Count - 1;
         int randomIndex = Random.Range(0, maxIndex + 1);
-        Tower tower = sellableTower[randomIndex];
+        Tower tower = towers[randomIndex];
         tower.Sell();
+    }
+    private void SellWorstTower(List<Tower> towers)
+    {
+        List<Tower> worstTowerList = towers.OrderBy(tower => tower.performance.currentScore).ToList();
+        var worstTower = worstTowerList[0];
+        worstTower.Sell();
+    }
+    private void EvaluatePreviousRound()
+    {
+        var builtTower = GetBuiltTower();
+        var RoundPerformances = GameplayManager.instance.RoundPerformances;
+        
+        int currentWaveIndex = GameplayManager.instance.CurrentWaveIndex;
+        int previousWaveIndex = currentWaveIndex - 1;
+        if(previousWaveIndex < 0)
+        {
+            return;
+        }
+        
+        var previousRoundPerformance = RoundPerformances[previousWaveIndex];
+        int totalEnemy = previousRoundPerformance.TotalEnemy;
+        float totalEnemyHealth = previousRoundPerformance.EnemyTotalHealth;
+        
+        foreach(var tower in builtTower)
+        {
+            if(tower.CurrentState == Tower.State.None) continue;
+            
+            var currentTowerPerformance = tower.performance;
+            var towerDamageDealt = currentTowerPerformance.damageDealt;
+            var towerEnemySlain = currentTowerPerformance.enemySlain;
+            float currentTowerScore = ((float)towerDamageDealt / totalEnemyHealth) + (((float)towerEnemySlain / totalEnemy) * 2);
+
+            currentTowerPerformance.currentScore = currentTowerScore;
+        }
     }
 }

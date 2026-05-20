@@ -70,6 +70,7 @@ public class GameplayManager : MonoBehaviour
     public float MultiplierGold { get; private set; }
     public float MultiplierDuration { get; private set; }
     public SpawnType SpawnMode => spawnType;
+    public List<RoundPerformance> RoundPerformances => roundPerformances;
     
     public enum State
     {
@@ -103,7 +104,11 @@ public class GameplayManager : MonoBehaviour
             mainBase.Setup(initHealth);
             fla.Setup(initHealth);
 
-            bot.Init();
+            var botProperty = configLoader.gameConfig.botUsage;
+            if (botProperty.useBot)
+            {
+                bot.Init(botProperty);
+            }
             if (bot.IsActive)
             {
                 selectionManager.DisableSelectionManager();
@@ -267,6 +272,10 @@ public class GameplayManager : MonoBehaviour
     }
     private void GameOver()
     {
+        if(GameState == State.GameOver)
+        {
+            return;
+        }
         Debug.Log("Game Over!");
         isActive = false;
         ChangeState(State.GameOver);

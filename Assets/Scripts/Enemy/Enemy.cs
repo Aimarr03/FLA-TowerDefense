@@ -34,9 +34,7 @@ public class Enemy : MonoBehaviour
     private float currentAttackTick = 0f;
     private Vector2 direction;
     private int bounty = 10;
-
-    public bool isDeath => currentHealh <= 0;
-    public Action<bool> OnDie;
+    public Action<Enemy, bool> OnDie;
     public EnemyTraverseType Type => enemyGroundType;
     Action currentAction;
 
@@ -52,6 +50,15 @@ public class Enemy : MonoBehaviour
         characterMovement.MovementSpeed = movementSpeed;
         currentHealh = maxHealth;
     }
+    void Start()
+    {
+        GameplayManager.instance.onchangedState += OnGameStateChange; 
+    }
+    void OnDestroy()
+    {
+        GameplayManager.instance.onchangedState -= OnGameStateChange; 
+    }
+
     private void Update()
     {
         currentAction?.Invoke();
@@ -75,6 +82,20 @@ public class Enemy : MonoBehaviour
         target.OnDeath += StopAction;
         PreMove();
     }
+    private void OnGameStateChange(GameplayManager.State state)
+    {
+        bool stopCondition = state switch
+        {
+             GameplayManager.State.GameOver => true,
+             GameplayManager.State.Win => true,
+             _ => false
+        };
+
+        if (stopCondition)
+        {
+            StopAction(); 
+        }
+    }
     private void StopAction()
     {
         characterMovement.CancelWalk();
@@ -97,10 +118,14 @@ public class Enemy : MonoBehaviour
 
     private void OnReachTarget()
     {
+        if(target == null)
+            return;
+        
         target.TakeDamage(1);
         characterMovement.OnArrived -= OnReachTarget;
         characterMovement.ChangeMoveDirection -= OnChangeMoveDirection;
-        OnDie?.Invoke(true);
+        
+        OnDie?.Invoke(this, true);
         Destroy(gameObject, 1);
     }
     private void Attacking()
@@ -123,7 +148,7 @@ public class Enemy : MonoBehaviour
             healthBar.Hide();
             GetComponent<Collider2D>().enabled = false;
             StopAction();
-            OnDie?.Invoke(false);
+            OnDie?.Invoke(this, false);
             enemyAnimation.OnDie();
 
             int finalBounty = (int) (bounty * GameplayManager.instance.MultiplierGold);

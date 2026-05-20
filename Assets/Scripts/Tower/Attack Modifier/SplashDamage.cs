@@ -22,6 +22,13 @@ public class SplashDamage : TowerAttackEffect
                 if ((attackable & enemyType) == enemyType)
                 {
                     enemy.TakeDamage(context.Damage);
+                    
+                    var performance = context.Source.performance;
+                    performance.damageDealt += context.Damage;
+                    if (enemy.isDead)
+                    {
+                        performance.enemySlain++;
+                    }
                 }
             }
         }

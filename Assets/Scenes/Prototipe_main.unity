@@ -1626,6 +1626,7 @@ MonoBehaviour:
     ActionWeightBuild: 75
     ActionWeightUpgrade: 25
     ActionWeightDefend: 15
+    ActionWeightSell: 5
     BuildRandomWeight: 50
     BuildRandomBestWeight: 35
     BuildBestWeight: 10
@@ -48519,6 +48520,9 @@ MonoBehaviour:
     cycleMode: 
     startingMoney: 0
     baseDuration: 0
+    botUsage:
+      useBot: 0
+      capability: 0
 --- !u!1 &752473687
 GameObject:
   m_ObjectHideFlags: 0

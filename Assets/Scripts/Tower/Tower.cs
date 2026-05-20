@@ -1,10 +1,16 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Tower : MonoBehaviour, I_MouseInteractable
 {
+    [Serializable]
+    public class Performance
+    {
+        public float damageDealt;
+        public int enemySlain;
+        public float currentScore = 0;
+    }
     [Header("General Info")]
     [SerializeField] private string TowerName = string.Empty;
     [SerializeField] private Bullet bullet;
@@ -45,6 +51,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     [SerializeReference] private List<TowerAttackBehaviour> AttackBehaviours;
     [SerializeReference] private List<TowerAttackEffect> AttackEffects;
 
+    public Performance performance;
     private void Awake()
     {
         rangeDetection = GetComponentInChildren<AreaDetection>();
@@ -52,6 +59,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
 
         AttackBehaviours = new();
         AttackEffects = new();
+        performance = new();
     }
     private void Start()
     {
@@ -90,7 +98,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         if (!IsEnemyAttackable(enemy)) return;
 
         enemiesInRange.Add(enemy);
-        enemy.OnDie += (bool reachDestination) =>
+        enemy.OnDie += (Enemy enemy, bool reachDestination) =>
         {
             OnEnemyDie(enemy);
         };
@@ -137,7 +145,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         
         foreach(var target in plan.Targets)
         {
-            if(target.isDead) continue;
+            if(target == null || target.isDead) continue;
             for(int i = 0; i < plan.Targets.Count; i++)
             {
                 Fire(target);
@@ -204,6 +212,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         UpdateData();
 
         DetectEnemiesInRange();
+        performance = new();
     }
     public void Sell()
     {
@@ -238,6 +247,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         attackRate = 0;
 
         TowerData = null;
+        performance = new();
         OnMouseDeselect();
     }
     public void Upgrade()

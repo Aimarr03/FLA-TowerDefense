@@ -102,7 +102,7 @@ public class EnemySpawner : MonoBehaviour
         Enemy enemy = Instantiate(enemyData.enemyPrefab, transform.position, Quaternion.identity);
         
         enemy.Init(enemyData);
-        enemy.OnDie += (bool reachDestination) =>
+        enemy.OnDie += (Enemy enemy, bool reachDestination) =>
         {
             if (reachDestination)
             {
