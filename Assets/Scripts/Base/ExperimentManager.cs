@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -47,7 +46,7 @@ public class ExperimentManager : MonoBehaviour
         if (condition)
         {
             CreateMatchLog();
-            
+
             currentIteration++;
             if(currentIteration < totalIteration)
             {
@@ -67,9 +66,62 @@ public class ExperimentManager : MonoBehaviour
     }
     IEnumerator ExitPlayMode()
     {
-        ExportCSV();
+        ExportGeneralCSV();
+        ExportEnemyCSV();
         yield return new WaitForSeconds(10f);
         EditorApplication.ExitPlaymode();
+    }
+    private void UpdateEnemyLog(MatchLog log)
+    {
+        var EnemySpawner = FindFirstObjectByType<EnemySpawner>();
+        var enemyPerformances = EnemySpawner.enemyPerformances;
+        var enemyHealthMetric = EnemySpawner.enemyHealthMetrics;
+
+        foreach(var key in enemyPerformances.Keys)
+        {
+            var performance = enemyPerformances[key];
+            var healthMetric = enemyHealthMetric[key];
+
+            float minHealth = -1;
+            float maxHealth = -1;
+            float avgHealth = -1;
+            if (healthMetric.Any())
+            {
+                minHealth = healthMetric.Min();
+                maxHealth = healthMetric.Max();
+                avgHealth = healthMetric.Average();    
+            }
+            
+            performance.avgHealth = avgHealth;
+            performance.minHealth = minHealth;
+            performance.maxHealth = maxHealth;
+            
+            performance.enemyType = key;
+
+            log.enemyPerformances.Add(performance);
+        }
+    }
+    private void ExportEnemyCSV()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine(
+        "Experiment,EnemyType,Spawned,Killed,Escaped,Average");
+        foreach(var match in generalLogs)
+        {
+            foreach(var enemy in match.enemyPerformances)
+            {
+                sb.AppendLine(
+                $"{match.experimentIndex}," +
+                $"{enemy.enemyType}," +
+                $"{enemy.spawnedCount}," +
+                $"{enemy.killedCount}," +
+                $"{enemy.escapedCount},"+
+                $"{enemy.avgHealth:F2}");
+            }
+        }
+        string path =
+        Application.dataPath + "/Debug Log/enemy_log.csv";
+        File.WriteAllText(path, sb.ToString());
     }
     private void CreateMatchLog()
     {
@@ -92,10 +144,12 @@ public class ExperimentManager : MonoBehaviour
         GameplayManager.instance.GetTotalEnemy(out int totalEnemyDamaged, out int totalEnemySlained);
         matchLog.totalEnemySlain = totalEnemySlained;
         matchLog.totalDamage = totalEnemyDamaged;
+        matchLog.enemyPerformances = new();
 
+        UpdateEnemyLog(matchLog);
         generalLogs.Add(matchLog);
     }
-    public void ExportCSV()
+    public void ExportGeneralCSV()
     {
         StringBuilder sb = new StringBuilder();
 
@@ -116,7 +170,7 @@ public class ExperimentManager : MonoBehaviour
         }
 
         string path =
-            Application.dataPath + "/match_log.csv";
+            Application.dataPath + "/Debug Log/match_log.csv";
 
         File.WriteAllText(path, sb.ToString());
 
@@ -155,4 +209,5 @@ public class MatchLog
 
     public float totalDamage;
     public int totalEnemySlain;
+    public List<EnemyPerformance> enemyPerformances;
 }

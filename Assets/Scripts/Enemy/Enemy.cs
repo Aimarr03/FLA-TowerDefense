@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
     public bool isDead => currentHealh <= 0;
     public float MaxHealth => maxHealth;
     public float CurrentHealth => currentHealh;
+    public EnemyType EnemyType => enemyType;
     private void Awake()
     {
         characterMovement = GetComponent<CharacterMovement>();

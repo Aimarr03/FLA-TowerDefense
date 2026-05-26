@@ -10,7 +10,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private List<SpawnEvent> spawnEvents;
     [SerializeField] private EnemySpawnLoader enemySpawnLoader;
     [SerializeField] private List<EnemySpawnInfo> enemySpawnInfos = new List<EnemySpawnInfo>();
-
+    public Dictionary<EnemyType, EnemyPerformance> enemyPerformances;
+    public Dictionary<EnemyType, List<float>> enemyHealthMetrics;
     public List<EnemySpawnInfo> EnemySpawnInfos => enemySpawnInfos;
 
     /// <summary>
@@ -32,10 +33,7 @@ public class EnemySpawner : MonoBehaviour
     public int EnemyDied { get; private set; }
     public float EnemyTotalHealth { get; private set; }
     public float EnemyRemainingHealth { get; private set; }
-    private void Awake()
-    {
-
-    }
+    
     private void OnDestroy()
     {
         GameplayManager.instance.onchangedState -= OnChangeState;
@@ -43,6 +41,20 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         GameplayManager.instance.onchangedState += OnChangeState;
+        enemyPerformances = new Dictionary<EnemyType, EnemyPerformance>()
+        {
+            { EnemyType.Goblin, new EnemyPerformance() },
+            { EnemyType.Bee, new EnemyPerformance() },
+            { EnemyType.Wolf, new EnemyPerformance() },
+            { EnemyType.Slime, new EnemyPerformance() }
+        };
+        enemyHealthMetrics = new Dictionary<EnemyType, List<float>>()
+        {
+            { EnemyType.Goblin, new List<float>() },
+            { EnemyType.Bee, new List<float>() },
+            { EnemyType.Wolf, new List<float>() },
+            { EnemyType.Slime, new List<float>() }
+        };
     }
 
     void Update()
@@ -109,16 +121,26 @@ public class EnemySpawner : MonoBehaviour
     {
         EnemyData enemyData = spawnEvent.enemyData;
         Enemy enemy = Instantiate(enemyData.enemyPrefab, transform.position, Quaternion.identity);
-        
         enemy.Init(enemyData);
+        
+        
+        var enemyPerformance = enemyPerformances[enemy.EnemyType];
+        enemyPerformance.spawnedCount++;
         enemy.OnDie += (Enemy enemy, bool reachDestination) =>
         {
+            
+            var enemyHealthMetric = enemyHealthMetrics[enemy.EnemyType];
+
+            float healthPercentage = Mathf.Clamp(enemy.CurrentHealth / enemy.MaxHealth, 0, 1);
+            enemyHealthMetric.Add(healthPercentage);
             if (reachDestination)
             {
+                enemyPerformance.escapedCount++;
                 EnemyReachDestination++;
             }
             else
             {
+                enemyPerformance.killedCount++;
                 EnemyDied++;
             }
             EnemyRemainingHealth += enemy.CurrentHealth;
@@ -238,4 +260,15 @@ public static class PseudoRandom
         
         return default(T); // Should never reach here if weights are properly defined
     }
+}
+[Serializable]
+public class EnemyPerformance
+{
+    public EnemyType enemyType;
+    public int spawnedCount = 0;
+    public int killedCount = 0;
+    public int escapedCount = 0;
+    public float avgHealth = 0;
+    public float minHealth = 0;
+    public float maxHealth = 0;
 }
