@@ -28,7 +28,7 @@ public class BotProperty
     [Header("Weighted Upgrade Type")]
     [Range(1, 100)] public int TowerUpgradeRandom = 30;
     [Range(1, 100)] public int TowerUpgradePerformance = 60;
-    [Range(0, 1.5f)] public float SellThreshold = 0.75f;
+    [Range(0, 1.5f)] public float SellThreshold = 75f;
     
     [Header("Weighted Sell Type")]
     [Range(1, 100)] public int TowerSellRandom = 30;
@@ -238,13 +238,7 @@ public class BotController : MonoBehaviour
         if (!canSell)
         {
             UpdateSellableTower();
-            bool anyZeroTower = sellableTower.Any(tower => tower.performance.currentScore == 0);
             bool shouldSell = false;
-            if (anyZeroTower)
-            {
-                canSell = false;    
-                return;
-            }
 
             if(sellableTower.Count > 0)
             {
@@ -705,22 +699,12 @@ public class BotController : MonoBehaviour
             return;
         
         sellInterval = 0;
-
-        float totalWeight = botProperty.TowerSellRandom + botProperty.TowerSellPerformance;
-        float roll = Random.value * totalWeight;
+        var lesserScoreTower = sellableTower.Where(tower => tower.performance.currentScore < botProperty.SellThreshold * 2)
+                                .OrderBy(tower => tower.performance.currentScore)
+                                .Take(2).ToList();
+        var soldTower = lesserScoreTower[Random.Range(0, lesserScoreTower.Count() - 1)];
+        soldTower.Sell();
         
-        if(roll < botProperty.TowerSellRandom)
-        {
-            RandomIndexSell(sellableTower);
-            return;
-        }
-        roll -= botProperty.TowerSellRandom;
-        
-        if(roll < botProperty.TowerSellPerformance)
-        {
-            SellWorstTower(sellableTower);
-            return;
-        }
     }
     private void RandomIndexSell(List<Tower> towers)
     {

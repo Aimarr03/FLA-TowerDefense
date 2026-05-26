@@ -353,12 +353,14 @@ public class GameplayManager : MonoBehaviour
         currentRoundPerformance.RemainingEnemy = enemySpawner.EnemyReachDestination;
         currentRoundPerformance.EnemyRemainingHealth = enemySpawner.EnemyRemainingHealth;
         currentRoundPerformance.EnemyTotalHealth = enemySpawner.EnemyTotalHealth;
-
+        currentRoundPerformance.RemainingGold = economyManager.CurrentMoney;
+        
         currentRoundPerformance.RemainingHealth = (int)mainBase.CurrentHealth;
         currentRoundPerformance.AttackNumber = CurrentWave;
         
         var towerEvaluation = currentRoundPerformance.towerEvaluation;
         towerEvaluation.currentRound = CurrentWave;
+        
         foreach(var tower in allTower)
         {
             TowerPerformance towerPerformance = new();
@@ -427,6 +429,7 @@ public class RoundPerformance
     public int RemainingEnemy;
     public int RemainingHealth;
     public int AttackNumber;
+    public int RemainingGold;
     public TowerEvaluation towerEvaluation = new();
     public ActionMetrics ActionMetric = new();
     public float normalizedEnemyCount => RemainingEnemy / TotalEnemy;
