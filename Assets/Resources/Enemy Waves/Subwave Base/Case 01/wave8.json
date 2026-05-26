@@ -1,0 +1,50 @@
+{
+    "index" : 7,
+    "defaultInterval" : 1,
+    "subWaves" : [
+        {
+            "useDefaultInterval" : false,
+            "interval" : 1,
+            "duration" : 0.5,
+            "enemies" : [
+                {
+                    "type" : 0,
+                    "amount" : 30
+                }
+            ]
+        },
+        {
+            "useDefaultInterval" : false,
+            "interval" : 0.5,
+            "duration" : 8,
+            "enemies" : [
+                {
+                    "type" : 1,
+                    "amount" : 6
+                }
+            ]
+        },
+        {
+            "useDefaultInterval" : false,
+            "interval" : 0.5,
+            "duration" : 16,
+            "enemies" : [
+                {
+                    "type" : 1,
+                    "amount" : 8
+                }
+            ]
+        },
+        {
+            "useDefaultInterval" : false,
+            "interval" : 0.5,
+            "duration" : 24,
+            "enemies" : [
+                {
+                    "type" : 1,
+                    "amount" : 10
+                }
+            ]
+        }
+    ]
+}

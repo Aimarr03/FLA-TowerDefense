@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -85,6 +86,14 @@ public class EnemySpawnLoader : MonoBehaviour
             PatternEnemyWave patternEnemyWave = JsonUtility.FromJson<PatternEnemyWave>(subWaveBaseString);
             patternEnemyWaves.Add(patternEnemyWave);
         }
+        patternEnemyWaves.Sort((a, b) => a.index.CompareTo(b.index));
+        StringBuilder builder = new();
+        builder.Append("Index sort: ");
+        foreach(var pattern in patternEnemyWaves)
+        {
+            builder.Append($"{pattern.index}, ");
+        }
+        Debug.Log(builder.ToString());
     }
     public void ConvertPercentageAndUpdateDic(Dictionary<EnemyType, int> container, PercentageEnemySpawn percentageEnemyWave, int amount)
     {

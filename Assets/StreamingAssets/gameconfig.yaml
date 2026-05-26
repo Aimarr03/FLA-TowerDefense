@@ -1,9 +1,9 @@
-filePath: Enemy Waves/Subwave Base
+filePath: Enemy Waves/Subwave Base/Case 01
 scenarioMode: dda
 spawnMode: subwave
 cycleMode: normal
-startingMoney: 350
-baseDuration: 30
+startingMoney: 450
+baseDuration: 20
 botUsage:
   useBot: true
   capability: "Low"

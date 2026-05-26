@@ -39,6 +39,7 @@ public struct EnemySubWave
 [Serializable]
 public struct PatternEnemyWave
 {
+    public int index;
     public float defaultInterval;
 
     public List<EnemySubWave> subWaves;
