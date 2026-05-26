@@ -24,6 +24,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer attackRangeEffect;
 
+
     [Header("Bot Property")]
     [SerializeField, Range(1,10)] private int preferenceScore;
     private AreaDetection rangeDetection;
@@ -50,7 +51,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     [Header("Behaviour Property")]
     [SerializeReference] private List<TowerAttackBehaviour> AttackBehaviours;
     [SerializeReference] private List<TowerAttackEffect> AttackEffects;
-
+    public static Action<TowerActionType> ActionInvoke;
     public Performance performance;
     private void Awake()
     {
@@ -214,8 +215,11 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         UpdateData();
         
         DetectEnemiesInRange();
-        performance = new();
-        performance.currentScore = 100;
+        performance = new()
+        {
+            currentScore = 160
+        };
+        ActionInvoke?.Invoke(TowerActionType.Buy);
     }
     public void Sell()
     {
@@ -251,6 +255,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
 
         TowerData = null;
         performance = new();
+        ActionInvoke?.Invoke(TowerActionType.Sell);
         OnMouseDeselect();
     }
     public void Upgrade()
@@ -266,6 +271,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         UpdateData();
 
         DetectEnemiesInRange();
+        performance.currentScore += 75;
+        ActionInvoke?.Invoke(TowerActionType.Upgrade);
     }
     private void UpdateData()
     {

@@ -18,7 +18,6 @@ public class BuyAction : TowerActionSO
 
     public override void Executes(Tower tower)
     {
-        ActionInvoke?.Invoke(TowerActionType.Buy);
         tower.Build(towerData);
     }
 

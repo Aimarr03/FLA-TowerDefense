@@ -13,7 +13,6 @@ public class SellAction : TowerActionSO
 
     public override void Executes(Tower tower)
     {
-        ActionInvoke?.Invoke(TowerActionType.Sell);
         tower.Sell();
     }
 

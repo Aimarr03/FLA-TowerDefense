@@ -18,7 +18,6 @@ public class UpgradeAction : TowerActionSO
     public override void Executes(Tower tower)
     {
         tower.Upgrade();
-        ActionInvoke?.Invoke(TowerActionType.Upgrade);
     }
 
     public override ActionContext GetActionContext(Tower tower)

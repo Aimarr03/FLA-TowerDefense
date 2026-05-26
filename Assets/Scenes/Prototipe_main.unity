@@ -49591,6 +49591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b26b7549ea1a64da3fd450b421d5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperimentManager
+  totalIteration: 2
 --- !u!4 &881900537
 Transform:
   m_ObjectHideFlags: 0

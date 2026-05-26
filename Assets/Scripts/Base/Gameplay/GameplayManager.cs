@@ -146,7 +146,7 @@ public class GameplayManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        TowerActionSO.ActionInvoke -= TowerActionInvoke;
+        Tower.ActionInvoke -= TowerActionInvoke;
     }
     private void Update()
     {
@@ -172,7 +172,7 @@ public class GameplayManager : MonoBehaviour
         mainBase.OnDeath += GameOver;
         DestinationPos = mainBase.transform.position;
 
-        TowerActionSO.ActionInvoke += TowerActionInvoke;
+        Tower.ActionInvoke += TowerActionInvoke;
         MainMenu.gameObject.SetActive(false);
         ChangeState(State.Building);
         
@@ -272,6 +272,38 @@ public class GameplayManager : MonoBehaviour
                 }
                 break;
         }
+    }
+    public void GetActCount(out int totalBuild, out int totalUpgrade, out int totalSell)
+    {
+        totalSell = 0;
+        totalBuild = 0;
+        totalUpgrade = 0;
+        for(int index = 0; index < CurrentWave; index++)
+        {
+            var currentRound = roundPerformances[index];
+            var actionMetric = currentRound.ActionMetric;
+
+            totalBuild += actionMetric.BuildPhase_BuyAction + actionMetric.DefendPhase_BuyAction;
+            totalSell += actionMetric.BuildPhase_SellAction + actionMetric.DefendPhase_SellAction;
+            totalUpgrade += actionMetric.BuildPhase_UpgradeAction + actionMetric.DefendPhase_UpgradeAction;
+        }
+    }
+    public void GetTotalEnemy(out int totalEnemyDamaged, out int totalEnemySlained)
+    {
+        totalEnemyDamaged = 0;
+        totalEnemySlained = 0;
+        for(int index = 0; index < CurrentWave; index++)
+        {
+            var currentRound = roundPerformances[index];
+            totalEnemyDamaged += (int)(currentRound.EnemyTotalHealth - currentRound.EnemyRemainingHealth);
+            totalEnemySlained += (int)(currentRound.TotalEnemy - currentRound.RemainingEnemy);
+        }
+    }
+    public void GetRemainingHealth(out int remainingHealth)
+    {
+        remainingHealth = 0;
+        var currentRoundPerformance = roundPerformances[CurrentWaveIndex];
+        remainingHealth = currentRoundPerformance.RemainingHealth;
     }
     private void GameOver()
     {

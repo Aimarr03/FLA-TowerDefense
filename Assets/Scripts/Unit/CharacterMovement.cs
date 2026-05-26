@@ -140,6 +140,7 @@ public class CharacterMovement : MonoBehaviour
         isMoving = false;
         reachDestination = true;
 
-        rootVisual.localScale = Vector3.one;
+        if(rootVisual != null)
+            rootVisual.localScale = Vector3.one;
     }
 }

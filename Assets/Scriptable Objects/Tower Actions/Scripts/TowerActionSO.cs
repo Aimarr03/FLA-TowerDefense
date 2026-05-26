@@ -5,7 +5,7 @@ public abstract class TowerActionSO : ScriptableObject
 {
     public string Name;
     public string Description;
-    public static Action<TowerActionType> ActionInvoke;
+    
     public abstract bool ExecutableConditions(Tower tower);
     public abstract void Executes(Tower tower);
     public abstract ActionContext GetActionContext(Tower tower);

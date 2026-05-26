@@ -28,11 +28,12 @@ public class BotProperty
     [Header("Weighted Upgrade Type")]
     [Range(1, 100)] public int TowerUpgradeRandom = 30;
     [Range(1, 100)] public int TowerUpgradePerformance = 60;
-    [Range(0, 1.5f)] public float SellThreshold = 75f;
+    [Range(1, 100)] public float SellThreshold = 75f;
     
     [Header("Weighted Sell Type")]
-    [Range(1, 100)] public int TowerSellRandom = 30;
-    [Range(1, 100)] public int TowerSellPerformance = 30;
+    [Range(1, 30)] public float maxCooldownSell = 30;
+    // [Range(1, 100)] public int TowerSellRandom = 30;
+    // [Range(1, 100)] public int TowerSellPerformance = 30;
 }
 public enum BotTowerSelectionStrat
 {
@@ -91,8 +92,11 @@ public class BotController : MonoBehaviour
     float buildCooldown = 3f;
     float upgradeInterval = 0f;
     float upgradeCooldown = 3f;
+    float currentDurationToSell = 0;
+    float minimumDurationToSell = 0;
     float sellInterval = 0f;
     float sellCooldown = 15f;
+
     public bool IsActive => isActive;
     /// <summary>
     /// For Making weights more dynamic, using base weight and modify the basis based on current Progress
@@ -128,6 +132,7 @@ public class BotController : MonoBehaviour
         currentInterval = 0;
         GameplayManager.instance.onchangedState += Gameplay_ChangeState;
         TD_API.Economy.OnMoneyChange += OnMoneyChange;
+        minimumDurationToSell = botProperty.maxCooldownSell;
         enemySpawnInfos = new();
     }
 
@@ -182,6 +187,7 @@ public class BotController : MonoBehaviour
         buildInterval += Time.deltaTime;
         upgradeInterval += Time.deltaTime;
         sellInterval += Time.deltaTime;
+        currentDurationToSell += Time.deltaTime;
         if(currentInterval > intervalDecision)
         {
             currentInterval = 0;
@@ -239,8 +245,8 @@ public class BotController : MonoBehaviour
         {
             UpdateSellableTower();
             bool shouldSell = false;
-
-            if(sellableTower.Count > 0)
+            bool durationCondition = currentDurationToSell >= minimumDurationToSell;
+            if(sellableTower.Count > 1)
             {
                 var worstTower = sellableTower.OrderBy(tower => tower.performance.currentScore).First();    
                 shouldSell = worstTower.performance.currentScore <= botProperty.SellThreshold;
@@ -248,7 +254,7 @@ public class BotController : MonoBehaviour
             
             //bool sellCooldownCondition = sellInterval >= sellCooldown;
             bool sellTowerCondition = sellableTower.Count > 1;
-            canSell = sellTowerCondition && shouldSell;
+            canSell = sellTowerCondition && shouldSell && durationCondition;
         }
     }
     private void UpdateDecisionWeight()
