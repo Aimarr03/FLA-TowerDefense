@@ -1623,16 +1623,22 @@ MonoBehaviour:
   botType: 0
   botProperty:
     botType: 0
-    ActionWeightBuild: 75
-    ActionWeightUpgrade: 25
-    ActionWeightDefend: 15
-    ActionWeightSell: 5
+    BaseWeightBuildAction: 75
+    BaseWeightUpgradeAction: 25
+    BaseWeightDefendAction: 15
+    BaseWeightSellAction: 5
+    BaseWeightNoneAction: 35
     BuildRandomWeight: 50
     BuildRandomBestWeight: 35
     BuildBestWeight: 10
     TowerTypeRandomWeight: 50
     TowerTypeObservingWeight: 15
-  enemySpawner: {fileID: 0}
+    TowerUpgradeRandom: 30
+    TowerUpgradePerformance: 60
+    SellThreshold: 0.75
+    TowerSellRandom: 30
+    TowerSellPerformance: 30
+  enemySpawner: {fileID: 1857650229}
 --- !u!4 &255797125
 Transform:
   m_ObjectHideFlags: 0

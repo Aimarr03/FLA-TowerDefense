@@ -10,11 +10,11 @@ public class BotProperty
 {
     public BotController.Capability botType;
     [Header("Weighted Action Property")]
-    [Range(1, 100)] public int ActionWeightBuild = 75;
-    [Range(1, 100)] public int ActionWeightUpgrade = 25;
-    [Range(1, 100)] public int ActionWeightDefend = 15;
-    [Range(1, 100)] public int ActionWeightSell = 5;
-    [Range(1, 100)] public int ActionWeightNone = 35;
+    [Range(1, 100)] public int BaseWeightBuildAction = 75;
+    [Range(1, 100)] public int BaseWeightUpgradeAction = 25;
+    [Range(1, 100)] public int BaseWeightDefendAction = 15;
+    [Range(1, 100)] public int BaseWeightSellAction = 5;
+    [Range(1, 100)] public int BaseWeightNoneAction = 35;
     
     [Header("Weighted Property Strategy")]
     [Range(1, 100)] public int BuildRandomWeight = 50;
@@ -94,6 +94,16 @@ public class BotController : MonoBehaviour
     float sellInterval = 0f;
     float sellCooldown = 15f;
     public bool IsActive => isActive;
+    /// <summary>
+    /// For Making weights more dynamic, using base weight and modify the basis based on current Progress
+    /// </summary>
+    private int buildWeight = 0;
+    private int upgradeWeight = 0;
+    private int sellWeight = 0;
+    private int noneWeight = 0;
+    private float DifferenceHealth = 0;
+    private float DifferenceDamageDealt = 0;
+    private float DifferentEnemySlain = 0;
     void Awake()
     {
         ListBot = new();   
@@ -142,6 +152,10 @@ public class BotController : MonoBehaviour
         else
         {
             EvaluatePreviousRound();
+            if(GameplayManager.instance.CurrentWave > 1)
+            {
+                
+            }
             if(state == GameplayManager.State.Building)
             {
                 if(enemySpawnInfos == null)
@@ -172,8 +186,8 @@ public class BotController : MonoBehaviour
         {
             currentInterval = 0;
             UpdateActionCondition();
+            UpdateDecisionWeight();
             DecideAction();
-
             switch (currentActionType)
             {
                 case ActionType.Build:
@@ -243,51 +257,81 @@ public class BotController : MonoBehaviour
             canSell = sellCooldownCondition && sellTowerCondition && shouldSell;
         }
     }
+    private void UpdateDecisionWeight()
+    {
+        buildWeight = botProperty.BaseWeightBuildAction;
+        
+        int totalUnbuildTower = allTower.Where(tower => tower.CurrentState == Tower.State.None).Count();
+        buildWeight += 10 * totalUnbuildTower;
+
+        upgradeWeight = botProperty.BaseWeightUpgradeAction;
+        int totalBuiltTower = allTower.Where(tower => tower.CurrentState == Tower.State.Built).Count();
+        upgradeWeight += 5 * totalBuiltTower;
+        if(upgradableTower.Count <= 0)
+        {
+            upgradeWeight = 0;
+        }
+        noneWeight = botProperty.BaseWeightNoneAction;
+        noneWeight += totalBuiltTower * 15;
+
+        sellWeight = botProperty.BaseWeightSellAction;
+        if(DifferenceHealth == 0) 
+            sellWeight = 0;
+        else if(DifferenceHealth < 5)
+        {
+            sellWeight += (int)DifferenceHealth;
+        }
+        else
+        {
+            sellWeight += (int)DifferenceHealth * 2;
+        }
+
+    }
     private void DecideAction()
     {
-        int totalWeight = botProperty.ActionWeightBuild 
-        + botProperty.ActionWeightUpgrade
-        + botProperty.ActionWeightSell
-        + botProperty.ActionWeightNone;
+        int totalWeight = buildWeight 
+        + upgradeWeight
+        + sellWeight
+        + noneWeight;
 
         float roll = Random.value * totalWeight;
         Debug.Log($"[Debug] Strat of Get Action Tower");
         Debug.Log($"[Debug] Roll: {roll} with totalWeight of {totalWeight}");
         Debug.Log($"[Debug] conditons for buy: {canBuild} || upgrade: {canUpgrade} || sell: {canSell}");
         
-        if(roll < botProperty.ActionWeightNone)
+        if(roll < noneWeight)
         {
-            Debug.Log($"[Debug] Check rolls: {roll} < {botProperty.ActionWeightNone}");
+            Debug.Log($"[Debug] Check rolls: {roll} < {botProperty.BaseWeightNoneAction}");
             currentActionType = ActionType.None;
             Debug.Log($"[Debug] Bot go with none");
             return;
         }
-        roll -= botProperty.ActionWeightNone;
+        roll -= noneWeight;
         
-        if(roll < botProperty.ActionWeightBuild && canBuild)
+        if(roll < buildWeight && canBuild)
         {
             currentActionType = ActionType.Build;
             Debug.Log($"[Debug] Bot go with Build");
             return;
         }
 
-        roll -= botProperty.ActionWeightBuild;
-        if(roll < botProperty.ActionWeightUpgrade && canUpgrade)
+        roll -= buildWeight;
+        if(roll < upgradeWeight && canUpgrade)
         {
             currentActionType = ActionType.Upgrade;
             Debug.Log($"[Debug] Bot go with Upgrade");
             return;
         }
-        roll -= botProperty.ActionWeightUpgrade;
+        roll -= upgradeWeight;
 
-        if(roll < botProperty.ActionWeightSell && canSell)
+        if(roll < sellWeight && canSell)
         {
             currentActionType = ActionType.Sell;
             Debug.Log($"[Debug] Bot go with Sell");
             return;
         }
         
-        roll -= botProperty.ActionWeightSell;
+        roll -= sellWeight;
         Debug.Log($"[Debug] Bot go with none");
         currentActionType = ActionType.None;
     }
@@ -709,5 +753,23 @@ public class BotController : MonoBehaviour
             float currentTowerScore = (towerDamageDealt / totalEnemyHealth) + enemyScoreSlain;
             currentTowerPerformance.currentScore = currentTowerScore;
         }
+    }
+    private void EvaluateDifferenceRound()
+    {
+        var RoundPerformances = GameplayManager.instance.RoundPerformances;
+        int currentWaveIndex = GameplayManager.instance.CurrentWaveIndex;
+        int previousWaveIndex = currentWaveIndex - 1;
+        if(previousWaveIndex < 1)
+        {
+            return;
+        }
+
+        var previous1 = RoundPerformances[previousWaveIndex];
+        var previous2 = RoundPerformances[previousWaveIndex - 1];
+
+        DifferenceHealth = Mathf.Abs(previous2.RemainingHealth - previous1.RemainingHealth);
+        DifferenceDamageDealt = Mathf.Abs((previous2.EnemyTotalHealth - previous2.EnemyRemainingHealth) - (previous1.EnemyTotalHealth - previous1.EnemyRemainingHealth)) ;
+        DifferentEnemySlain = Mathf.Abs(previous2.RemainingEnemy- previous1.RemainingEnemy);
+
     }
 }
