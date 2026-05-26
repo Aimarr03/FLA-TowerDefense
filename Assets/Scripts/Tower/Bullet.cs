@@ -43,6 +43,7 @@ public class Bullet : MonoBehaviour
             target.TakeDamage(damage);
             var performace = attackContext.Source.performance;
             performace.damageDealt += damage;
+            performace.currentScore += damage;
 
             foreach(var attackEffect in attackContext.Effects)
             {

@@ -27,7 +27,7 @@ public class EnemySpawner : MonoBehaviour
     float timer = 0f;
 
     
-    public int TotalEnemy => enemyRemaining;
+    public int TotalEnemy {get; private set;}
     public int EnemyReachDestination { get; private set; }
     public int EnemyDied { get; private set; }
     public float EnemyTotalHealth { get; private set; }
@@ -95,6 +95,15 @@ public class EnemySpawner : MonoBehaviour
                 break;
         }
         enemyRemaining = spawnEvents.Count;
+        int totalHealth = 0;
+        int totalEnemy = 0;
+        foreach(var enemyInfo in enemySpawnInfos)
+        {
+            totalEnemy += enemyInfo.amount;
+            totalHealth += (int) TD_API.EnemyDatas[enemyInfo.type].MaxHealth * enemyInfo.amount;
+        }
+        TotalEnemy = totalEnemy;
+        EnemyTotalHealth = totalHealth;
     }
     private void SpawnEnemy(SpawnEvent spawnEvent)
     {

@@ -25,6 +25,8 @@ public class SplashDamage : TowerAttackEffect
                     
                     var performance = context.Source.performance;
                     performance.damageDealt += context.Damage;
+                    performance.currentScore += context.Damage;
+                    
                     if (enemy.isDead)
                     {
                         performance.enemySlain++;

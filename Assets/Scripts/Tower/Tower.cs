@@ -71,6 +71,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     {
         if (towerState == State.None) return;
         
+        float decayedPerformance = performance.currentScore - (Time.deltaTime * 3);
+        performance.currentScore = Mathf.Max(decayedPerformance, 0);
         if (target == null || target.isDead)
         {
             SelectPrimalTarget();
@@ -210,9 +212,10 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         animator.runtimeAnimatorController = towerData.animatorController;
         animator.Play($"Upgrade_{level}");
         UpdateData();
-
+        
         DetectEnemiesInRange();
         performance = new();
+        performance.currentScore = 100;
     }
     public void Sell()
     {

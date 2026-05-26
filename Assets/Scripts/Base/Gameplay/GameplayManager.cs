@@ -2,6 +2,7 @@ using NavMeshPlus.Components;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -52,7 +53,8 @@ public class GameplayManager : MonoBehaviour
     private bool isActive = false;
     private int rewardQuestionAnswered = 0;
     private int maxWave = 0;
-    
+    private List<Tower> allTower;
+
     [Header("Enemy Wave")]
     public List<EnemySpawnInfo> enemySpawnInfos;
     private List<RoundPerformance> roundPerformances;
@@ -99,6 +101,7 @@ public class GameplayManager : MonoBehaviour
             MultiplierGold = 1f;
             MultiplierSpeed = 1f;
             
+            allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
             LoadConfig();
             
             mainBase.Setup(initHealth);
@@ -353,6 +356,39 @@ public class GameplayManager : MonoBehaviour
 
         currentRoundPerformance.RemainingHealth = (int)mainBase.CurrentHealth;
         currentRoundPerformance.AttackNumber = CurrentWave;
+        
+        var towerEvaluation = currentRoundPerformance.towerEvaluation;
+        towerEvaluation.currentRound = CurrentWave;
+        foreach(var tower in allTower)
+        {
+            TowerPerformance towerPerformance = new();
+            if(tower.CurrentState == Tower.State.None)
+            {
+                towerPerformance.towerName = "None";
+                towerPerformance.damageDealt = -1;
+                towerPerformance.enemySlain = -1;
+            }
+            else if(tower.CurrentState == Tower.State.Built)
+            {
+                var towerName = tower.TowerData.TowerName;
+                towerPerformance.towerName = towerName;
+                towerPerformance.damageDealt = (int) tower.performance.damageDealt;
+                towerPerformance.enemySlain = (int) tower.performance.enemySlain;
+                if(towerName == "Archer Tower")
+                {
+                    towerEvaluation.archerCount++;   
+                }
+                else if(towerName == "Mortar Tower")
+                {
+                    towerEvaluation.mortarCount++;
+                }
+                else if(towerName == "Mage Tower")
+                {
+                    towerEvaluation.mageCount++;
+                }
+            }
+            towerEvaluation.towerPerformance.Add(towerPerformance);
+        }
 
 
         Debug.Log($"No. Current Wave Clear: {CurrentWave}");
@@ -391,7 +427,7 @@ public class RoundPerformance
     public int RemainingEnemy;
     public int RemainingHealth;
     public int AttackNumber;
-
+    public TowerEvaluation towerEvaluation = new();
     public ActionMetrics ActionMetric = new();
     public float normalizedEnemyCount => RemainingEnemy / TotalEnemy;
     public float normalizedDuration => RemainingbuildPhaseDuration / BuildPhaseDuration;
@@ -407,4 +443,23 @@ public class ActionMetrics
     public int DefendPhase_SellAction;
     public int DefendPhase_BuyAction;
     public int DefendPhase_UpgradeAction;
+}
+[Serializable]
+public class TowerEvaluation
+{
+    public int mortarCount = 0;
+    public int archerCount = 0;
+    public int mageCount = 0;
+    public int currentRound = 0;
+    public List<TowerPerformance> towerPerformance = new();
+}
+
+[Serializable]
+public class TowerPerformance
+{
+    public string towerName;
+    
+    public int damageDealt;
+    public int enemySlain;
+
 }

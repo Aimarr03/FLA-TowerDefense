@@ -154,7 +154,7 @@ public class BotController : MonoBehaviour
             EvaluatePreviousRound();
             if(GameplayManager.instance.CurrentWave > 1)
             {
-                
+                EvaluateDifferenceRound();
             }
             if(state == GameplayManager.State.Building)
             {
@@ -214,7 +214,7 @@ public class BotController : MonoBehaviour
     {
         if (!canBuild)
         {
-            bool buildCooldownCondition = buildInterval >= buildCooldown;
+            //bool buildCooldownCondition = buildInterval >= buildCooldown;
             bool buildRandomCondition = TryBuildChanceTrigger();
             bool buildMoneyCondition = CheckBuildActionLeft();
 
@@ -224,7 +224,7 @@ public class BotController : MonoBehaviour
 
             bool buildableTowerCondition = buildableTower.Count > 0;
             
-            canBuild = buildCooldownCondition && buildRandomCondition 
+            canBuild = buildRandomCondition 
             && buildMoneyCondition && buildableTowerCondition;       
         }
 
@@ -252,9 +252,9 @@ public class BotController : MonoBehaviour
                 shouldSell = worstTower.performance.currentScore <= botProperty.SellThreshold;
             }
             
-            bool sellCooldownCondition = sellInterval >= sellCooldown;
+            //bool sellCooldownCondition = sellInterval >= sellCooldown;
             bool sellTowerCondition = sellableTower.Count > 1;
-            canSell = sellCooldownCondition && sellTowerCondition && shouldSell;
+            canSell = sellTowerCondition && shouldSell;
         }
     }
     private void UpdateDecisionWeight()
@@ -263,6 +263,10 @@ public class BotController : MonoBehaviour
         
         int totalUnbuildTower = allTower.Where(tower => tower.CurrentState == Tower.State.None).Count();
         buildWeight += 10 * totalUnbuildTower;
+        if(buildInterval >= buildCooldown)
+        {
+            buildWeight += 25;
+        }
 
         upgradeWeight = botProperty.BaseWeightUpgradeAction;
         int totalBuiltTower = allTower.Where(tower => tower.CurrentState == Tower.State.Built).Count();
@@ -280,10 +284,18 @@ public class BotController : MonoBehaviour
         else if(DifferenceHealth < 5)
         {
             sellWeight += (int)DifferenceHealth;
+            if(sellInterval >= sellCooldown)
+            {
+                sellWeight += 25;
+            }
         }
         else
         {
             sellWeight += (int)DifferenceHealth * 2;
+            if(sellInterval >= sellCooldown)
+            {
+                sellWeight += 25;
+            }
         }
 
     }
@@ -737,7 +749,6 @@ public class BotController : MonoBehaviour
         
         var previousRoundPerformance = RoundPerformances[previousWaveIndex];
         float totalEnemy = previousRoundPerformance.TotalEnemy;
-        float totalEnemyHealth = previousRoundPerformance.EnemyTotalHealth;
         
         foreach(var tower in builtTower)
         {
@@ -746,12 +757,15 @@ public class BotController : MonoBehaviour
             var currentTowerPerformance = tower.performance;
             float towerDamageDealt = currentTowerPerformance.damageDealt;
             float towerEnemySlain = currentTowerPerformance.enemySlain;
+            float rationalizedSlainEnemy = towerEnemySlain / totalEnemy;
+            Debug.Log($"Rationalized: {towerEnemySlain}/{totalEnemy}={rationalizedSlainEnemy}");
+            float currentTowerScore = towerDamageDealt * rationalizedSlainEnemy;
+            currentTowerPerformance.currentScore += currentTowerScore;
+            Debug.Log($"Checking Score: tower {tower.TowerData.TowerName} with score of: {currentTowerPerformance.currentScore}");
             
-            float enemyScoreSlain = (towerEnemySlain / totalEnemy) * 2;
-            enemyScoreSlain = Mathf.Clamp(enemyScoreSlain, 0, float.MaxValue);
-
-            float currentTowerScore = (towerDamageDealt / totalEnemyHealth) + enemyScoreSlain;
-            currentTowerPerformance.currentScore = currentTowerScore;
+            //Reset Stats:
+            currentTowerPerformance.enemySlain = 0;
+            currentTowerPerformance.damageDealt = 0;
         }
     }
     private void EvaluateDifferenceRound()
