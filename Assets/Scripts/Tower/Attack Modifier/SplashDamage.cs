@@ -12,7 +12,7 @@ public class SplashDamage : TowerAttackEffect
             radius
         );
 
-        EnemyTraverseType attackable = context.Source.TowerData.AttackableType;
+        EnemyTraverseType attackable = context.AttackableType;
 
         foreach (var hit in hits)
         {
@@ -26,10 +26,11 @@ public class SplashDamage : TowerAttackEffect
                     var performance = context.Source.performance;
                     performance.damageDealt += context.Damage;
                     performance.currentScore += context.Damage;
-                    
+                    context.InvokeDamageEvent(context.Damage);
                     if (enemy.isDead)
                     {
                         performance.enemySlain++;
+                        context.InvokeKillEvent();
                     }
                 }
             }

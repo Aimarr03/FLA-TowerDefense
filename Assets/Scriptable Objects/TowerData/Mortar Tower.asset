@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Mortar Tower
   m_EditorClassIdentifier: Assembly-CSharp::TowerData
   TowerName: Mortar Tower
+  Type: 2
   Description: Mortar Tower Desc
   _baseDamage: 7
   _multiplierDamage: 0.5

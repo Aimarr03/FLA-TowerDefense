@@ -26,5 +26,6 @@ public enum TowerActionType
 {
     Buy,
     Upgrade,
-    Sell
+    Sell,
+    Presell,
 }

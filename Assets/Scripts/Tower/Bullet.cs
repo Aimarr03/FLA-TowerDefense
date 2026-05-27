@@ -44,7 +44,7 @@ public class Bullet : MonoBehaviour
             var performace = attackContext.Source.performance;
             performace.damageDealt += damage;
             performace.currentScore += damage;
-
+            attackContext.InvokeDamageEvent(damage);
             foreach(var attackEffect in attackContext.Effects)
             {
                 attackEffect.Apply(attackContext);
@@ -62,5 +62,6 @@ public class Bullet : MonoBehaviour
             return;
         var towerPerformance = attackContext.Source.performance;
         towerPerformance.enemySlain++;
+        attackContext.InvokeKillEvent();
     }
 }

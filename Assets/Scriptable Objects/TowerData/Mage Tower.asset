@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Mage Tower
   m_EditorClassIdentifier: Assembly-CSharp::TowerData
   TowerName: Mage Tower
+  Type: 1
   Description: Mage Tower Desc
   _baseDamage: 10
   _multiplierDamage: 1

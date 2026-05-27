@@ -51,7 +51,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     [Header("Behaviour Property")]
     [SerializeReference] private List<TowerAttackBehaviour> AttackBehaviours;
     [SerializeReference] private List<TowerAttackEffect> AttackEffects;
-    public static Action<TowerActionType> ActionInvoke;
+    public static Action<Tower,TowerActionType> ActionInvoke;
     public Performance performance;
     private void Awake()
     {
@@ -161,7 +161,9 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         {
             Target = enemy,
             Source = this,
-            Damage = attackDamage
+            Damage = attackDamage,
+            towerType = TowerData.Type,
+            AttackableType = TowerData.AttackableType
         };
         
         foreach(var attackEffect in AttackEffects)
@@ -219,11 +221,12 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         {
             currentScore = 160
         };
-        ActionInvoke?.Invoke(TowerActionType.Buy);
+        ActionInvoke?.Invoke(this,TowerActionType.Buy);
     }
     public void Sell()
     {
         Debug.Log("Sell");
+        ActionInvoke?.Invoke(this,TowerActionType.Presell);
         float sellCost = TowerData.SellCost(level);
 
         TD_API.Economy.GainMoney((int)sellCost);
@@ -255,7 +258,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
 
         TowerData = null;
         performance = new();
-        ActionInvoke?.Invoke(TowerActionType.Sell);
+        ActionInvoke?.Invoke(this,TowerActionType.Sell);
         OnMouseDeselect();
     }
     public void Upgrade()
@@ -272,7 +275,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
 
         DetectEnemiesInRange();
         performance.currentScore += 75;
-        ActionInvoke?.Invoke(TowerActionType.Upgrade);
+        ActionInvoke?.Invoke(this, TowerActionType.Upgrade);
     }
     private void UpdateData()
     {

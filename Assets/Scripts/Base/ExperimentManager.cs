@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -68,6 +69,7 @@ public class ExperimentManager : MonoBehaviour
     {
         ExportGeneralCSV();
         ExportEnemyCSV();
+        ExportTowerCSV();
         yield return new WaitForSeconds(10f);
         EditorApplication.ExitPlaymode();
     }
@@ -101,28 +103,19 @@ public class ExperimentManager : MonoBehaviour
             log.enemyPerformances.Add(performance);
         }
     }
-    private void ExportEnemyCSV()
+    private void UpdateTowerLog(MatchLog log)
     {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine(
-        "Experiment,EnemyType,Spawned,Killed,Escaped,Average");
-        foreach(var match in generalLogs)
+        var TowerLogController = FindFirstObjectByType<TowerLogController>();
+        TowerLogController.FinalisedRawData();
+
+        var towerLogs = TowerLogController.towerLogs;
+        foreach(var key in towerLogs.Keys)
         {
-            foreach(var enemy in match.enemyPerformances)
-            {
-                sb.AppendLine(
-                $"{match.experimentIndex}," +
-                $"{enemy.enemyType}," +
-                $"{enemy.spawnedCount}," +
-                $"{enemy.killedCount}," +
-                $"{enemy.escapedCount},"+
-                $"{enemy.avgHealth:F2}");
-            }
+            var towerLog = towerLogs[key];
+            log.towerLogs.Add(towerLog);
         }
-        string path =
-        Application.dataPath + "/Debug Log/enemy_log.csv";
-        File.WriteAllText(path, sb.ToString());
     }
+    
     private void CreateMatchLog()
     {
         var matchLog = new MatchLog();
@@ -145,8 +138,10 @@ public class ExperimentManager : MonoBehaviour
         matchLog.totalEnemySlain = totalEnemySlained;
         matchLog.totalDamage = totalEnemyDamaged;
         matchLog.enemyPerformances = new();
+        matchLog.towerLogs = new();
 
         UpdateEnemyLog(matchLog);
+        UpdateTowerLog(matchLog);
         generalLogs.Add(matchLog);
     }
     public void ExportGeneralCSV()
@@ -176,7 +171,59 @@ public class ExperimentManager : MonoBehaviour
 
         Debug.Log("CSV Exported");
     }
-    
+    private void ExportEnemyCSV()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine(
+        "Experiment,EnemyType,Spawned,Killed,Escaped,Average");
+        foreach(var match in generalLogs)
+        {
+            foreach(var enemy in match.enemyPerformances)
+            {
+                sb.AppendLine(
+                $"{match.experimentIndex}," +
+                $"{enemy.enemyType}," +
+                $"{enemy.spawnedCount}," +
+                $"{enemy.killedCount}," +
+                $"{enemy.escapedCount},"+
+                $"{enemy.avgHealth:F0}");
+            }
+        }
+        string path =
+        Application.dataPath + "/Debug Log/enemy_log.csv";
+        File.WriteAllText(path, sb.ToString());
+    }
+    public void ExportTowerCSV()
+    {
+        StringBuilder sb = new StringBuilder();
+        
+        sb.AppendLine(
+            "Experiment,TowerType,Built,Upgrade,Sold,Damage,EnemySlain,Average Score");
+
+        foreach(var match in generalLogs)
+        {
+            foreach(var tower in match.towerLogs)
+            {
+                sb.AppendLine(
+                $"{match.experimentIndex}," +
+                $"{tower.towerType}," +
+                $"{tower.builtTotal}," +
+                $"{tower.upgradeTotal}," +
+                $"{tower.sellTotal},"+
+                $"{tower.totalDamage},"+
+                $"{tower.totalKill},"+
+                $"{tower.averageScore:F2},"
+                );
+            }
+        }
+
+        string path =
+            Application.dataPath + "/Debug Log/tower_log.csv";
+
+        File.WriteAllText(path, sb.ToString());
+
+        Debug.Log("CSV Exported");
+    }
     private void OnPlayStateChange(PlayModeStateChange change)
     {
         if(change == PlayModeStateChange.EnteredPlayMode)
@@ -210,4 +257,5 @@ public class MatchLog
     public float totalDamage;
     public int totalEnemySlain;
     public List<EnemyPerformance> enemyPerformances;
+    public List<TowerLog> towerLogs;
 }
