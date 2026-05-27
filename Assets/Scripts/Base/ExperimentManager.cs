@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
@@ -70,6 +71,7 @@ public class ExperimentManager : MonoBehaviour
         ExportGeneralCSV();
         ExportEnemyCSV();
         ExportTowerCSV();
+        ExportHealthMetric();
         yield return new WaitForSeconds(10f);
         EditorApplication.ExitPlaymode();
     }
@@ -115,6 +117,14 @@ public class ExperimentManager : MonoBehaviour
             log.towerLogs.Add(towerLog);
         }
     }
+    private void UpdateHealthMetric(MatchLog log)
+    {
+        var RoundPerformances = GameplayManager.instance.RoundPerformances;
+        foreach(var round in RoundPerformances)
+        {
+            log.healthMetrics.remainingHealth.Add(round.RemainingHealth);
+        }
+    }
     
     private void CreateMatchLog()
     {
@@ -139,9 +149,11 @@ public class ExperimentManager : MonoBehaviour
         matchLog.totalDamage = totalEnemyDamaged;
         matchLog.enemyPerformances = new();
         matchLog.towerLogs = new();
+        matchLog.healthMetrics = new();
 
         UpdateEnemyLog(matchLog);
         UpdateTowerLog(matchLog);
+        UpdateHealthMetric(matchLog);
         generalLogs.Add(matchLog);
     }
     public void ExportGeneralCSV()
@@ -224,6 +236,40 @@ public class ExperimentManager : MonoBehaviour
 
         Debug.Log("CSV Exported");
     }
+    public void ExportHealthMetric()
+    {
+        StringBuilder sb = new StringBuilder();
+        int maxWave = generalLogs[0].healthMetrics.remainingHealth.Count;        
+        sb.Append("Experiment,");
+        for(int i = 0; i < maxWave; i++)
+        {
+            sb.Append($"Wave {i + 1:D2}");
+
+            if(i < maxWave - 1)
+                sb.Append(",");
+        }
+        sb.AppendLine();
+        foreach(var match in generalLogs)
+        {
+            sb.Append($"{match.experimentIndex},");
+            var healthMetric = match.healthMetrics.remainingHealth;
+            for(int i = 0; i < healthMetric.Count; i++)
+            {
+                sb.Append($"{healthMetric[i]}");
+
+                if(i < maxWave - 1)
+                    sb.Append(",");
+            }
+            sb.AppendLine();
+        }
+
+        string path =
+            Application.dataPath + "/Debug Log/health_log.csv";
+
+        File.WriteAllText(path, sb.ToString());
+
+        Debug.Log("CSV Exported");
+    }
     private void OnPlayStateChange(PlayModeStateChange change)
     {
         if(change == PlayModeStateChange.EnteredPlayMode)
@@ -258,4 +304,14 @@ public class MatchLog
     public int totalEnemySlain;
     public List<EnemyPerformance> enemyPerformances;
     public List<TowerLog> towerLogs;
+    public HealthMetric healthMetrics;
+}
+[Serializable]
+public class HealthMetric
+{
+    public List<int> remainingHealth;
+    public HealthMetric()
+    {
+        remainingHealth = new();
+    }
 }
