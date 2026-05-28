@@ -48,8 +48,10 @@ public class FLA : MonoBehaviour
 
         DebugFLA.AppendLine("Fibonacci Result");
         DebugFLA.AppendLine($"Sequenced: {fibonacciSequence.currentSequence}\n");
+        
+        float decay = 1f / (1f + (currentIndex * 0.19f));
+        totalMultiplierHP = 1 + (multiplierHP * fibonacciSequence.Value * decay);
 
-        totalMultiplierHP = 1 + (multiplierHP * fibonacciSequence.Value);
 
         DebugFLA.AppendLine($"HP Multiplier: {totalMultiplierHP}\n");
     }
