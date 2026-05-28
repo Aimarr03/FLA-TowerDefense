@@ -4,7 +4,7 @@ using UnityEngine;
 public class FLA : MonoBehaviour
 {
     [SerializeField] private float multiplierHP = 0.1f;
-    [SerializeField] private static float totalMultiplierHP = 0f;
+    [SerializeField] private static float totalMultiplierHP = 1f;
     [SerializeField] private float baseMultiplierGold = 1.0f;
     [SerializeField] private float baseMultiplierSpeed = 1.0f;
 
@@ -49,27 +49,8 @@ public class FLA : MonoBehaviour
         DebugFLA.AppendLine("Fibonacci Result");
         DebugFLA.AppendLine($"Sequenced: {fibonacciSequence.currentSequence}\n");
 
-        totalMultiplierHP = 1 + (multiplierHP * fibonacciSequence.currentSequence);
+        totalMultiplierHP = 1 + (multiplierHP * fibonacciSequence.Value);
+
         DebugFLA.AppendLine($"HP Multiplier: {totalMultiplierHP}\n");
-
-
-        // Classifier.ClassificationResult result = classifier.Classify(currentRound, previousRound);
-        // Classifier.PlayerClassify playerHealthClassify = result.HealthClassification;
-        // int difficultyDelta = playerHealthClassify switch
-        // {
-        //     Classifier.PlayerClassify.High => +2,
-        //     Classifier.PlayerClassify.Medium => +1,
-        //     Classifier.PlayerClassify.Low => -1,
-        //     _ => 0
-        // };
-        // fibonacciSequence.currentSequence += difficultyDelta;
-        // int currentFibonacciValue = fibonacciSequence.Value;
-
-        // finalMultiplierGold = baseMultiplierGold - (currentFibonacciValue * goldScale);
-        // finalMultiplierDuration = baseMultiplierDuration - (currentFibonacciValue * durationScale);
-        // finalMultiplierSpeed = baseMultiplierSpeed + (currentFibonacciValue * speedScale);
-
-        // Debug.Log($"[FLA] Classification Result: {playerHealthClassify}");
-        // Debug.Log($"[FLA] Final Multipliers: Gold: {finalMultiplierGold}, Duration: {finalMultiplierDuration}, Speed: {finalMultiplierSpeed}");
     }
 }

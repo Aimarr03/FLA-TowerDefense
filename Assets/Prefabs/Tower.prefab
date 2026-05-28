@@ -942,8 +942,13 @@ MonoBehaviour:
   unBuildSprite: {fileID: -855298285791758126, guid: 68b14cceeab3688448386ff60c53e3b9, type: 3}
   animator: {fileID: 5748737214043734095}
   attackRangeEffect: {fileID: 4010333714041943418}
+  preferenceScore: 1
   AttackBehaviours: []
   AttackEffects: []
+  performance:
+    damageDealt: 0
+    enemySlain: 0
+    currentScore: 0
   references:
     version: 2
     RefIds: []

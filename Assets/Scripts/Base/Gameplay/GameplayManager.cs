@@ -99,6 +99,8 @@ public class GameplayManager : MonoBehaviour
 
             MultiplierGold = 1f;
             MultiplierSpeed = 1f;
+            MultiplierHP = 1f;
+            
             
             allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
             LoadConfig();
@@ -324,16 +326,16 @@ public class GameplayManager : MonoBehaviour
         if (!condition) return;
         CalculatePerformance();
 
-        CurrentWaveIndex++;
         buildPhaseDuration = CurrentBuildPhaseDuration;
-
-        if (CurrentWave > maxWave)
+        int bufferIndex = CurrentWaveIndex + 1;
+        if (bufferIndex >= maxWave)
         {
             isActive = false;
             ChangeState(State.Win);
         }
         else
         {
+            CurrentWaveIndex++;
             int index = Mathf.Clamp(CurrentWaveIndex, 0, maxWave - 1);
             currentRoundPerformance = roundPerformances[index];
             UpdateWave();

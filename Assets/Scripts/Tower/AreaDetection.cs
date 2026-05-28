@@ -13,6 +13,7 @@ public class AreaDetection : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log($"[Debug Tower]Trigger: {collision.gameObject}");
         TriggerEnter2D?.Invoke(collision);
     }
     private void OnTriggerExit2D(Collider2D collision)

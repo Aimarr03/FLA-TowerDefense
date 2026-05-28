@@ -2,12 +2,102 @@ FLA PERFORMANCE LOG
 
 
 Current Round: 0
-performance: 0.6
-Player Ratio: 0.3333333
-Enemy Ratio: 1
+performance: 0.6131428
+Player Ratio: 0.6333333
+Enemy Ratio: 0.5828571
 
 Fibonacci Result
 Sequenced: 1
 
-HP Multiplier: 1
+HP Multiplier: 1.1
+
+Current Round: 1
+performance: 0.3972
+Player Ratio: 0.4666667
+Enemy Ratio: 0.293
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1.1
+
+Current Round: 2
+performance: 0.5570435
+Player Ratio: 0.4666667
+Enemy Ratio: 0.6926087
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1.1
+
+Current Round: 3
+performance: 0.45376
+Player Ratio: 0.4666667
+Enemy Ratio: 0.4344
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1.1
+
+Current Round: 4
+performance: 0.5771636
+Player Ratio: 0.4666667
+Enemy Ratio: 0.7429091
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1.1
+
+Current Round: 5
+performance: 0.6142326
+Player Ratio: 0.4666667
+Enemy Ratio: 0.8355814
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1.1
+
+Current Round: 6
+performance: 0.5857334
+Player Ratio: 0.4666667
+Enemy Ratio: 0.7643334
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1.1
+
+Current Round: 7
+performance: 0.6390145
+Player Ratio: 0.4666667
+Enemy Ratio: 0.8975362
+
+Fibonacci Result
+Sequenced: 3
+
+HP Multiplier: 1.2
+
+Current Round: 8
+performance: 0.5690981
+Player Ratio: 0.4666667
+Enemy Ratio: 0.7227451
+
+Fibonacci Result
+Sequenced: 3
+
+HP Multiplier: 1.2
+
+Current Round: 9
+performance: 0.6420403
+Player Ratio: 0.4666667
+Enemy Ratio: 0.9051007
+
+Fibonacci Result
+Sequenced: 4
+
+HP Multiplier: 1.3
 

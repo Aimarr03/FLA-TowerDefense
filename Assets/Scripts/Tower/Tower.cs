@@ -65,8 +65,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     private void Start()
     {
         rangeDetection.circleCollider.radius = attackRange;
-        rangeDetection.TriggerEnter2D += OnTriggerEnter2D;
-        rangeDetection.TriggerExit2D += OnTriggerExit2D;
+        rangeDetection.TriggerEnter2D += TriggerEnter;
+        rangeDetection.TriggerExit2D += TriggerExit;
     }
     void Update()
     {
@@ -74,20 +74,16 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         
         float decayedPerformance = performance.currentScore - (Time.deltaTime * 3);
         performance.currentScore = Mathf.Max(decayedPerformance, 0);
-        if (target == null || target.isDead)
-        {
-            SelectPrimalTarget();
-            return;
-        }
-
+        
         attackTimer += Time.deltaTime;
         if (attackTimer >= attackRate)
         {
+            SelectPrimalTarget();
             Attack();
             attackTimer = 0f;
         }
     }
-    private void OnTriggerEnter2D(Collider2D other)
+    private void TriggerEnter(Collider2D other)
     {
         if(CurrentState == State.None) return;
         
@@ -96,18 +92,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
             TryAddEnemy(enemy);
         }
     }
-    private void TryAddEnemy(Enemy enemy)
-    {
-        if (!IsEnemyAttackable(enemy)) return;
-
-        enemiesInRange.Add(enemy);
-        enemy.OnDie += (Enemy enemy, bool reachDestination) =>
-        {
-            OnEnemyDie(enemy);
-        };
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
+    private void TriggerExit(Collider2D other)
     {
         if (CurrentState == State.None) return;
         
@@ -118,6 +103,19 @@ public class Tower : MonoBehaviour, I_MouseInteractable
                 target = null;
         }
     }
+    private void TryAddEnemy(Enemy enemy)
+    {
+        if (!IsEnemyAttackable(enemy)) return;
+
+        Debug.Log($"Added Enemy, Health: {enemy.MaxHealth} || {enemy != null && !enemy.isDead}");
+        enemiesInRange.Add(enemy);
+        enemy.OnDie += (Enemy enemy, bool reachDestination) =>
+        {
+            OnEnemyDie(enemy);
+        };
+    }
+
+    
     private void DetectEnemiesInRange()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRange);
@@ -132,7 +130,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     }
     private void SelectPrimalTarget()
     {
-        enemiesInRange.RemoveAll(e => e == null);
+        enemiesInRange.RemoveAll(e => e == null || e.isDead);
 
         if (enemiesInRange.Count > 0)
             target = enemiesInRange[0]; // FIFO
@@ -140,6 +138,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
 
     private void Attack()
     {
+        Debug.Log("[Debug Tower] Attack");
         var plan = new AttackPlan();
         plan.Targets.Add(target);
 
@@ -182,7 +181,9 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     }
     public bool IsEnemyAttackable(Enemy enemy)
     {
-        return (TowerData.AttackableType & enemy.Type) != 0;
+        bool isAttackable = (TowerData.AttackableType & enemy.Type) != 0;
+        Debug.Log($"[Debug Tower] {isAttackable}");
+        return isAttackable;
     }
 
     public void Build(TowerData towerData)
@@ -285,6 +286,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         rangeDetection.circleCollider.radius = attackRange;
 
         attackRangeEffect.transform.localScale = Vector3.one * attackRange * 2;
+        attackTimer = 0f;
     }
 
 
