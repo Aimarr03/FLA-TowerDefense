@@ -142,6 +142,8 @@ public class Enemy : MonoBehaviour
     
     public void TakeDamage(float damage)
     {
+        if(isDead) return;
+        
         currentHealh -= damage;
         currentHealh = Mathf.Max(currentHealh, 0);
         healthBar.UpdateHealth(currentHealh / maxHealth);

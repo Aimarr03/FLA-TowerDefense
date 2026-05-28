@@ -773,7 +773,7 @@ public class BotController : MonoBehaviour
 
         DifferenceHealth = Mathf.Abs(previous2.RemainingHealth - previous1.RemainingHealth);
         DifferenceDamageDealt = Mathf.Abs((previous2.EnemyTotalHealth - previous2.EnemyRemainingHealth) - (previous1.EnemyTotalHealth - previous1.EnemyRemainingHealth)) ;
-        DifferentEnemySlain = Mathf.Abs(previous2.RemainingEnemy- previous1.RemainingEnemy);
+        DifferentEnemySlain = Mathf.Abs(previous2.EnemyEscapedCount- previous1.EnemyEscapedCount);
 
     }
 }

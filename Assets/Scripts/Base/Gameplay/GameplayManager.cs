@@ -289,15 +289,19 @@ public class GameplayManager : MonoBehaviour
             totalUpgrade += actionMetric.BuildPhase_UpgradeAction + actionMetric.DefendPhase_UpgradeAction;
         }
     }
-    public void GetTotalEnemy(out int totalEnemyDamaged, out int totalEnemySlained)
+    public void GetTotalEnemy(out int totalEnemyDamaged, out int totalEnemySlained, out int totalEnemyEscape, out int totalEnemyCount)
     {
         totalEnemyDamaged = 0;
         totalEnemySlained = 0;
+        totalEnemyEscape = 0;
+        totalEnemyCount = 0;
         for(int index = 0; index < CurrentWave; index++)
         {
             var currentRound = roundPerformances[index];
             totalEnemyDamaged += (int)(currentRound.EnemyTotalHealth - currentRound.EnemyRemainingHealth);
-            totalEnemySlained += (int)(currentRound.TotalEnemy - currentRound.RemainingEnemy);
+            totalEnemySlained += currentRound.EnemyKilledCount;
+            totalEnemyEscape += currentRound.EnemyEscapedCount;
+            totalEnemyCount += currentRound.EnemyTotalCount;
         }
     }
     public void GetRemainingHealth(out int remainingHealth)
@@ -312,9 +316,18 @@ public class GameplayManager : MonoBehaviour
         {
             return;
         }
-        Debug.Log("Game Over!");
-        isActive = false;
-        ChangeState(State.GameOver);
+        IEnumerator GameOverSequence()
+        {
+            Time.timeScale = 0;
+            yield return new WaitForSecondsRealtime(2);
+            Time.timeScale = 1;
+            isActive = false;
+            Debug.Log("Game Over!");
+            isActive = false;
+            ChangeState(State.GameOver);
+        }
+        
+        StartCoroutine(GameOverSequence());
     }
     public void DefendsOver()
     {
@@ -328,10 +341,17 @@ public class GameplayManager : MonoBehaviour
 
         buildPhaseDuration = CurrentBuildPhaseDuration;
         int bufferIndex = CurrentWaveIndex + 1;
-        if (bufferIndex >= maxWave)
+        IEnumerator FreezeWin()
         {
+            Time.timeScale = 0;
+            yield return new WaitForSecondsRealtime(2);
+            Time.timeScale = 1;
             isActive = false;
             ChangeState(State.Win);
+        }
+        if (bufferIndex >= maxWave)
+        {
+            StartCoroutine(FreezeWin());
         }
         else
         {
@@ -381,8 +401,14 @@ public class GameplayManager : MonoBehaviour
     }
     private void CalculatePerformance()
     {
-        currentRoundPerformance.TotalEnemy = enemySpawner.TotalEnemy;
-        currentRoundPerformance.RemainingEnemy = enemySpawner.EnemyReachDestination;
+        int enemyEscapeCount = (int)enemySpawner.CurrentRoundEnemyEscaped;
+        int enemySlain = (int)enemySpawner.CurrentRoundEnemySlained;
+        Debug.Log($"[Debug Log Gameplay] escaped ${enemyEscapeCount}, Killed {enemySlain}");
+        currentRoundPerformance.EnemyEscapedCount = enemyEscapeCount;
+        currentRoundPerformance.EnemyKilledCount = enemySlain;
+        currentRoundPerformance.EnemyTotalCount = (int)enemySpawner.CurrentRoundEnemyCount;
+
+        
         currentRoundPerformance.EnemyRemainingHealth = enemySpawner.EnemyRemainingHealth;
         currentRoundPerformance.EnemyTotalHealth = enemySpawner.EnemyTotalHealth;
         currentRoundPerformance.RemainingGold = economyManager.CurrentMoney;
@@ -459,17 +485,16 @@ public class RoundPerformance
 
     public float BuildPhaseDuration;
     public float RemainingbuildPhaseDuration;
-
-    public int TotalEnemy;
-    public int RemainingEnemy;
+    public int EnemyTotalCount;
+    public int EnemyKilledCount;
+    public int EnemyEscapedCount;
     public int RemainingHealth;
     public int AttackNumber;
     public int RemainingGold;
     //public TowerEvaluation towerEvaluation = new();
     public ActionMetrics ActionMetric = new();
-    public float normalizedEnemyCount => RemainingEnemy / TotalEnemy;
-    public float normalizedDuration => RemainingbuildPhaseDuration / BuildPhaseDuration;
     public float normalizedEnemyHP => EnemyRemainingHealth / EnemyTotalHealth;
+    public int TotalEnemy => EnemyKilledCount + EnemyEscapedCount;
 }
 [Serializable]
 public class ActionMetrics

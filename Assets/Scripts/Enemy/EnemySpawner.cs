@@ -29,10 +29,11 @@ public class EnemySpawner : MonoBehaviour
 
     
     public int TotalEnemy {get; private set;}
-    public int EnemyReachDestination { get; private set; }
-    public int EnemyDied { get; private set; }
     public float EnemyTotalHealth { get; private set; }
     public float EnemyRemainingHealth { get; private set; }
+    public float CurrentRoundEnemyCount { get; private set; }
+    public float CurrentRoundEnemySlained {get; private set;}
+    public float CurrentRoundEnemyEscaped {get; private set;}
     
     private void OnDestroy()
     {
@@ -82,6 +83,9 @@ public class EnemySpawner : MonoBehaviour
                 currentIndex = 0;
                 timer = 0f;
                 isActive = true;
+                CurrentRoundEnemyCount = 0 ;
+                CurrentRoundEnemyEscaped = 0;
+                CurrentRoundEnemySlained = 0;
                 break;
         }
     }
@@ -116,6 +120,7 @@ public class EnemySpawner : MonoBehaviour
         }
         TotalEnemy = totalEnemy;
         EnemyTotalHealth = totalHealth;
+        CurrentRoundEnemyCount = totalEnemy;
     }
     private void SpawnEnemy(SpawnEvent spawnEvent)
     {
@@ -135,13 +140,13 @@ public class EnemySpawner : MonoBehaviour
             enemyHealthMetric.Add(healthPercentage);
             if (reachDestination)
             {
+                CurrentRoundEnemyEscaped++;
                 enemyPerformance.escapedCount++;
-                EnemyReachDestination++;
             }
             else
             {
+                CurrentRoundEnemySlained++;
                 enemyPerformance.killedCount++;
-                EnemyDied++;
             }
             EnemyRemainingHealth += enemy.CurrentHealth;
             OnRemoveEnemy(enemy);

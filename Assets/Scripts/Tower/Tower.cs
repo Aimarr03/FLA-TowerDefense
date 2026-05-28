@@ -70,6 +70,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     }
     void Update()
     {
+        if(!GameplayManager.instance.IsActive) return;
         if (towerState == State.None) return;
         
         float decayedPerformance = performance.currentScore - (Time.deltaTime * 3);

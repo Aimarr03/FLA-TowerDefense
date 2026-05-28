@@ -17,6 +17,7 @@ public class ExperimentManager : MonoBehaviour
     private int currentIteration = 0;
     public static ExperimentManager instance;
     private List<MatchLog> generalLogs;
+    private string DirectoryName = "Experiment_";
     void Awake()
     {
         if(instance != null)
@@ -35,6 +36,7 @@ public class ExperimentManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         GameplayManager.instance.onchangedState += OnGameplayStateChange;
+        Time.timeScale = multiplierSpeed;
     }
 
     private void OnGameplayStateChange(GameplayManager.State state)
@@ -42,7 +44,7 @@ public class ExperimentManager : MonoBehaviour
         IEnumerator ReloadScene()
         {
             ExportFLALog();
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(3);
             SceneManager.LoadSceneAsync("Prototipe_main");
         }
         bool condition = state switch
@@ -151,8 +153,12 @@ public class ExperimentManager : MonoBehaviour
         matchLog.upgradeCount = totalUpgrade;
         matchLog.sellCount = totalSell;
 
-        GameplayManager.instance.GetTotalEnemy(out int totalEnemyDamaged, out int totalEnemySlained);
+        GameplayManager.instance.GetTotalEnemy(out int totalEnemyDamaged, out int totalEnemySlained, out int totalEnemyEscaped, out int totalEnemyCount);
+        matchLog.totalEnemyEscape = totalEnemyEscaped;
         matchLog.totalEnemySlain = totalEnemySlained;
+        matchLog.totalEnemyCount = totalEnemyCount;
+        Debug.Log($"[Debug Log Experiment] escaped ${totalEnemyEscaped}, Killed {totalEnemySlained}, Total {totalEnemyCount}");
+        
         matchLog.totalDamage = totalEnemyDamaged;
         matchLog.enemyPerformances = new();
         matchLog.towerLogs = new();
@@ -168,7 +174,7 @@ public class ExperimentManager : MonoBehaviour
         StringBuilder sb = new StringBuilder();
 
         sb.AppendLine(
-            "Experiment,Win,Wave,Build,Upgrade,Sell,Damage,EnemySlain");
+            "Experiment,Win,Wave,Build,Upgrade,Sell,Damage,EnemyEscape,EnemySlain,TotalEnemy");
 
         foreach(var log in generalLogs)
         {
@@ -180,7 +186,9 @@ public class ExperimentManager : MonoBehaviour
                 $"{log.upgradeCount}," +
                 $"{log.sellCount}," +
                 $"{log.totalDamage}," +
-                $"{log.totalEnemySlain}");
+                $"{log.totalEnemyEscape}," +
+                $"{log.totalEnemySlain}," +
+                $"{log.totalEnemyCount}");
         }
 
         string path =
@@ -324,6 +332,8 @@ public class MatchLog
 
     public float totalDamage;
     public int totalEnemySlain;
+    public int totalEnemyEscape;
+    public int totalEnemyCount;
     public List<EnemyPerformance> enemyPerformances;
     public List<TowerLog> towerLogs;
     public HealthMetric healthMetrics;

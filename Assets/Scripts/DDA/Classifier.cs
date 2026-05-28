@@ -41,7 +41,6 @@ public class Classifier
         float performance = 0;
         float maxHealth = GameplayManager.instance.MainBase.MaxHealth;
         float healthRatio = ((float)currentRound.RemainingHealth / maxHealth);
-        Debug.Log($"[Debug] Enemy, total: {currentRound.TotalEnemy} & remain: {currentRound.RemainingEnemy}");
         float enemyRatio = 1 - currentRound.normalizedEnemyHP;
 
         performance = (healthRatio * 0.6f)+(enemyRatio * 0.4f);
@@ -60,8 +59,8 @@ public class Classifier
     }
     private PlayerClassify ClassifyBasedOnEnemyRemaining(RoundPerformance roundPerformance)
     {
-        int remainingEnemies = roundPerformance.RemainingEnemy;
-        int totalEnemies = roundPerformance.TotalEnemy;
+        int remainingEnemies = roundPerformance.EnemyEscapedCount;
+        int totalEnemies = roundPerformance.EnemyEscapedCount + roundPerformance.EnemyKilledCount;
         float delta = ((float)remainingEnemies) / totalEnemies;
         
         PlayerClassify classification = PlayerClassify.Medium;

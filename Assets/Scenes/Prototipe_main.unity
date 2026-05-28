@@ -48500,11 +48500,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 112beab20af05cc428d3e53d916017f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FLA
+  multiplierHP: 0.1
   baseMultiplierGold: 1
-  baseMultiplierDuration: 1
   baseMultiplierSpeed: 1
   goldScale: 0.05
-  durationScale: 0.05
   speedScale: 0.05
 --- !u!114 &747893287
 MonoBehaviour:
@@ -49591,7 +49590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b26b7549ea1a64da3fd450b421d5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperimentManager
-  totalIteration: 5
+  totalIteration: 1
   multiplierSpeed: 10
 --- !u!4 &881900537
 Transform:
