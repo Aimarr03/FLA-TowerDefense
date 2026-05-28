@@ -39,6 +39,12 @@ public class ExperimentManager : MonoBehaviour
 
     private void OnGameplayStateChange(GameplayManager.State state)
     {
+        IEnumerator ReloadScene()
+        {
+            ExportFLALog();
+            yield return new WaitForSeconds(5);
+            SceneManager.LoadSceneAsync("Prototipe_main");
+        }
         bool condition = state switch
         {
             GameplayManager.State.Win => true,
@@ -52,7 +58,7 @@ public class ExperimentManager : MonoBehaviour
             currentIteration++;
             if(currentIteration < totalIteration)
             {
-                SceneManager.LoadSceneAsync("Prototipe_main");
+                StartCoroutine(ReloadScene());
             }
             else
             {
@@ -72,9 +78,10 @@ public class ExperimentManager : MonoBehaviour
         ExportEnemyCSV();
         ExportTowerCSV();
         ExportHealthMetric();
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(5f);
         EditorApplication.ExitPlaymode();
     }
+
     private void UpdateEnemyLog(MatchLog log)
     {
         var EnemySpawner = FindFirstObjectByType<EnemySpawner>();
@@ -265,6 +272,21 @@ public class ExperimentManager : MonoBehaviour
 
         string path =
             Application.dataPath + "/Debug Log/health_log.csv";
+
+        File.WriteAllText(path, sb.ToString());
+
+        Debug.Log("CSV Exported");
+    }
+    private void ExportFLALog()
+    {
+        StringBuilder sb = FindFirstObjectByType<FLA>().DebugFLA;
+        string directoryPath = Application.dataPath + $"/Debug Log/FLA_Log/";
+        if(!Directory.Exists(directoryPath))
+            Directory.CreateDirectory(directoryPath);
+        
+        string fileName = $"FLALog_{generalLogs.Count}.txt";
+        string path =
+            directoryPath + $"{fileName}";
 
         File.WriteAllText(path, sb.ToString());
 

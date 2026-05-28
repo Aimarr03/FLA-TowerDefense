@@ -70,7 +70,7 @@ public class GameplayManager : MonoBehaviour
     public bool IsActive => isActive;
     public float MultiplierSpeed { get; private set; }
     public float MultiplierGold { get; private set; }
-    public float MultiplierDuration { get; private set; }
+    public float MultiplierHP {get; private set;}
     public SpawnType SpawnMode => spawnType;
     public List<RoundPerformance> RoundPerformances => roundPerformances;
     
@@ -97,7 +97,6 @@ public class GameplayManager : MonoBehaviour
             fla = GetComponent<FLA>();
             configLoader = GetComponent<ConfigLoader>();
 
-            MultiplierDuration = 1f;
             MultiplierGold = 1f;
             MultiplierSpeed = 1f;
             
@@ -326,7 +325,6 @@ public class GameplayManager : MonoBehaviour
         CalculatePerformance();
 
         CurrentWaveIndex++;
-        CurrentBuildPhaseDuration = BaseBuildStateDuration * MultiplierDuration;
         buildPhaseDuration = CurrentBuildPhaseDuration;
 
         if (CurrentWave > maxWave)
@@ -386,7 +384,7 @@ public class GameplayManager : MonoBehaviour
         currentRoundPerformance.EnemyRemainingHealth = enemySpawner.EnemyRemainingHealth;
         currentRoundPerformance.EnemyTotalHealth = enemySpawner.EnemyTotalHealth;
         currentRoundPerformance.RemainingGold = economyManager.CurrentMoney;
-        
+        currentRoundPerformance.RoundIndex = CurrentWaveIndex;
         currentRoundPerformance.RemainingHealth = (int)mainBase.CurrentHealth;
         currentRoundPerformance.AttackNumber = CurrentWave;
         
@@ -447,12 +445,13 @@ public class GameplayManager : MonoBehaviour
 
         MultiplierGold = fla.FinalMultiplierGold;
         MultiplierSpeed = fla.FinalMultiplierSpeed;
-        MultiplierDuration = fla.FinalMultiplierDuration;
+        MultiplierHP = FLA.FinalMultiplierHP;
     }
 }
 [Serializable]
 public class RoundPerformance
 {
+    public int RoundIndex;
     public float EnemyTotalHealth;
     public float EnemyRemainingHealth;
 

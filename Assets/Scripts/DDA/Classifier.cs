@@ -4,6 +4,9 @@ using UnityEngine;
 public class Classifier
 {
     int baseHealth = 30;
+    public float Performance;
+    public float HealthRatio;
+    public float EnemyRatio;
     public Classifier(int baseHealth)
     {
         this.baseHealth = baseHealth;
@@ -16,6 +19,8 @@ public class Classifier
     }
     public ClassificationResult Classify(RoundPerformance currentRound, RoundPerformance previousRound)
     {
+
+
         int currentRoundHealth = currentRound.RemainingHealth;
         int previousRoundHealth = previousRound.RemainingHealth;
 
@@ -30,6 +35,28 @@ public class Classifier
             HealthClassification = classifcationHealth,
             EnemyClassification = classificationEnemy
         };
+    }
+    public int GetPerformance(RoundPerformance currentRound)
+    {
+        float performance = 0;
+        float maxHealth = GameplayManager.instance.MainBase.MaxHealth;
+        float healthRatio = ((float)currentRound.RemainingHealth / maxHealth);
+        Debug.Log($"[Debug] Enemy, total: {currentRound.TotalEnemy} & remain: {currentRound.RemainingEnemy}");
+        float enemyRatio = 1 - currentRound.normalizedEnemyHP;
+
+        performance = (healthRatio * 0.6f)+(enemyRatio * 0.4f);
+        HealthRatio = healthRatio;
+        EnemyRatio = enemyRatio;
+        Performance = performance;
+
+        if(performance >= 0.8f)
+            return +2;
+        else if(performance >= 0.6f)
+            return +1;
+        else if(performance >= 0.4f)
+            return 0;
+        else
+            return -1;
     }
     private PlayerClassify ClassifyBasedOnEnemyRemaining(RoundPerformance roundPerformance)
     {

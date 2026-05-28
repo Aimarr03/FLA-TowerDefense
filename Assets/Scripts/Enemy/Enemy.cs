@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour
     public void Init(EnemyData enemyData)
     {
         maxHealth = enemyData.MaxHealth;
+        maxHealth = maxHealth * GameplayManager.instance.MultiplierHP;
         damage = enemyData.Damage; 
         damageRate = enemyData.AttackRate;
         movementSpeed = enemyData.MovementSpeed;
