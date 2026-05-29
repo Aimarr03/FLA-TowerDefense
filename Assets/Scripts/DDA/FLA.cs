@@ -1,22 +1,22 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
 
 public class FLA : MonoBehaviour
 {
-    [SerializeField] private float multiplierHP = 0.1f;
+    [SerializeField] private float scalingHP = 0.3f;
+    [SerializeField] private float baseMultplierHP = 1f;
     [SerializeField] private static float totalMultiplierHP = 1f;
-    [SerializeField] private float baseMultiplierGold = 1.0f;
-    [SerializeField] private float baseMultiplierSpeed = 1.0f;
-
-    [SerializeField] private float goldScale = 0.05f;
-    [SerializeField] private float speedScale = 0.05f;
-
-    private float finalMultiplierGold = 1.0f;
-    private float finalMultiplierSpeed = 1.0f;
+    [SerializeField] private float scalingGold = 0.45f;
+    [SerializeField] private float baseMultplierGold = 2.2f;
+    [SerializeField] private static float totalMultiplierGold = 1.0f;
+    [SerializeField] private float scalingSpawnEnemy = 0.12f;
+    [SerializeField] private float baseMultiplierSpawnEnemy = 1f;
+    [SerializeField] private static float totalMultiplierSpawnEnemy = 1f;
 
     public static float FinalMultiplierHP => totalMultiplierHP;
-    public float FinalMultiplierGold => finalMultiplierGold;
-    public float FinalMultiplierSpeed => finalMultiplierSpeed;
+    public static float FinalMultiplierGold => totalMultiplierGold;
+    public static float FinalMultiplierSpawnEnemy => totalMultiplierSpawnEnemy;    
     public StringBuilder DebugFLA;
  
     FibonacciSequence fibonacciSequence;
@@ -49,10 +49,14 @@ public class FLA : MonoBehaviour
         DebugFLA.AppendLine("Fibonacci Result");
         DebugFLA.AppendLine($"Sequenced: {fibonacciSequence.currentSequence}\n");
         
-        float decay = 1f / (1f + (currentIndex * 0.19f));
-        totalMultiplierHP = 1 + (multiplierHP * fibonacciSequence.Value * decay);
-
+        // float decay = 1f / (1f + (currentIndex * 0.19f));
+        // totalMultiplierHP = 1 + (multiplierHP * fibonacciSequence.Value * decay);
+        totalMultiplierHP = baseMultplierHP + Mathf.Log(fibonacciSequence.Value) * scalingHP;
+        totalMultiplierGold = baseMultplierGold - Mathf.Log(fibonacciSequence.Value) * scalingGold;
+        totalMultiplierSpawnEnemy = baseMultiplierSpawnEnemy + Mathf.Log(fibonacciSequence.Value) * scalingSpawnEnemy;
 
         DebugFLA.AppendLine($"HP Multiplier: {totalMultiplierHP}\n");
+        DebugFLA.AppendLine($"Gold Multiplier: {totalMultiplierGold}\n");
+        DebugFLA.AppendLine($"Spawn Enemy Multiplier: {totalMultiplierSpawnEnemy}\n\n\n");
     }
 }

@@ -76,7 +76,7 @@ public class Enemy : MonoBehaviour
         
         currentHealh = maxHealth;
 
-        float finalMovementSpeed = movementSpeed * GameplayManager.instance.MultiplierSpeed;
+        float finalMovementSpeed = movementSpeed;
         characterMovement.MovementSpeed = finalMovementSpeed;
         bounty = enemyData.bounty;
 

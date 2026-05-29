@@ -80,6 +80,7 @@ public class ExperimentManager : MonoBehaviour
         ExportEnemyCSV();
         ExportTowerCSV();
         ExportHealthMetric();
+        ExportFLALog();
         yield return new WaitForSeconds(5f);
         EditorApplication.ExitPlaymode();
     }

@@ -105,6 +105,8 @@ public class EnemySpawner : MonoBehaviour
                 break;
             case GameplayManager.SpawnType.Subwave:
                 PatternEnemyWave subpatternWave = enemySpawnLoader.patternEnemyWaves[waveIndex];
+                subpatternWave.UpdateAmount();
+                
                 spawnEvents = EnemyWaveBuilder.SubwaveBuild(subpatternWave);
                 
                 enemySpawnInfos = subpatternWave.GetTotalEnemySpawn();
