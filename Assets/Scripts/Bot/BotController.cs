@@ -8,7 +8,8 @@ using UnityEngine.Rendering;
 [Serializable]
 public class BotProperty
 {
-    public BotController.Capability botType;
+    public BotController.Capability BotType;
+    public float IntervalDecision = 2f;
     [Header("Weighted Action Property")]
     [Range(1, 100)] public int BaseWeightBuildAction = 75;
     [Range(1, 100)] public int BaseWeightUpgradeAction = 25;
@@ -31,7 +32,7 @@ public class BotProperty
     [Range(1, 100)] public float SellThreshold = 75f;
     
     [Header("Weighted Sell Type")]
-    [Range(1, 30)] public float maxCooldownSell = 30;
+    [Range(1, 30)] public float MaxCooldownSell = 30;
     // [Range(1, 100)] public int TowerSellRandom = 30;
     // [Range(1, 100)] public int TowerSellPerformance = 30;
 }
@@ -121,7 +122,13 @@ public class BotController : MonoBehaviour
             return;
         }
         allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
+        
         isActive = true;
+        var botLoader = GetComponent<BotPropLoader>();
+        botLoader.Init();
+        
+        var botCapability = botUsage.capability;
+        botProperty = botLoader.BotProperties[botCapability];
         
         buyActions = new();
         foreach(var buyAct in TD_API.BuildActions)
@@ -132,8 +139,10 @@ public class BotController : MonoBehaviour
         currentInterval = 0;
         GameplayManager.instance.onchangedState += Gameplay_ChangeState;
         TD_API.Economy.OnMoneyChange += OnMoneyChange;
-        minimumDurationToSell = botProperty.maxCooldownSell;
+        minimumDurationToSell = botProperty.MaxCooldownSell;
         enemySpawnInfos = new();
+
+        intervalDecision = botProperty.IntervalDecision;
     }
 
     private void Gameplay_ChangeState(GameplayManager.State state)

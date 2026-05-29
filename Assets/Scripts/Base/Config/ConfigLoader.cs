@@ -79,4 +79,21 @@ public class ConfigLoader : MonoBehaviour
                 break;
         }
     }
+    public void TryParseScenarioMode(string spawnType, out GameplayManager.ScenarioMode parsedType)
+    {
+        spawnType = spawnType.ToLower();
+        switch (spawnType)
+        {
+            case "dda":
+                parsedType = GameplayManager.ScenarioMode.DDA;
+                break;
+            case "static":
+                parsedType = GameplayManager.ScenarioMode.Static;
+                break;
+            default:
+                Debug.LogWarning($"{spawnType} is not found, please check again! using normal type");
+                parsedType = GameplayManager.ScenarioMode.Static;
+                break;
+        }
+    }
 }

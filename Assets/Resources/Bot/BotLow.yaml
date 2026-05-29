@@ -1,0 +1,26 @@
+BotType: Low
+IntervalDecision: 6
+
+# Weighted Action Property
+BaseWeightBuildAction: 80
+BaseWeightUpgradeAction: 25
+BaseWeightDefendAction: 35
+BaseWeightSellAction: 5
+BaseWeightNoneAction: 35
+
+# Weighted Property Strategy
+BuildRandomWeight: 50
+BuildRandomBestWeight: 20
+BuildBestWeight: 0
+
+# Weighted Property Type
+TowerTypeRandomWeight: 45
+TowerTypeObservingWeight: 0
+
+# Weighted Upgrade Type
+TowerUpgradeRandom: 60
+TowerUpgradePerformance: 15
+
+# Sell Property
+SellThreshold: 90
+MaxCooldownSell: 30

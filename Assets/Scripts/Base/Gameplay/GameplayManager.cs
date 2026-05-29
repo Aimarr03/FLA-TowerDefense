@@ -17,6 +17,11 @@ public static partial class TD_API
 }
 public class GameplayManager : MonoBehaviour
 {
+    public enum ScenarioMode
+    {
+        DDA,
+        Static
+    }
     public static GameplayManager instance;
     [Header("Main Componene")]
     [SerializeField] private BotController bot;
@@ -44,6 +49,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private Image readyButton;
     [SerializeField] private bool instantPlay = true;
     [SerializeField] private SpawnType spawnType = SpawnType.Subwave;
+    [SerializeField] private ScenarioMode scenarioMode = ScenarioMode.Static;
 
     [Space(25)]
     [SerializeField] private int initHealth = 30;
@@ -60,7 +66,7 @@ public class GameplayManager : MonoBehaviour
     private List<RoundPerformance> roundPerformances;
     public int MaxWave => maxWave;
 
-
+    public GameConfig GameConfiguration { get; private set;}
     public State GameState { get; private set; }
     public int CurrentWaveIndex { get; private set; }
     public int CurrentWave => CurrentWaveIndex + 1;
@@ -101,6 +107,7 @@ public class GameplayManager : MonoBehaviour
             MultiplierSpawnEnemy = 1f;
             MultiplierHP = 1f;
             
+            GameConfiguration = configLoader.gameConfig;
             
             allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
             LoadConfig();
@@ -137,6 +144,7 @@ public class GameplayManager : MonoBehaviour
         configLoader.Init();
 
         var config = configLoader.gameConfig;
+        configLoader.TryParseScenarioMode(config.scenarioMode, out scenarioMode);
         configLoader.TryParseSpawnType(config.spawnMode, out spawnType);
         
         economyManager = new EconomyManager(config.startingMoney);
@@ -459,7 +467,10 @@ public class GameplayManager : MonoBehaviour
             RoundPerformance previousRoundPerformance = roundPerformances[Mathf.Clamp(CurrentWaveIndex - 1, 0, maxWave - 1)];
             if (previousRoundPerformance != null)
             {
-                fla.UpdateFLA(currentRoundPerformance, previousRoundPerformance);
+                if(scenarioMode == ScenarioMode.DDA)
+                {
+                    fla.UpdateFLA(currentRoundPerformance, previousRoundPerformance);    
+                }
             }
         }
         else if (CurrentWave == 1)
@@ -468,12 +479,19 @@ public class GameplayManager : MonoBehaviour
             {
                 RemainingHealth = initHealth,
             };
-            fla.UpdateFLA(currentRoundPerformance, initPerformance);
+            if(scenarioMode == ScenarioMode.DDA)
+            {
+                fla.UpdateFLA(currentRoundPerformance, initPerformance);
+            }
+            
         }
 
-        MultiplierGold = FLA.FinalMultiplierGold;
-        MultiplierSpawnEnemy = FLA.FinalMultiplierSpawnEnemy;
-        MultiplierHP = FLA.FinalMultiplierHP;
+        if(scenarioMode == ScenarioMode.DDA)
+        {
+            MultiplierGold = FLA.FinalMultiplierGold;
+            MultiplierSpawnEnemy = FLA.FinalMultiplierSpawnEnemy;
+            MultiplierHP = FLA.FinalMultiplierHP;    
+        }
     }
 }
 [Serializable]

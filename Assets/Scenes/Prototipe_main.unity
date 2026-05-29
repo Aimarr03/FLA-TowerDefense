@@ -48500,11 +48500,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 112beab20af05cc428d3e53d916017f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FLA
-  multiplierHP: 0.1
-  baseMultiplierGold: 1
-  baseMultiplierSpeed: 1
-  goldScale: 0.05
-  speedScale: 0.05
+  scalingHP: 0.3
+  baseMultplierHP: 1
+  scalingGold: 0.45
+  baseMultplierGold: 2.2
+  scalingSpawnEnemy: 0.12
+  baseMultiplierSpawnEnemy: 1
 --- !u!114 &747893287
 MonoBehaviour:
   m_ObjectHideFlags: 0
