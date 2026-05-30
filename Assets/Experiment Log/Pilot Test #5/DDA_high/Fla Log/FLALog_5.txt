@@ -1,0 +1,51 @@
+FLA PERFORMANCE LOG
+
+
+Current Round: 0
+performance: 0.6900001
+Player Ratio: 0.6666667
+Enemy Ratio: 0.725
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 1
+performance: 0.2146667
+Player Ratio: 0.1
+Enemy Ratio: 0.3866667
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 2
+performance: 0.30475
+Player Ratio: 0.03333334
+Enemy Ratio: 0.711875
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+

@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Archer Tower
   m_EditorClassIdentifier: Assembly-CSharp::TowerData
   TowerName: Archer Tower
+  Type: 0
   Description: Archer Tower Desc
-  _baseDamage: 3
-  _multiplierDamage: 0.5
+  _baseDamage: 2
+  _multiplierDamage: 0.7
   _baseAttackRange: 6
   _multiplierAttackRange: 0.3
-  _baseAttackRate: 1
-  _multiplierAttackRate: 0.15
+  _baseAttackRate: 0.9
+  _multiplierAttackRate: 0.2
   _costBuild: 70
-  _multiplierCost: 0.7
+  _multiplierCost: 1.5
   TowerAttackBehaviours: []
   TowerAttackEffects: []
   towerSprites:

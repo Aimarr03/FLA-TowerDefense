@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   EnemyName: Goblin
   EnemyDesc: 
-  MaxHealth: 35
-  MovementSpeed: 1
+  MaxHealth: 40
+  MovementSpeed: 1.25
   bounty: 12
   Damage: 4
   AttackRate: 1.5

@@ -1,0 +1,3 @@
+Experiment,BotType,ScenarioMode,Win,Wave,RemainingHealth,Build,Upgrade,Sell,Damage,EnemyEscape,EnemySlain,TotalEnemy
+0,Low,Static,True,10,14,19,19,13,17005,16,383,0
+1,Low,Static,False,2,0,4,1,0,568,13,7,0

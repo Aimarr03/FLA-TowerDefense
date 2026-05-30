@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   EnemyName: Bee
   EnemyDesc: 
-  MaxHealth: 25
-  MovementSpeed: 2
-  bounty: 10
+  MaxHealth: 30
+  MovementSpeed: 2.5
+  bounty: 8
   Damage: 15
   AttackRate: 1
   enemyGroundType: 2

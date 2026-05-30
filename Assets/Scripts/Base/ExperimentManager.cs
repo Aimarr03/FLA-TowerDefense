@@ -5,19 +5,25 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Unity.Mathematics;
+using Mono.Cecil;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ExperimentManager : MonoBehaviour
 {
-    [SerializeField] private int totalIteration = 10;
-    [SerializeField, Range(5,10)] private float multiplierSpeed = 5;
+    [SerializeField] private string rootDirName = "Pilot Test #1";
+    [SerializeField] private int IterationPerScenario = 30;
+    [SerializeField, Range(5,30)] private float multiplierSpeed = 5;
     private int currentIteration = 0;
     public static ExperimentManager instance;
     private List<MatchLog> generalLogs;
-    private string DirectoryName = "Experiment_";
+    
+    private ExperimentPreset currentPreset;
+    List<ExperimentPreset> presets;
+    string fileName ="";
+    string specificIterationDirPath;
+    int iterationPreset;
     void Awake()
     {
         if(instance != null)
@@ -28,15 +34,30 @@ public class ExperimentManager : MonoBehaviour
         instance = this;
         currentIteration = 0;
         generalLogs = new();
-        EditorApplication.playModeStateChanged += OnPlayStateChange;
+        presets = new()
+        {
+            new(false, BotController.Capability.Low),
+            new(false, BotController.Capability.Medium),
+            new(false, BotController.Capability.High),
+
+            new(true, BotController.Capability.Low),
+            new(true, BotController.Capability.Medium),
+            new(true, BotController.Capability.High),
+        };
+        currentPreset = presets[0];
+        UpdateFileName();
         SceneManager.sceneLoaded += OnSceneLoaded;
+        Application.runInBackground = true;
         DontDestroyOnLoad(gameObject);
+        
     }
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         GameplayManager.instance.onchangedState += OnGameplayStateChange;
         Time.timeScale = multiplierSpeed;
+        GameplayManager.instance.InitializeGame(fileName);
+        GameplayManager.instance.StartGame();
     }
 
     private void OnGameplayStateChange(GameplayManager.State state)
@@ -58,31 +79,69 @@ public class ExperimentManager : MonoBehaviour
             CreateMatchLog();
 
             currentIteration++;
-            if(currentIteration < totalIteration)
+            if(currentIteration < IterationPerScenario)
             {
                 StartCoroutine(ReloadScene());
             }
             else
             {
-                StartCoroutine(ExitPlayMode());
+                iterationPreset++;
+                if(iterationPreset < presets.Count)
+                {
+                    ExportAll();
+                    
+                    currentPreset = presets[iterationPreset];
+                    UpdateFileName();
+
+                    currentIteration = 0;
+                    generalLogs.Clear();
+                    StartCoroutine(ReloadScene());
+                }
+                else
+                {
+                    StartCoroutine(ExitPlayMode());        
+                }
+                
             }
         }
     }
-    IEnumerator OnEnterPlayMode()
+
+    private void UpdateFileName()
     {
-        yield return new WaitForSeconds(1f);
-        Time.timeScale = multiplierSpeed;
-        GameplayManager.instance.StartGame();
+        StringBuilder sb = new();
+        string useDDA = currentPreset.useDDA ? "DDA" : "Static";
+        sb.Append(useDDA);
+        sb.Append("_");
+        sb.Append(currentPreset.botType.ToString().ToLower());
+        fileName = sb.ToString();
+        Debug.Log($"File Name: {fileName}");
     }
     IEnumerator ExitPlayMode()
     {
+        ExportAll();
+        yield return new WaitForSeconds(5f);
+        EditorApplication.ExitPlaymode();
+    }
+    private void ExportAll()
+    {
+        string directoryPath = Application.dataPath + "/Experiment Log";
+        specificIterationDirPath = directoryPath + $"/{rootDirName}/{fileName}";
+        
+        if(!Directory.Exists(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+        }
+        if (!Directory.Exists(specificIterationDirPath))
+        {
+            Directory.CreateDirectory(specificIterationDirPath);
+        }
+
         ExportGeneralCSV();
         ExportEnemyCSV();
         ExportTowerCSV();
         ExportHealthMetric();
+        ExportFLAMetric();
         ExportFLALog();
-        yield return new WaitForSeconds(5f);
-        EditorApplication.ExitPlaymode();
     }
 
     private void UpdateEnemyLog(MatchLog log)
@@ -135,7 +194,21 @@ public class ExperimentManager : MonoBehaviour
             log.healthMetrics.remainingHealth.Add(round.RemainingHealth);
         }
     }
-    
+    private void UpdateFLAMetric(MatchLog log)
+    {
+        foreach(var metric in GameplayManager.instance.FLA_Metrics)
+        {
+            log.fla_metrics.Add(new FLA_Metrics()
+            {
+                currentWave = metric.currentWave,
+                botType = metric.botType,
+                scenarioMode = metric.scenarioMode,
+                goldMult = metric.goldMult,
+                spawnMult = metric.spawnMult,
+                HPMult = metric.HPMult,
+            });
+        }
+    } 
     private void CreateMatchLog()
     {
         var matchLog = new MatchLog();
@@ -160,14 +233,24 @@ public class ExperimentManager : MonoBehaviour
         matchLog.totalEnemyCount = totalEnemyCount;
         Debug.Log($"[Debug Log Experiment] escaped ${totalEnemyEscaped}, Killed {totalEnemySlained}, Total {totalEnemyCount}");
         
+        GameplayManager.instance.GetScenarioData(out GameplayManager.ScenarioMode scenarioMode, out BotController.Capability botType);
+        matchLog.botType = botType;
+        matchLog.scenarioMode = scenarioMode;
+        
+        int remainingHealth = 0;
+        GameplayManager.instance.GetRemainingHealth(out remainingHealth );
+        matchLog.remainingHealth = remainingHealth;
+
         matchLog.totalDamage = totalEnemyDamaged;
         matchLog.enemyPerformances = new();
         matchLog.towerLogs = new();
         matchLog.healthMetrics = new();
+        matchLog.fla_metrics = new();
 
         UpdateEnemyLog(matchLog);
         UpdateTowerLog(matchLog);
         UpdateHealthMetric(matchLog);
+        UpdateFLAMetric(matchLog);
         generalLogs.Add(matchLog);
     }
     public void ExportGeneralCSV()
@@ -175,14 +258,17 @@ public class ExperimentManager : MonoBehaviour
         StringBuilder sb = new StringBuilder();
 
         sb.AppendLine(
-            "Experiment,Win,Wave,Build,Upgrade,Sell,Damage,EnemyEscape,EnemySlain,TotalEnemy");
+            "Experiment,ScenarioMode,BotType,Win,Wave,RemainingHealth,Build,Upgrade,Sell,Damage,EnemyEscape,EnemySlain,TotalEnemy");
 
         foreach(var log in generalLogs)
         {
             sb.AppendLine(
                 $"{log.experimentIndex}," +
+                $"{log.scenarioMode}," +
+                $"{log.botType}," +
                 $"{log.win}," +
                 $"{log.waveReached}," +
+                $"{log.remainingHealth}," +
                 $"{log.buildCount}," +
                 $"{log.upgradeCount}," +
                 $"{log.sellCount}," +
@@ -193,7 +279,7 @@ public class ExperimentManager : MonoBehaviour
         }
 
         string path =
-            Application.dataPath + "/Debug Log/match_log.csv";
+            specificIterationDirPath + "/match_log.csv";
 
         File.WriteAllText(path, sb.ToString());
 
@@ -203,13 +289,15 @@ public class ExperimentManager : MonoBehaviour
     {
         StringBuilder sb = new StringBuilder();
         sb.AppendLine(
-        "Experiment,EnemyType,Spawned,Killed,Escaped,Average");
+        "Experiment,ScenarioMode,BotType,EnemyType,Spawned,Killed,Escaped,Average");
         foreach(var match in generalLogs)
         {
             foreach(var enemy in match.enemyPerformances)
             {
                 sb.AppendLine(
                 $"{match.experimentIndex}," +
+                $"{match.scenarioMode}," +
+                $"{match.botType}," +
                 $"{enemy.enemyType}," +
                 $"{enemy.spawnedCount}," +
                 $"{enemy.killedCount}," +
@@ -218,7 +306,7 @@ public class ExperimentManager : MonoBehaviour
             }
         }
         string path =
-        Application.dataPath + "/Debug Log/enemy_log.csv";
+        specificIterationDirPath + "/enemy_log.csv";
         File.WriteAllText(path, sb.ToString());
     }
     public void ExportTowerCSV()
@@ -226,7 +314,7 @@ public class ExperimentManager : MonoBehaviour
         StringBuilder sb = new StringBuilder();
         
         sb.AppendLine(
-            "Experiment,TowerType,Built,Upgrade,Sold,Damage,EnemySlain,Average Score");
+            "Experiment,ScenarioMode,BotType,TowerType,Built,Upgrade,Sold,Damage,EnemySlain,Average Score");
 
         foreach(var match in generalLogs)
         {
@@ -234,6 +322,8 @@ public class ExperimentManager : MonoBehaviour
             {
                 sb.AppendLine(
                 $"{match.experimentIndex}," +
+                $"{match.scenarioMode}," +
+                $"{match.botType}," +
                 $"{tower.towerType}," +
                 $"{tower.builtTotal}," +
                 $"{tower.upgradeTotal}," +
@@ -246,7 +336,7 @@ public class ExperimentManager : MonoBehaviour
         }
 
         string path =
-            Application.dataPath + "/Debug Log/tower_log.csv";
+            specificIterationDirPath + "/tower_log.csv";
 
         File.WriteAllText(path, sb.ToString());
 
@@ -256,7 +346,7 @@ public class ExperimentManager : MonoBehaviour
     {
         StringBuilder sb = new StringBuilder();
         int maxWave = generalLogs[0].healthMetrics.remainingHealth.Count;        
-        sb.Append("Experiment,");
+        sb.Append("Experiment,ScenarioMode,BotType,");
         for(int i = 0; i < maxWave; i++)
         {
             sb.Append($"Wave {i + 1:D2}");
@@ -267,11 +357,27 @@ public class ExperimentManager : MonoBehaviour
         sb.AppendLine();
         foreach(var match in generalLogs)
         {
-            sb.Append($"{match.experimentIndex},");
+            sb.Append
+            (
+                $"{match.experimentIndex},"+
+                $"{match.scenarioMode},"+
+                $"{match.botType},"
+            );
             var healthMetric = match.healthMetrics.remainingHealth;
+            bool flagZero = false;
             for(int i = 0; i < healthMetric.Count; i++)
             {
-                sb.Append($"{healthMetric[i]}");
+                int health = healthMetric[i];
+                if (flagZero)
+                {
+                    health = -1;
+                }
+                if(!flagZero && health <= 0)
+                {
+                    flagZero = true;
+                }
+                sb.Append($"{health}");    
+                
 
                 if(i < maxWave - 1)
                     sb.Append(",");
@@ -280,7 +386,37 @@ public class ExperimentManager : MonoBehaviour
         }
 
         string path =
-            Application.dataPath + "/Debug Log/health_log.csv";
+            specificIterationDirPath + "/health_log.csv";
+
+        File.WriteAllText(path, sb.ToString());
+
+        Debug.Log("CSV Exported");
+    }
+    public void ExportFLAMetric()
+    {
+        StringBuilder sb = new StringBuilder();
+        
+        sb.AppendLine(
+            "Experiment,ScenarioMode,BotType,Current Wave,HPMult,SpawnMult,GoldMult");
+
+        foreach(var match in generalLogs)
+        {
+            foreach(var fla in match.fla_metrics)
+            {
+                sb.AppendLine(
+                $"{match.experimentIndex}," +
+                $"{match.scenarioMode}," +
+                $"{match.botType}," +
+                $"{fla.currentWave}," +
+                $"{fla.HPMult},"+
+                $"{fla.spawnMult}," +
+                $"{fla.goldMult},"
+                );
+            }
+        }
+
+        string path =
+            specificIterationDirPath + "/fla_metric.csv";
 
         File.WriteAllText(path, sb.ToString());
 
@@ -289,24 +425,17 @@ public class ExperimentManager : MonoBehaviour
     private void ExportFLALog()
     {
         StringBuilder sb = FindFirstObjectByType<FLA>().DebugFLA;
-        string directoryPath = Application.dataPath + $"/Debug Log/FLA_Log/";
+        string directoryPath = specificIterationDirPath + "/Fla Log/";
         if(!Directory.Exists(directoryPath))
             Directory.CreateDirectory(directoryPath);
         
         string fileName = $"FLALog_{generalLogs.Count}.txt";
         string path =
-            directoryPath + $"{fileName}";
+            directoryPath + $"/{fileName}";
 
         File.WriteAllText(path, sb.ToString());
 
         Debug.Log("CSV Exported");
-    }
-    private void OnPlayStateChange(PlayModeStateChange change)
-    {
-        if(change == PlayModeStateChange.EnteredPlayMode)
-        {
-            StartCoroutine(OnEnterPlayMode());
-        }
     }
 
     [MenuItem("Tools/Start Experiment")]
@@ -324,9 +453,11 @@ public class ExperimentManager : MonoBehaviour
 public class MatchLog
 {
     public int experimentIndex;
+    public BotController.Capability botType;
+    public GameplayManager.ScenarioMode scenarioMode;
     public bool win;
     public int waveReached;
-
+    public int remainingHealth;
     public int buildCount;
     public int upgradeCount;
     public int sellCount;
@@ -338,6 +469,7 @@ public class MatchLog
     public List<EnemyPerformance> enemyPerformances;
     public List<TowerLog> towerLogs;
     public HealthMetric healthMetrics;
+    public List<FLA_Metrics> fla_metrics;
 }
 [Serializable]
 public class HealthMetric
@@ -346,5 +478,16 @@ public class HealthMetric
     public HealthMetric()
     {
         remainingHealth = new();
+    }
+}
+[Serializable]
+public class ExperimentPreset
+{
+    public bool useDDA;
+    public BotController.Capability botType;
+    public ExperimentPreset(bool useDDA, BotController.Capability botType)
+    {
+        this.useDDA = useDDA;
+        this.botType = botType;
     }
 }

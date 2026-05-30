@@ -1,0 +1,4 @@
+Experiment,ScenarioMode,BotType,TowerType,Built,Upgrade,Sold,Damage,EnemySlain,Average Score
+0,DDA,High,Archer,71,64,55,18367,310,72.77,
+0,DDA,High,Mage,59,28,33,78642,1171,289.29,
+0,DDA,High,Mortar,60,5,48,31887,196,48.84,

@@ -1,0 +1,9 @@
+Experiment,EnemyType,Spawned,Killed,Escaped,Average
+0,Goblin,130,119,11,0
+0,Bee,126,123,3,0
+0,Wolf,74,72,2,0
+0,Slime,69,69,0,0
+1,Goblin,20,7,13,0
+1,Bee,0,0,0,-1
+1,Wolf,20,1,17,0
+1,Slime,0,0,0,-1

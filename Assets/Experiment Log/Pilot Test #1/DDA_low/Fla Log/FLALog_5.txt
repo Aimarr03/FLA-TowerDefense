@@ -1,0 +1,163 @@
+FLA PERFORMANCE LOG
+
+
+Current Round: 0
+performance: 0.426
+Player Ratio: 0.5
+Enemy Ratio: 0.315
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 1
+performance: 0.2713333
+Player Ratio: 0.4333333
+Enemy Ratio: 0.02833331
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 2
+performance: 0.51425
+Player Ratio: 0.4333333
+Enemy Ratio: 0.635625
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 3
+performance: 0.3490667
+Player Ratio: 0.4333333
+Enemy Ratio: 0.2226667
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 4
+performance: 0.5404103
+Player Ratio: 0.4333333
+Enemy Ratio: 0.7010256
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 5
+performance: 0.5781754
+Player Ratio: 0.4333333
+Enemy Ratio: 0.7954386
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 6
+performance: 0.5267429
+Player Ratio: 0.4333333
+Enemy Ratio: 0.6668571
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 7
+performance: 0.6114167
+Player Ratio: 0.4333333
+Enemy Ratio: 0.8785416
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 8
+performance: 0.5075817
+Player Ratio: 0.4333333
+Enemy Ratio: 0.6189542
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 9
+performance: 0.5060976
+Player Ratio: 0.2666667
+Enemy Ratio: 0.8652439
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1
+
+Gold Multiplier: 2.2
+
+Spawn Enemy Multiplier: 1
+
+
+

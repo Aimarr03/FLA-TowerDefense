@@ -1,0 +1,5 @@
+Experiment,ScenarioMode,BotType,EnemyType,Spawned,Killed,Escaped,Average
+0,Static,Medium,Goblin,130,130,0,0
+0,Static,Medium,Bee,126,125,1,0
+0,Static,Medium,Wolf,74,74,0,0
+0,Static,Medium,Slime,69,69,0,0

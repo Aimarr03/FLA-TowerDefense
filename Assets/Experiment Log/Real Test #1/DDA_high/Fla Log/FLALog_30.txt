@@ -1,0 +1,163 @@
+FLA PERFORMANCE LOG
+
+
+Current Round: 0
+performance: 1
+Player Ratio: 1
+Enemy Ratio: 1
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 1
+performance: 0.9746667
+Player Ratio: 0.9666666
+Enemy Ratio: 0.9866667
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 2
+performance: 0.978
+Player Ratio: 0.9666666
+Enemy Ratio: 0.995
+
+Fibonacci Result
+Sequenced: 3
+
+HP Multiplier: 1.207944
+
+Gold Multiplier: 0.9542523
+
+Spawn Enemy Multiplier: 1.130312
+
+
+
+Current Round: 3
+performance: 0.9757333
+Player Ratio: 0.9666666
+Enemy Ratio: 0.9893333
+
+Fibonacci Result
+Sequenced: 4
+
+HP Multiplier: 1.329584
+
+Gold Multiplier: 0.9274916
+
+Spawn Enemy Multiplier: 1.206539
+
+
+
+Current Round: 4
+performance: 0.838659
+Player Ratio: 0.8
+Enemy Ratio: 0.8966473
+
+Fibonacci Result
+Sequenced: 5
+
+HP Multiplier: 1.482831
+
+Gold Multiplier: 0.8937771
+
+Spawn Enemy Multiplier: 1.302574
+
+
+
+Current Round: 5
+performance: 0.8517141
+Player Ratio: 0.8
+Enemy Ratio: 0.929285
+
+Fibonacci Result
+Sequenced: 6
+
+HP Multiplier: 1.623832
+
+Gold Multiplier: 0.8627568
+
+Spawn Enemy Multiplier: 1.390935
+
+
+
+Current Round: 6
+performance: 0.5421938
+Player Ratio: 0.4333333
+Enemy Ratio: 0.7054844
+
+Fibonacci Result
+Sequenced: 6
+
+HP Multiplier: 1.623832
+
+Gold Multiplier: 0.8627568
+
+Spawn Enemy Multiplier: 1.390935
+
+
+
+Current Round: 7
+performance: 0.5961569
+Player Ratio: 0.4
+Enemy Ratio: 0.8903922
+
+Fibonacci Result
+Sequenced: 6
+
+HP Multiplier: 1.623832
+
+Gold Multiplier: 0.8627568
+
+Spawn Enemy Multiplier: 1.390935
+
+
+
+Current Round: 8
+performance: 0.502453
+Player Ratio: 0.4
+Enemy Ratio: 0.6561325
+
+Fibonacci Result
+Sequenced: 6
+
+HP Multiplier: 1.623832
+
+Gold Multiplier: 0.8627568
+
+Spawn Enemy Multiplier: 1.390935
+
+
+
+Current Round: 9
+performance: 0.5509312
+Player Ratio: 0.3333333
+Enemy Ratio: 0.8773278
+
+Fibonacci Result
+Sequenced: 6
+
+HP Multiplier: 1.623832
+
+Gold Multiplier: 0.8627568
+
+Spawn Enemy Multiplier: 1.390935
+
+
+

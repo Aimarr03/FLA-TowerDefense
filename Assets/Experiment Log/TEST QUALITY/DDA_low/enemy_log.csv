@@ -1,0 +1,5 @@
+Experiment,ScenarioMode,BotType,EnemyType,Spawned,Killed,Escaped,Average
+0,DDA,Low,Goblin,20,0,20,1
+0,DDA,Low,Bee,0,0,0,-1
+0,DDA,Low,Wolf,20,4,10,0
+0,DDA,Low,Slime,0,0,0,-1

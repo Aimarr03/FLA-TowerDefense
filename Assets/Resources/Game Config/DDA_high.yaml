@@ -1,0 +1,10 @@
+filePath: Enemy Waves/Subwave Base/Case 01
+scenarioMode: DDA
+spawnMode: subwave
+cycleMode: normal
+startingMoney: 450
+baseDuration: 20
+botUsage:
+  useBot: true
+  capability: "High"
+

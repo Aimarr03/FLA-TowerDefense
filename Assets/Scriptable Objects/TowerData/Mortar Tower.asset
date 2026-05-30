@@ -15,14 +15,14 @@ MonoBehaviour:
   TowerName: Mortar Tower
   Type: 2
   Description: Mortar Tower Desc
-  _baseDamage: 7
+  _baseDamage: 6
   _multiplierDamage: 0.5
-  _baseAttackRange: 7
-  _multiplierAttackRange: 0.1
+  _baseAttackRange: 6
+  _multiplierAttackRange: 0
   _baseAttackRate: 3
   _multiplierAttackRate: 0.2
   _costBuild: 115
-  _multiplierCost: 1
+  _multiplierCost: 2.5
   TowerAttackBehaviours: []
   TowerAttackEffects:
   - rid: 934252278042591328

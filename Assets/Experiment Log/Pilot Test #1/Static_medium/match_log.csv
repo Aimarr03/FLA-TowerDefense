@@ -1,0 +1,6 @@
+Experiment,Win,Wave,Build,Upgrade,Sell,Damage,EnemyEscape,EnemySlain,TotalEnemy
+0,False,5,15,4,6,1814,20,63,0
+1,True,10,42,27,35,20224,15,384,0
+2,True,10,45,29,36,18320,14,385,0
+3,True,10,42,23,33,17502,25,374,0
+4,True,10,45,27,37,18817,11,388,0

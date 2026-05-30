@@ -2,6 +2,8 @@ using UnityEngine;
 using System.IO;
 using YamlDotNet.Serialization;
 using System;
+using Mono.Cecil;
+using System.Text;
 public class ConfigLoader : MonoBehaviour
 {
     string defaultPath = "Enemy Waves/Subwave Base";
@@ -13,10 +15,28 @@ public class ConfigLoader : MonoBehaviour
     string defaultNameFile = "gameconfig.yaml";
 
     public GameConfig gameConfig;
-    
+    public string directoryPath = "Game Config";
+
+    public GameConfig LoadGameConfig(string fileName)
+    {
+        StringBuilder sb = new();
+        sb.Append($"{directoryPath}/");
+        sb.Append(fileName);
+        var textConfig = Resources.Load<TextAsset>(sb.ToString());
+        if(textConfig == null)
+        {
+            Debug.LogError("No File found, please try different methods");
+            return null;
+        }
+        var deserializer = new DeserializerBuilder().Build();
+        string yamlText = textConfig.text;
+        gameConfig = deserializer.Deserialize<GameConfig>(yamlText);
+
+        return gameConfig;
+    }
     public void Init()
     {
-        string folderPath = Application.streamingAssetsPath;
+        string folderPath = directoryPath;
         if (!Directory.Exists(folderPath))
         {
             Directory.CreateDirectory(folderPath);

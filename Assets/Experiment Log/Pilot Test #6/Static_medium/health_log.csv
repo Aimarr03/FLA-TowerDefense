@@ -1,0 +1,6 @@
+Experiment,ScenarioMode,BotType,Wave 01,Wave 02,Wave 03,Wave 04,Wave 05,Wave 06,Wave 07,Wave 08,Wave 09,Wave 10
+0,Static,Medium,30,29,27,27,21,21,21,21,20,20
+1,Static,Medium,20,15,15,10,0,-1,-1,-1,-1,-1
+2,Static,Medium,28,27,25,25,21,20,20,20,20,20
+3,Static,Medium,12,0,-1,-1,-1,-1,-1,-1,-1,-1
+4,Static,Medium,19,2,1,0,-1,-1,-1,-1,-1,-1

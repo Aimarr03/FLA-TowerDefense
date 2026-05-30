@@ -15,14 +15,14 @@ MonoBehaviour:
   TowerName: Mage Tower
   Type: 1
   Description: Mage Tower Desc
-  _baseDamage: 10
+  _baseDamage: 17
   _multiplierDamage: 1
   _baseAttackRange: 7
   _multiplierAttackRange: 0.15
-  _baseAttackRate: 2
-  _multiplierAttackRate: 0
+  _baseAttackRate: 2.2
+  _multiplierAttackRate: 0.1
   _costBuild: 90
-  _multiplierCost: 1.5
+  _multiplierCost: 2
   TowerAttackBehaviours: []
   TowerAttackEffects: []
   towerSprites:

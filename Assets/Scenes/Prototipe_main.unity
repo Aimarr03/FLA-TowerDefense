@@ -1600,6 +1600,7 @@ GameObject:
   m_Component:
   - component: {fileID: 255797125}
   - component: {fileID: 255797124}
+  - component: {fileID: 255797126}
   m_Layer: 0
   m_Name: Bot
   m_TagString: Untagged
@@ -1622,7 +1623,8 @@ MonoBehaviour:
   intervalDecision: 2
   botType: 0
   botProperty:
-    botType: 0
+    BotType: 0
+    IntervalDecision: 2
     BaseWeightBuildAction: 75
     BaseWeightUpgradeAction: 25
     BaseWeightDefendAction: 15
@@ -1636,7 +1638,7 @@ MonoBehaviour:
     TowerUpgradeRandom: 30
     TowerUpgradePerformance: 60
     SellThreshold: 100
-    maxCooldownSell: 30
+    MaxCooldownSell: 30
   enemySpawner: {fileID: 1857650229}
 --- !u!4 &255797125
 Transform:
@@ -1653,6 +1655,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &255797126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255797123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe71cceeee7d9f343b62b66b3512a042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BotPropLoader
 --- !u!1 &258330652
 GameObject:
   m_ObjectHideFlags: 0
@@ -48471,8 +48485,10 @@ MonoBehaviour:
   readyButton: {fileID: 258330655}
   instantPlay: 1
   spawnType: 2
+  scenarioMode: 1
   initHealth: 30
   enemySpawnInfos: []
+  FLA_Metrics: []
 --- !u!4 &747893284
 Transform:
   m_ObjectHideFlags: 0
@@ -48502,9 +48518,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FLA
   scalingHP: 0.3
   baseMultplierHP: 1
-  scalingGold: 0.45
-  baseMultplierGold: 2.2
-  scalingSpawnEnemy: 0.12
+  scalingGold: 0.033
+  baseMultplierGold: 1
+  scalingSpawnEnemy: 0.188
   baseMultiplierSpawnEnemy: 1
 --- !u!114 &747893287
 MonoBehaviour:
@@ -48528,6 +48544,7 @@ MonoBehaviour:
     botUsage:
       useBot: 0
       capability: 0
+  directoryPath: Game Config
 --- !u!1 &752473687
 GameObject:
   m_ObjectHideFlags: 0
@@ -49591,8 +49608,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b26b7549ea1a64da3fd450b421d5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperimentManager
-  totalIteration: 1
-  multiplierSpeed: 10
+  rootDirName: Pilot Test #4
+  IterationPerScenario: 5
+  multiplierSpeed: 13
 --- !u!4 &881900537
 Transform:
   m_ObjectHideFlags: 0

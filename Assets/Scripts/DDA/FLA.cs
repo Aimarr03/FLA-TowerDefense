@@ -16,7 +16,8 @@ public class FLA : MonoBehaviour
 
     public static float FinalMultiplierHP => totalMultiplierHP;
     public static float FinalMultiplierGold => totalMultiplierGold;
-    public static float FinalMultiplierSpawnEnemy => totalMultiplierSpawnEnemy;    
+    public static float FinalMultiplierSpawnEnemy => totalMultiplierSpawnEnemy;   
+    public static float Performance {get; private set;} 
     public StringBuilder DebugFLA;
  
     FibonacciSequence fibonacciSequence;
@@ -34,6 +35,7 @@ public class FLA : MonoBehaviour
     public void UpdateFLA(RoundPerformance currentRound, RoundPerformance previousRound)
     {
         var delta = classifier.GetPerformance(currentRound);
+        Performance = classifier.Performance;
         DebugFLA.AppendLine($"Current Round: {currentRound.RoundIndex}");
         DebugFLA.AppendLine($"performance: {classifier.Performance}");
         DebugFLA.AppendLine($"Player Ratio: {classifier.HealthRatio}");
@@ -54,7 +56,6 @@ public class FLA : MonoBehaviour
         totalMultiplierHP = baseMultplierHP + Mathf.Log(fibonacciSequence.Value) * scalingHP;
         totalMultiplierGold = baseMultplierGold - Mathf.Log(fibonacciSequence.Value) * scalingGold;
         totalMultiplierSpawnEnemy = baseMultiplierSpawnEnemy + Mathf.Log(fibonacciSequence.Value) * scalingSpawnEnemy;
-
         DebugFLA.AppendLine($"HP Multiplier: {totalMultiplierHP}\n");
         DebugFLA.AppendLine($"Gold Multiplier: {totalMultiplierGold}\n");
         DebugFLA.AppendLine($"Spawn Enemy Multiplier: {totalMultiplierSpawnEnemy}\n\n\n");

@@ -79,7 +79,7 @@ public class GameplayManager : MonoBehaviour
     public float MultiplierSpawnEnemy {get; private set;}
     public SpawnType SpawnMode => spawnType;
     public List<RoundPerformance> RoundPerformances => roundPerformances;
-    
+    public List<FLA_Metrics> FLA_Metrics = new();
     public enum State
     {
         Building,
@@ -110,48 +110,42 @@ public class GameplayManager : MonoBehaviour
             GameConfiguration = configLoader.gameConfig;
             
             allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
-            LoadConfig();
-            
-            mainBase.Setup(initHealth);
-            fla.Setup(initHealth);
-
-            var botProperty = configLoader.gameConfig.botUsage;
-            if (botProperty.useBot)
-            {
-                bot.Init(botProperty);
-            }
-            if (bot.IsActive)
-            {
-                selectionManager.DisableSelectionManager();
-            }
-            if (instantPlay)
-            {
-                StartGame();
-            }
         }
     }
-    private void LoadConfig()
+    public void InitializeGame(string fileName)
     {
-        if(configLoader == null)
-        {
-            configLoader = GetComponent<ConfigLoader>();
-            if(configLoader == null)
-            {
-                Debug.LogError("Config Loader is not found, try again!");
-                return;
-            }
-        }
-        configLoader.Init();
-
-        var config = configLoader.gameConfig;
-        configLoader.TryParseScenarioMode(config.scenarioMode, out scenarioMode);
-        configLoader.TryParseSpawnType(config.spawnMode, out spawnType);
-        
-        economyManager = new EconomyManager(config.startingMoney);
-        BaseBuildStateDuration = config.baseDuration;
-
+        InitializedConfig(fileName);
         InitializedAPI();
         InitializedWave();
+        InitializedBot();
+
+        mainBase.Setup(initHealth);
+        fla.Setup(initHealth);
+    }
+
+    private void InitializedBot()
+    {
+        var botProperty = configLoader.gameConfig.botUsage;
+        if (botProperty.useBot)
+        {
+            bot.Init(botProperty);
+        }
+        if (bot.IsActive)
+        {
+            selectionManager.DisableSelectionManager();
+        }
+    }
+
+    private void InitializedConfig(string filename)
+    {
+        configLoader.LoadGameConfig(filename);
+        GameConfiguration = configLoader.gameConfig;
+        
+        configLoader.TryParseScenarioMode(GameConfiguration.scenarioMode, out scenarioMode);
+        configLoader.TryParseSpawnType(GameConfiguration.spawnMode, out spawnType);
+        
+        economyManager = new EconomyManager(GameConfiguration.startingMoney);
+        BaseBuildStateDuration = GameConfiguration.baseDuration;
     }
     private void OnDestroy()
     {
@@ -208,8 +202,17 @@ public class GameplayManager : MonoBehaviour
         maxWave = enemyLoader.MaxWaveCount;
         
         roundPerformances = new();
+        FLA_Metrics = new();
         for(int i = 0; i < maxWave; i++)
+        {
             roundPerformances.Add(new RoundPerformance());
+            FLA_Metrics.Add(new FLA_Metrics()
+            {
+                currentWave = i + 1,
+                botType = GameConfiguration.botUsage.capability,
+                scenarioMode = this.scenarioMode
+            });
+        }
         
         CurrentWaveIndex = 0;
         int index = Mathf.Clamp(CurrentWaveIndex, 0, maxWave - 1);
@@ -311,6 +314,11 @@ public class GameplayManager : MonoBehaviour
             totalEnemyEscape += currentRound.EnemyEscapedCount;
             totalEnemyCount += currentRound.EnemyTotalCount;
         }
+    }
+    public void GetScenarioData(out ScenarioMode scenarioMode, out BotController.Capability botType)
+    {
+        scenarioMode = this.scenarioMode;
+        botType = GameConfiguration.botUsage.capability;
     }
     public void GetRemainingHealth(out int remainingHealth)
     {
@@ -424,6 +432,8 @@ public class GameplayManager : MonoBehaviour
         currentRoundPerformance.RemainingHealth = (int)mainBase.CurrentHealth;
         currentRoundPerformance.AttackNumber = CurrentWave;
         
+
+
         #region Obsolete
         // var towerEvaluation = currentRoundPerformance.towerEvaluation;
         // towerEvaluation.currentRound = CurrentWave;
@@ -488,9 +498,24 @@ public class GameplayManager : MonoBehaviour
 
         if(scenarioMode == ScenarioMode.DDA)
         {
+            var fla_metric = FLA_Metrics[CurrentWaveIndex];
+            fla_metric.currentWave = CurrentWaveIndex+1;
+            
             MultiplierGold = FLA.FinalMultiplierGold;
             MultiplierSpawnEnemy = FLA.FinalMultiplierSpawnEnemy;
             MultiplierHP = FLA.FinalMultiplierHP;    
+            
+            fla_metric.HPMult = MultiplierHP;
+            fla_metric.goldMult = MultiplierGold;
+            fla_metric.spawnMult = MultiplierSpawnEnemy;
+        }
+        else
+        {
+            var fla_metric = FLA_Metrics[CurrentWaveIndex];
+            fla_metric.currentWave = CurrentWaveIndex+1;
+            fla_metric.HPMult = MultiplierHP;
+            fla_metric.goldMult = MultiplierGold;
+            fla_metric.spawnMult = MultiplierSpawnEnemy;
         }
     }
 }
@@ -524,6 +549,16 @@ public class ActionMetrics
     public int DefendPhase_SellAction;
     public int DefendPhase_BuyAction;
     public int DefendPhase_UpgradeAction;
+}
+[Serializable]
+public class FLA_Metrics
+{
+    public int currentWave = 0;
+    public BotController.Capability botType;
+    public GameplayManager.ScenarioMode scenarioMode;
+    public float HPMult = 0;
+    public float spawnMult = 0;
+    public float goldMult = 0;
 }
 // [Serializable]
 // public class TowerEvaluation
