@@ -1,0 +1,6 @@
+Experiment,ScenarioMode,BotType,Win,Wave,RemainingHealth,Build,Upgrade,Sell,Damage,EnemyEscape,EnemySlain,TotalEnemy
+0,DDA,Medium,False,4,0,15,2,8,1575,26,32,0
+1,DDA,Medium,True,10,12,46,24,36,16720,18,381,0
+2,DDA,Medium,False,5,0,17,3,9,961,27,56,0
+3,DDA,Medium,True,10,4,36,22,27,18111,26,373,0
+4,DDA,Medium,True,10,4,41,23,31,16161,26,373,0

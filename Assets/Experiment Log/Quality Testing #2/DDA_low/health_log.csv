@@ -1,0 +1,4 @@
+Experiment,ScenarioMode,BotType,Wave 01,Wave 02,Wave 03,Wave 04,Wave 05,Wave 06,Wave 07,Wave 08,Wave 09,Wave 10
+0,DDA,Low,25,25,25,25,21,19,19,19,16,14
+1,DDA,Low,18,0,-1,-1,-1,-1,-1,-1,-1,-1
+2,DDA,Low,16,14,14,14,8,8,8,8,8,8

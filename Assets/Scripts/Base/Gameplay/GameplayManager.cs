@@ -342,6 +342,13 @@ public class GameplayManager : MonoBehaviour
             isActive = false;
             ChangeState(State.GameOver);
         }
+        for(int i= CurrentWaveIndex; i < FLA_Metrics.Count; i++)
+        {
+            var fla = FLA_Metrics[i];
+            fla.goldMult = MultiplierGold;
+            fla.HPMult = MultiplierHP;
+            fla.spawnMult = MultiplierSpawnEnemy;
+        }
         
         StartCoroutine(GameOverSequence());
     }
@@ -556,9 +563,9 @@ public class FLA_Metrics
     public int currentWave = 0;
     public BotController.Capability botType;
     public GameplayManager.ScenarioMode scenarioMode;
-    public float HPMult = 0;
-    public float spawnMult = 0;
-    public float goldMult = 0;
+    public float HPMult = 1;
+    public float spawnMult = 1;
+    public float goldMult = 1;
 }
 // [Serializable]
 // public class TowerEvaluation

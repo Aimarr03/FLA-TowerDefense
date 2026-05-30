@@ -22,6 +22,9 @@ public class ExperimentManager : MonoBehaviour
     private ExperimentPreset currentPreset;
     List<ExperimentPreset> presets;
     string fileName ="";
+    string generalLogFileName = "summary_log.csv";
+    string healthLogFileName = "health_log.csv";
+    string flaLogFileName = "fla_metric.csv";
     string specificIterationDirPath;
     int iterationPreset;
     void Awake()
@@ -37,15 +40,15 @@ public class ExperimentManager : MonoBehaviour
         presets = new()
         {
             new(false, BotController.Capability.Low),
-            new(false, BotController.Capability.Medium),
-            new(false, BotController.Capability.High),
-
             new(true, BotController.Capability.Low),
+            new(false, BotController.Capability.Medium),
             new(true, BotController.Capability.Medium),
+            new(false, BotController.Capability.High),
             new(true, BotController.Capability.High),
+
         };
         currentPreset = presets[0];
-        UpdateFileName();
+        UpdateFileName(currentPreset);
         SceneManager.sceneLoaded += OnSceneLoaded;
         Application.runInBackground = true;
         DontDestroyOnLoad(gameObject);
@@ -91,7 +94,7 @@ public class ExperimentManager : MonoBehaviour
                     ExportAll();
                     
                     currentPreset = presets[iterationPreset];
-                    UpdateFileName();
+                    UpdateFileName(currentPreset);
 
                     currentIteration = 0;
                     generalLogs.Clear();
@@ -106,19 +109,23 @@ public class ExperimentManager : MonoBehaviour
         }
     }
 
-    private void UpdateFileName()
+    private void UpdateFileName(ExperimentPreset preset)
     {
         StringBuilder sb = new();
-        string useDDA = currentPreset.useDDA ? "DDA" : "Static";
+        string useDDA = preset.useDDA ? "DDA" : "Static";
         sb.Append(useDDA);
         sb.Append("_");
-        sb.Append(currentPreset.botType.ToString().ToLower());
+        sb.Append(preset.botType.ToString().ToLower());
         fileName = sb.ToString();
         Debug.Log($"File Name: {fileName}");
     }
     IEnumerator ExitPlayMode()
     {
         ExportAll();
+
+        FinalisedCSV(generalLogFileName, "final_summary_log.csv");
+        FinalisedCSV(healthLogFileName, "final_health_log.csv");
+        FinalisedCSV(flaLogFileName, "final_fla_metric_log.csv");
         yield return new WaitForSeconds(5f);
         EditorApplication.ExitPlaymode();
     }
@@ -279,11 +286,39 @@ public class ExperimentManager : MonoBehaviour
         }
 
         string path =
-            specificIterationDirPath + "/match_log.csv";
+            specificIterationDirPath + $"/{generalLogFileName}";
 
         File.WriteAllText(path, sb.ToString());
 
         Debug.Log("CSV Exported");
+    }
+    private void FinalisedCSV(string fileName, string finalFileName)
+    {
+        string rootPath = Application.dataPath + $"/Experiment Log/{rootDirName}";
+        string destinationPath = rootPath + $"/{finalFileName}";
+        bool firstFile = true;
+        StringBuilder finalFile = new();
+        foreach(var preset in presets)
+        {
+            StringBuilder sb = new();
+            string useDDA = preset.useDDA ? "DDA" : "Static";
+            sb.Append(useDDA);
+            sb.Append("_");
+            sb.Append(preset.botType.ToString().ToLower());
+            string typePath = sb.ToString();
+            string loadPath = rootPath + $"/{typePath}/{fileName}";
+
+            string[] text = File.ReadAllLines(loadPath);
+            if (firstFile)
+            {
+                firstFile = false;
+                File.AppendAllLines(destinationPath, text);
+            }
+            else
+            {
+                File.AppendAllLines(destinationPath, text.Skip(1));
+            }
+        }
     }
     private void ExportEnemyCSV()
     {
@@ -370,7 +405,7 @@ public class ExperimentManager : MonoBehaviour
                 int health = healthMetric[i];
                 if (flagZero)
                 {
-                    health = -1;
+                    health = 0;
                 }
                 if(!flagZero && health <= 0)
                 {
@@ -386,7 +421,7 @@ public class ExperimentManager : MonoBehaviour
         }
 
         string path =
-            specificIterationDirPath + "/health_log.csv";
+            specificIterationDirPath + $"/{healthLogFileName}";
 
         File.WriteAllText(path, sb.ToString());
 
@@ -416,7 +451,7 @@ public class ExperimentManager : MonoBehaviour
         }
 
         string path =
-            specificIterationDirPath + "/fla_metric.csv";
+            specificIterationDirPath + $"/{flaLogFileName}";
 
         File.WriteAllText(path, sb.ToString());
 

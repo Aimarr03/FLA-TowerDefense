@@ -1,0 +1,10 @@
+Experiment,ScenarioMode,BotType,TowerType,Built,Upgrade,Sold,Damage,EnemySlain,Average Score
+0,Static,Medium,Archer,76,58,57,25972,350,63.00,
+0,Static,Medium,Mage,53,46,21,117912,1779,47.35,
+0,Static,Medium,Mortar,44,8,34,23988,96,60.91,
+1,Static,Medium,Archer,76,58,57,25972,350,63.00,
+1,Static,Medium,Mage,53,46,21,117912,1779,47.35,
+1,Static,Medium,Mortar,44,8,34,23988,96,60.91,
+2,Static,Medium,Archer,76,58,57,25972,350,63.00,
+2,Static,Medium,Mage,53,46,21,117912,1779,47.35,
+2,Static,Medium,Mortar,44,8,34,23988,96,60.91,

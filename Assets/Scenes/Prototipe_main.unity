@@ -49608,9 +49608,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b26b7549ea1a64da3fd450b421d5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperimentManager
-  rootDirName: Pilot Test #4
-  IterationPerScenario: 5
-  multiplierSpeed: 13
+  rootDirName: Real Test #3
+  IterationPerScenario: 30
+  multiplierSpeed: 15.1
 --- !u!4 &881900537
 Transform:
   m_ObjectHideFlags: 0
