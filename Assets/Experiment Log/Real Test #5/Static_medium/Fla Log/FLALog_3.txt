@@ -1,0 +1,163 @@
+FLA PERFORMANCE LOG
+
+
+Current Round: 0
+performance: 0.819
+Player Ratio: 0.7666667
+Enemy Ratio: 0.8975
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 1
+performance: 0.5226667
+Player Ratio: 0.4
+Enemy Ratio: 0.7066667
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 2
+performance: 0.55975
+Player Ratio: 0.3666667
+Enemy Ratio: 0.849375
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 3
+performance: 0.4914667
+Player Ratio: 0.3666667
+Enemy Ratio: 0.6786667
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 4
+performance: 0.4601026
+Player Ratio: 0.2
+Enemy Ratio: 0.8502564
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 5
+performance: 0.4790176
+Player Ratio: 0.2
+Enemy Ratio: 0.8975438
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 6
+performance: 0.4532572
+Player Ratio: 0.2
+Enemy Ratio: 0.8331429
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 7
+performance: 0.4956667
+Player Ratio: 0.2
+Enemy Ratio: 0.9391667
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 8
+performance: 0.4436601
+Player Ratio: 0.2
+Enemy Ratio: 0.8091503
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 9
+performance: 0.4962602
+Player Ratio: 0.2
+Enemy Ratio: 0.9406504
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+

@@ -1,0 +1,163 @@
+FLA PERFORMANCE LOG
+
+
+Current Round: 0
+performance: 0.891
+Player Ratio: 0.8666667
+Enemy Ratio: 0.9275
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 1
+performance: 0.832
+Player Ratio: 0.8
+Enemy Ratio: 0.88
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 2
+performance: 0.862
+Player Ratio: 0.8
+Enemy Ratio: 0.955
+
+Fibonacci Result
+Sequenced: 3
+
+HP Multiplier: 1.207944
+
+Gold Multiplier: 0.9771261
+
+Spawn Enemy Multiplier: 1.130312
+
+
+
+Current Round: 3
+performance: 0.8416
+Player Ratio: 0.8
+Enemy Ratio: 0.904
+
+Fibonacci Result
+Sequenced: 4
+
+HP Multiplier: 1.329584
+
+Gold Multiplier: 0.9637458
+
+Spawn Enemy Multiplier: 1.206539
+
+
+
+Current Round: 4
+performance: 0.5666153
+Player Ratio: 0.4
+Enemy Ratio: 0.8165383
+
+Fibonacci Result
+Sequenced: 4
+
+HP Multiplier: 1.329584
+
+Gold Multiplier: 0.9637458
+
+Spawn Enemy Multiplier: 1.206539
+
+
+
+Current Round: 5
+performance: 0.5408386
+Player Ratio: 0.3333333
+Enemy Ratio: 0.8520964
+
+Fibonacci Result
+Sequenced: 4
+
+HP Multiplier: 1.329584
+
+Gold Multiplier: 0.9637458
+
+Spawn Enemy Multiplier: 1.206539
+
+
+
+Current Round: 6
+performance: 0.3714628
+Player Ratio: 0.1333333
+Enemy Ratio: 0.7286569
+
+Fibonacci Result
+Sequenced: 3
+
+HP Multiplier: 1.207944
+
+Gold Multiplier: 0.9771261
+
+Spawn Enemy Multiplier: 1.130312
+
+
+
+Current Round: 7
+performance: 0.4404292
+Player Ratio: 0.1333333
+Enemy Ratio: 0.9010729
+
+Fibonacci Result
+Sequenced: 3
+
+HP Multiplier: 1.207944
+
+Gold Multiplier: 0.9771261
+
+Spawn Enemy Multiplier: 1.130312
+
+
+
+Current Round: 8
+performance: 0.3558561
+Player Ratio: 0.1333333
+Enemy Ratio: 0.6896403
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 9
+performance: 0.4413943
+Player Ratio: 0.1333333
+Enemy Ratio: 0.9034857
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+

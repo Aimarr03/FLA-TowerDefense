@@ -1,0 +1,163 @@
+FLA PERFORMANCE LOG
+
+
+Current Round: 0
+performance: 0.593
+Player Ratio: 0.6
+Enemy Ratio: 0.5825
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 1
+performance: 0.4733334
+Player Ratio: 0.5333334
+Enemy Ratio: 0.3833333
+
+Fibonacci Result
+Sequenced: 1
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 2
+performance: 0.6275001
+Player Ratio: 0.5333334
+Enemy Ratio: 0.76875
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 3
+performance: 0.5226667
+Player Ratio: 0.5333334
+Enemy Ratio: 0.5066667
+
+Fibonacci Result
+Sequenced: 2
+
+HP Multiplier: 1
+
+Gold Multiplier: 1
+
+Spawn Enemy Multiplier: 1
+
+
+
+Current Round: 4
+performance: 0.6214359
+Player Ratio: 0.5
+Enemy Ratio: 0.8035898
+
+Fibonacci Result
+Sequenced: 3
+
+HP Multiplier: 1.207944
+
+Gold Multiplier: 0.9771261
+
+Spawn Enemy Multiplier: 1.130312
+
+
+
+Current Round: 5
+performance: 0.6462457
+Player Ratio: 0.5
+Enemy Ratio: 0.8656141
+
+Fibonacci Result
+Sequenced: 4
+
+HP Multiplier: 1.329584
+
+Gold Multiplier: 0.9637458
+
+Spawn Enemy Multiplier: 1.206539
+
+
+
+Current Round: 6
+performance: 0.6124572
+Player Ratio: 0.5
+Enemy Ratio: 0.7811428
+
+Fibonacci Result
+Sequenced: 5
+
+HP Multiplier: 1.482831
+
+Gold Multiplier: 0.9468886
+
+Spawn Enemy Multiplier: 1.302574
+
+
+
+Current Round: 7
+performance: 0.6680834
+Player Ratio: 0.5
+Enemy Ratio: 0.9202083
+
+Fibonacci Result
+Sequenced: 6
+
+HP Multiplier: 1.623832
+
+Gold Multiplier: 0.9313784
+
+Spawn Enemy Multiplier: 1.390935
+
+
+
+Current Round: 8
+performance: 0.550868
+Player Ratio: 0.4333333
+Enemy Ratio: 0.72717
+
+Fibonacci Result
+Sequenced: 6
+
+HP Multiplier: 1.623832
+
+Gold Multiplier: 0.9313784
+
+Spawn Enemy Multiplier: 1.390935
+
+
+
+Current Round: 9
+performance: 0.6260626
+Player Ratio: 0.4333333
+Enemy Ratio: 0.9151565
+
+Fibonacci Result
+Sequenced: 7
+
+HP Multiplier: 1.769485
+
+Gold Multiplier: 0.9153567
+
+Spawn Enemy Multiplier: 1.48221
+
+
+
