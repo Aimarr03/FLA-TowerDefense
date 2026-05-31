@@ -121,6 +121,12 @@ public class GameplayManager : MonoBehaviour
 
         mainBase.Setup(initHealth);
         fla.Setup(initHealth);
+        if(scenarioMode == ScenarioMode.Static)
+        {
+            MultiplierGold = 0.98f;
+            MultiplierSpawnEnemy = 1.11f;
+            MultiplierHP = 1.18f;
+        }
     }
 
     private void InitializedBot()

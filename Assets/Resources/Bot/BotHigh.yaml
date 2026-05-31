@@ -2,20 +2,20 @@ BotType: High
 IntervalDecision: 1.5
 
 # Weighted Action Property
-BaseWeightBuildAction: 65
-BaseWeightUpgradeAction: 15
-BaseWeightDefendAction: 15
-BaseWeightSellAction: 15
+BaseWeightBuildAction: 75
+BaseWeightUpgradeAction: 45
+BaseWeightDefendAction: 5
+BaseWeightSellAction: 10
 BaseWeightNoneAction: 35
 
 # Weighted Property Strategy
 BuildRandomWeight: 30
 BuildRandomBestWeight: 30
-BuildBestWeight: 40
+BuildBestWeight: 60
 
 # Weighted Property Type
 TowerTypeRandomWeight: 30
-TowerTypeObservingWeight: 45
+TowerTypeObservingWeight: 55
 
 # Weighted Upgrade Type
 TowerUpgradeRandom: 30
