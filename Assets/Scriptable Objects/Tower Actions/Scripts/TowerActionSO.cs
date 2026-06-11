@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class TowerActionSO : ScriptableObject
@@ -18,7 +19,7 @@ public class ActionContext
     public int actionCost;
     public TowerActionType actionType;
     public Action clickEvent;
-    public string actionDescription;
+    public List<string> actionDescription;
     public Func<bool> isExecutable;
     public bool useMoney = false;
 }

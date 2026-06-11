@@ -13,9 +13,11 @@ public class UIAction : MonoBehaviour
     private int startingButtons = 5;
     ActionContext selectedContext;
     TowerActionButton selectedButton;
+    UI_TowerActionDescription actionDescriber;
     private void Awake()
     {
         buttons = new List<TowerActionButton>();
+        actionDescriber = FindFirstObjectByType<UI_TowerActionDescription>(FindObjectsInactive.Include);
         CreateButton(startingButtons);
     }
     private void CreateButton(int count)
@@ -99,6 +101,7 @@ public class UIAction : MonoBehaviour
     }
     private void SelectAction(ActionContext context, TowerActionButton button)
     {
+        actionDescriber.ShowActionContext(context);
         bool condition = selectedButton != null && selectedButton != button;
         Debug.Log($"Condition: {condition}");
         if (selectedButton != null && selectedButton != button)
@@ -121,6 +124,7 @@ public class UIAction : MonoBehaviour
             selectedButton.SetActionIcon();
         }
 
+        actionDescriber.HideActionContext();
         selectedContext = null;
         selectedButton = null;
         foreach (TowerActionButton button in buttons)

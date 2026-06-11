@@ -22,14 +22,33 @@ public class UpgradeAction : TowerActionSO
 
     public override ActionContext GetActionContext(Tower tower)
     {
-        var actionContext = new ActionContext();
-        actionContext.actionName = $"Upgrade Tower";
-        actionContext.actionDescription = $"Upgrade Tower for ${tower.TowerData.UpgradeCost(tower.Level + 1)}";
-        actionContext.isExecutable = () => ExecutableConditions(tower);
-        actionContext.clickEvent = () => Executes(tower);
-        actionContext.actionIcon = upgradeIcon;
-        actionContext.useMoney = true;
-        actionContext.actionCost = (int)tower.TowerData.UpgradeCost(tower.Level + 1);
+        var towerData = tower.TowerData;
+        var level = tower.Level;
+        var actionContext = new ActionContext
+        {
+            actionName = $"Upgrade Tower",
+            actionDescription = new(),
+            isExecutable = () => ExecutableConditions(tower),
+            clickEvent = () => Executes(tower),
+            actionIcon = upgradeIcon,
+            useMoney = true,
+            actionCost = (int)tower.TowerData.UpgradeCost(tower.Level + 1)
+        };
+
+        actionContext.actionDescription.Add($"Upgrade Tower for ${towerData.UpgradeCost(level + 1)}");
+
+        var currentDMG = towerData.Damage(level);
+        var nextDMG = towerData.Damage(level + 1);
+        actionContext.actionDescription.Add($"Attack Damage: {currentDMG:0.#} \u2192 {nextDMG:0.#}");
+
+        var currentARate = towerData.AttackRate(level);
+        var nextARate = towerData.AttackRate(level + 1);
+        actionContext.actionDescription.Add($"Attack Damage: {currentARate:0.#} \u2192 {nextARate:0.#}");
+
+        var currentARange = towerData.AttackRange(level);
+        var nextARange = towerData.AttackRange(level + 1);
+        actionContext.actionDescription.Add($"Attack Damage: {currentARange:0.#} \u2192 {nextARange:0.#}");
+
         return actionContext;
     }
 }

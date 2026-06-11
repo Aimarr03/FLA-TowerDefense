@@ -23,15 +23,20 @@ public class BuyAction : TowerActionSO
 
     public override ActionContext GetActionContext(Tower tower)
     {
-        var actionContext = new ActionContext();
-        actionContext.actionName = $"Buy Tower";
-        actionContext.actionDescription = $"{towerData.Description}\nBuy {towerData.TowerName} for ${towerData.CostBuild()}";
-        actionContext.isExecutable = () => ExecutableConditions(tower);
-        actionContext.clickEvent = () => Executes(tower);
-        actionContext.actionIcon = towerData.iconSprites[0];
-        actionContext.actionCost = (int) towerData.CostBuild();
-        actionContext.actionType = TowerActionType.Buy;
-        actionContext.useMoney = true;
+        var actionContext = new ActionContext
+        {
+            actionName = $"Buy Tower",
+            actionDescription = new(),
+            isExecutable = () => ExecutableConditions(tower),
+            clickEvent = () => Executes(tower),
+            actionIcon = towerData.iconSprites[0],
+            actionCost = (int)towerData.CostBuild(),
+            actionType = TowerActionType.Buy,
+            useMoney = true
+        };
+        actionContext.actionDescription.Add($"Attack Damage: {towerData.Damage(1):0.#}");
+        actionContext.actionDescription.Add($"Attack Range: {towerData.AttackRate(1):0.#}s");
+        actionContext.actionDescription.Add($"Attack Rate: {towerData.AttackRange(1):0.#}m");
         return actionContext;
     }
     public int GetBuildCost()
