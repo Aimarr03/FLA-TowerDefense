@@ -8,6 +8,8 @@ public class EncyclopediaInfo : ScriptableObject
     public EncyclopediaType EncyType;
     public Sprite Profile;
     public string Name;
+    public HPType HP;
+    public MSType MS;
 
     [TextArea(3,6)] public string Description;
     [TextArea(3,6)] public string Deskripsi;
@@ -17,7 +19,26 @@ public class EncyclopediaInfo : ScriptableObject
     public class Vocab
     {
         public string ID;
-        public string EN;    
+        public string EN;
+
+        public override string ToString()
+        {
+            return $"{EN} = {ID}";
+        }
+    }
+    public enum HPType
+    {
+        Low,
+        Medium,
+        High
+    }
+    public enum MSType
+    {
+        VerySlow,
+        Slow,
+        Medium,
+        Fast,
+        VeryFast
     }
 }
 public enum EncyclopediaType

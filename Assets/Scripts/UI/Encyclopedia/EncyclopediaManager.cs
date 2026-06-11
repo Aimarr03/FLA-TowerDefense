@@ -1,5 +1,9 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
+using System.Linq;
 public class EncyclopediaManager : MonoBehaviour
 {
     [SerializeField] private RectTransform background;
@@ -7,10 +11,67 @@ public class EncyclopediaManager : MonoBehaviour
     [SerializeField] private RectTransform mainPanel;
     [SerializeField] private RectTransform optionPanel;
     [SerializeField] private RectTransform unitPanel;
+    [SerializeField] private List<EncyclopediaInfo> EncyInfos;
+    [SerializeField] private Button templateButton;
+    private List<Button> EnemyUnits;
+    private List<Button> TowerUnits;
+    private EncyclopediaInfoDisplayer infoDisplayer;
     void Awake()
     {
+        EncyInfos = new();
+        EncyInfos = Resources.LoadAll<EncyclopediaInfo>("Encyclopedia/").ToList();
+        EnemyUnits = new();
+        TowerUnits = new();
+        
+        infoDisplayer = FindFirstObjectByType<EncyclopediaInfoDisplayer>(FindObjectsInactive.Include);
+        foreach(var ency in EncyInfos)
+        {
+            var newButton = Instantiate(templateButton, templateButton.transform.parent);
+            newButton.gameObject.SetActive(false);
+            
+            var tmp = newButton.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+            var image = newButton.transform.GetChild(0).GetComponent<Image>();
+            tmp.text = ency.Name;
+            image.sprite = ency.Profile;
+            
+            if(ency.EncyType == EncyclopediaType.Enemy)
+                EnemyUnits.Add(newButton);
+            else if(ency.EncyType == EncyclopediaType.Tower)
+            {
+                TowerUnits.Add(newButton);
+                image.transform.localScale = Vector3.one * 2;
+            }
+                
+
+            newButton.onClick.RemoveAllListeners();
+            newButton.onClick.AddListener(() => infoDisplayer.UpdateInfo(ency));
+            newButton.onClick.AddListener(OpenUnitPanel);
+        }
         CloseMainPanel();
     }
+    public void OpenTowerUnits()
+    {
+        foreach(var tower in TowerUnits)
+        {
+            tower.gameObject.SetActive(true);
+        }
+        foreach(var enemy in EnemyUnits)
+        {
+            enemy.gameObject.SetActive(false);
+        }
+    }
+    public void OpenEnemyUnits()
+    {
+        foreach(var tower in TowerUnits)
+        {
+            tower.gameObject.SetActive(false);
+        }
+        foreach(var enemy in EnemyUnits)
+        {
+            enemy.gameObject.SetActive(true);
+        }
+    }
+
     public void OpenMainPanel()
     {
         background.gameObject.SetActive(true);
