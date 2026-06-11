@@ -1,10 +1,35 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MainMenu : MonoBehaviour
 {
-    public void PlayGame()
+    [SerializeField] private RectTransform MainOptions;
+    [SerializeField] private RectTransform PlayOptions;
+    void Awake()
     {
-        SceneManager.LoadScene(1);
+        MainMenuOption();
+    }
+    public void PlayOption()
+    {
+        PlayOptions.gameObject.SetActive(true);
+        MainOptions.gameObject.SetActive(false);
+    }
+    public void MainMenuOption()
+    {
+        PlayOptions.gameObject.SetActive(false);
+        MainOptions.gameObject.SetActive(true);
+    }
+    public void PlayStatic()
+    {
+        var builder = new GameConfigBuilder();
+        builder.SetScenarioMode(GameplayManager.ScenarioMode.Static);
+        GameManager.instance.LoadPlayScene(builder.Build());
+    }
+    public void PlayDynamic()
+    {
+        var builder = new GameConfigBuilder();
+        builder.SetScenarioMode(GameplayManager.ScenarioMode.DDA);
+        GameManager.instance.LoadPlayScene(builder.Build());
     }
 }

@@ -8,7 +8,7 @@ public class UpgradeAction : TowerActionSO
     {
         bool towerCondition = tower.CurrentState == Tower.State.Built && !tower.IsMax;
         int upgradeCost = (int) tower.TowerData.UpgradeCost(tower.Level + 1);
-        bool moneyCondition = TD_API.Economy.IsEnough(upgradeCost);
+        bool moneyCondition = GameplayManager.Economy.IsEnough(upgradeCost);
         
         bool fullCondition = towerCondition && moneyCondition;
         //Debug.Log($"Upgrade Action: {fullCondition}");

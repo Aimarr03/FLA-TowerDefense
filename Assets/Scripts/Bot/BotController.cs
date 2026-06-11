@@ -17,24 +17,22 @@ public class BotProperty
     [Range(1, 100)] public int BaseWeightSellAction = 5;
     [Range(1, 100)] public int BaseWeightNoneAction = 35;
     
-    [Header("Weighted Property Strategy")]
+    [Header("Weighted Build Strategy")]
     [Range(1, 100)] public int BuildRandomWeight = 50;
     [Range(1, 100)] public int BuildRandomBestWeight = 35;
     [Range(1, 100)] public int BuildBestWeight = 10;
     
-    [Header("Weighted Property Type")]
+    [Header("Weighted Build Type")]
     [Range(1, 100)] public int TowerTypeRandomWeight = 50;
     [Range(1, 100)] public int TowerTypeObservingWeight = 25;
 
-    [Header("Weighted Upgrade Type")]
+    [Header("Weighted Upgrade Strategy")]
     [Range(1, 100)] public int TowerUpgradeRandom = 30;
     [Range(1, 100)] public int TowerUpgradePerformance = 60;
-    [Range(1, 100)] public float SellThreshold = 75f;
     
-    [Header("Weighted Sell Type")]
+    [Header("Weighted Sell Property")]
+    [Range(1, 100)] public float SellThreshold = 75f;
     [Range(1, 30)] public float MaxCooldownSell = 30;
-    // [Range(1, 100)] public int TowerSellRandom = 30;
-    // [Range(1, 100)] public int TowerSellPerformance = 30;
 }
 public enum BotTowerSelectionStrat
 {
@@ -138,7 +136,7 @@ public class BotController : MonoBehaviour
 
         currentInterval = 0;
         GameplayManager.instance.onchangedState += Gameplay_ChangeState;
-        TD_API.Economy.OnMoneyChange += OnMoneyChange;
+        GameplayManager.Economy.OnMoneyChange += OnMoneyChange;
         minimumDurationToSell = botProperty.MaxCooldownSell;
         enemySpawnInfos = new();
 
@@ -159,7 +157,7 @@ public class BotController : MonoBehaviour
         if (gameEnd)
         {
             GameplayManager.instance.onchangedState -= Gameplay_ChangeState;
-            TD_API.Economy.OnMoneyChange -= OnMoneyChange;
+            GameplayManager.Economy.OnMoneyChange -= OnMoneyChange;
             isActive = false;
             return;
         }
@@ -368,7 +366,7 @@ public class BotController : MonoBehaviour
     }
     private bool CheckBuildActionLeft()
     {
-        var actions = buyActions.Where(buyAction => TD_API.Economy.IsEnough(buyAction.GetBuildCost())).ToList();
+        var actions = buyActions.Where(buyAction => GameplayManager.Economy.IsEnough(buyAction.GetBuildCost())).ToList();
         bool canBuildAgain = actions != null && actions.Count > 0;
         return canBuildAgain;
     }
@@ -404,7 +402,7 @@ public class BotController : MonoBehaviour
             _ => null
         };
         BuyAction buildAction = GetTowerType();
-        bool isMoneyEnough = TD_API.Economy.IsEnough(buildAction.GetBuildCost());
+        bool isMoneyEnough = GameplayManager.Economy.IsEnough(buildAction.GetBuildCost());
         if (!isMoneyEnough)
         {
             return;
@@ -649,7 +647,7 @@ public class BotController : MonoBehaviour
         {
             TowerData towerData = tower.TowerData;
             int upgradeCost = (int)towerData.UpgradeCost(tower.Level + 1);
-            bool isUpgradable = !tower.IsMax && TD_API.Economy.IsEnough(upgradeCost);
+            bool isUpgradable = !tower.IsMax && GameplayManager.Economy.IsEnough(upgradeCost);
             if(isUpgradable)
                 upgradableTower.Add(tower);
         }

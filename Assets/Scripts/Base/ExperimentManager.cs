@@ -27,6 +27,7 @@ public class ExperimentManager : MonoBehaviour
     string flaLogFileName = "fla_metric.csv";
     string specificIterationDirPath;
     int iterationPreset;
+    bool isActive = false;
     void Awake()
     {
         if(instance != null)
@@ -46,17 +47,29 @@ public class ExperimentManager : MonoBehaviour
             new(false, BotController.Capability.High),
             new(true, BotController.Capability.High),
 
-        };
+        };        
+    }
+    public void Initialized()
+    {
+        isActive = true;
+        
         currentPreset = presets[0];
         UpdateFileName(currentPreset);
         SceneManager.sceneLoaded += OnSceneLoaded;
         Application.runInBackground = true;
         DontDestroyOnLoad(gameObject);
-        
+
+        GameplayManager.instance.onchangedState += OnGameplayStateChange;
+        Time.timeScale = multiplierSpeed;
+        GameplayManager.instance.InitializeGame(fileName);
+        GameplayManager.instance.StartGame();
     }
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if(!isActive)
+            return;
+        
         GameplayManager.instance.onchangedState += OnGameplayStateChange;
         Time.timeScale = multiplierSpeed;
         GameplayManager.instance.InitializeGame(fileName);
@@ -65,6 +78,9 @@ public class ExperimentManager : MonoBehaviour
 
     private void OnGameplayStateChange(GameplayManager.State state)
     {
+        if(!isActive)
+            return;
+        
         IEnumerator ReloadScene()
         {
             ExportFLALog();

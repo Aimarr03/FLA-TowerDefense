@@ -13,11 +13,11 @@ public class UI_MoneyDisplay : MonoBehaviour
     }
     private void Start()
     {
-        TD_API.Economy.OnMoneyChange += UpdateDisplayMoney;
+        GameplayManager.Economy.OnMoneyChange += UpdateDisplayMoney;
     }
     private void OnDestroy()
     {
-        TD_API.Economy.OnMoneyChange -= UpdateDisplayMoney;
+        GameplayManager.Economy.OnMoneyChange -= UpdateDisplayMoney;
     }
     private void UpdateDisplayMoney(int newMoney)
     {

@@ -197,7 +197,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         TowerName = TowerData.TowerName;
 
         float buyCost = TowerData.CostBuild();
-        TD_API.Economy.UseMoney((int)buyCost);
+        GameplayManager.Economy.UseMoney((int)buyCost);
         visual.sprite = towerData.GetSprite(level - 1);
 
         foreach(var attackEffect in TowerData.TowerAttackEffects)
@@ -231,7 +231,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         ActionInvoke?.Invoke(this,TowerActionType.Presell);
         float sellCost = TowerData.SellCost(level);
 
-        TD_API.Economy.GainMoney((int)sellCost);
+        GameplayManager.Economy.GainMoney((int)sellCost);
         towerState = State.None;
         level = -1;
 
@@ -271,7 +271,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         visual.sprite = TowerData.GetSprite(level - 1);
 
         float upgradeCost = TowerData.UpgradeCost(level);
-        TD_API.Economy.UseMoney((int)upgradeCost);
+        GameplayManager.Economy.UseMoney((int)upgradeCost);
         animator.Play($"Upgrade_{level}");
         UpdateData();
 

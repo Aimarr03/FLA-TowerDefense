@@ -156,7 +156,7 @@ public class Enemy : MonoBehaviour
             enemyAnimation.OnDie();
 
             int finalBounty = (int) (bounty * GameplayManager.instance.MultiplierGold);
-            TD_API.Economy.GainMoney(finalBounty);
+            GameplayManager.Economy.GainMoney(finalBounty);
             //gameObject.SetActive(false);
         }
         else

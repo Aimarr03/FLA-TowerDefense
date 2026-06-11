@@ -10,7 +10,6 @@ using Random = UnityEngine.Random;
 
 public static partial class TD_API
 {
-    public static EconomyManager Economy { get; internal set; }
     public static List<TowerActionSO> TowerActions { get; internal set; }
     public static List<TowerActionSO> BuildActions{ get; internal set; }
     public static Dictionary<EnemyType,EnemyData> EnemyDatas { get; internal set; }
@@ -41,7 +40,6 @@ public class GameplayManager : MonoBehaviour
     [Space(25)]
     [SerializeField] private NavMeshSurface Surface2D;
     [SerializeField] private MainBase mainBase;
-    [SerializeField] private EconomyManager economyManager;
     [SerializeField] private float BaseBuildStateDuration = 60;
 
     [Space(25)]
@@ -54,6 +52,7 @@ public class GameplayManager : MonoBehaviour
     [Space(25)]
     [SerializeField] private int initHealth = 30;
     
+    private static EconomyManager economyManager;
     private RoundPerformance currentRoundPerformance;
     private float buildPhaseDuration;
     private bool isActive = false;
@@ -79,6 +78,7 @@ public class GameplayManager : MonoBehaviour
     public float MultiplierSpawnEnemy {get; private set;}
     public SpawnType SpawnMode => spawnType;
     public List<RoundPerformance> RoundPerformances => roundPerformances;
+    public static EconomyManager Economy => economyManager;
     public List<FLA_Metrics> FLA_Metrics = new();
     public enum State
     {
@@ -110,25 +110,47 @@ public class GameplayManager : MonoBehaviour
             GameConfiguration = configLoader.gameConfig;
             
             allTower = FindObjectsByType<Tower>(FindObjectsSortMode.None).ToList();
+            economyManager = new EconomyManager(0);
+            InitializedAPI();
         }
     }
     public void InitializeGame(string fileName)
     {
-        InitializedConfig(fileName);
-        InitializedAPI();
+        configLoader.LoadGameConfig(fileName);
+        GameConfiguration = configLoader.gameConfig;
+        
+        SetupGame();
+    }
+    public void InitializeGame(GameConfig gameConfig)
+    {
+        GameConfiguration = gameConfig;
+        configLoader.gameConfig = gameConfig;
+        SetupGame();
+    }
+    private void SetupGame()
+    {
+        InitializedConfig();
         InitializedWave();
         InitializedBot();
 
         mainBase.Setup(initHealth);
         fla.Setup(initHealth);
+        
         if(scenarioMode == ScenarioMode.Static)
         {
-            MultiplierGold = 0.98f;
-            MultiplierSpawnEnemy = 1.11f;
-            MultiplierHP = 1.18f;
+            MultiplierGold = 1f;
+            MultiplierSpawnEnemy = 1f;
+            MultiplierHP = 1f;    
         }
     }
-
+    private void InitializedConfig()
+    {
+        configLoader.TryParseScenarioMode(GameConfiguration.scenarioMode, out scenarioMode);
+        configLoader.TryParseSpawnType(GameConfiguration.spawnMode, out spawnType);
+        BaseBuildStateDuration = GameConfiguration.baseDuration;
+        economyManager.GainMoney(GameConfiguration.startingMoney);
+    }
+    
     private void InitializedBot()
     {
         var botProperty = configLoader.gameConfig.botUsage;
@@ -142,17 +164,7 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    private void InitializedConfig(string filename)
-    {
-        configLoader.LoadGameConfig(filename);
-        GameConfiguration = configLoader.gameConfig;
-        
-        configLoader.TryParseScenarioMode(GameConfiguration.scenarioMode, out scenarioMode);
-        configLoader.TryParseSpawnType(GameConfiguration.spawnMode, out spawnType);
-        
-        economyManager = new EconomyManager(GameConfiguration.startingMoney);
-        BaseBuildStateDuration = GameConfiguration.baseDuration;
-    }
+    
     private void OnDestroy()
     {
         Tower.ActionInvoke -= TowerActionInvoke;
@@ -233,7 +245,6 @@ public class GameplayManager : MonoBehaviour
     }
     private void InitializedAPI()
     {
-        TD_API.Economy = economyManager;
         TD_API.TowerActions = towerActions;
         TD_API.BuildActions = new();
         foreach (var build in buildData)
@@ -386,6 +397,7 @@ public class GameplayManager : MonoBehaviour
         {
             CurrentWaveIndex++;
             int index = Mathf.Clamp(CurrentWaveIndex, 0, maxWave - 1);
+            CurrentBuildPhaseDuration = BaseBuildStateDuration;
             currentRoundPerformance = roundPerformances[index];
             UpdateWave();
             ChangeState(State.Building);

@@ -8,7 +8,7 @@ public class BuyAction : TowerActionSO
     {
         bool towerCondition = tower.CurrentState == Tower.State.None && tower.Level < 0;
         float builtCost = towerData.CostBuild();
-        bool moneyCondition = TD_API.Economy.IsEnough((int) builtCost);
+        bool moneyCondition = GameplayManager.Economy.IsEnough((int) builtCost);
         
         bool fullCondition = towerCondition && moneyCondition;
         

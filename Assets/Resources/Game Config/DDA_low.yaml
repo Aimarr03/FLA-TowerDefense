@@ -4,6 +4,7 @@ spawnMode: subwave
 cycleMode: normal
 startingMoney: 450
 baseDuration: 20
+useExperiment: true
 botUsage:
   useBot: true
   capability: "Low"

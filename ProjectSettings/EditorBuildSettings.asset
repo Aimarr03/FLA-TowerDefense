@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/UI Scene/Main Menu.unity
     guid: 549dd5ec26a078648a1deb15bb17f596
   - enabled: 1
-    path: Assets/Scenes/Prototipe_main.unity
+    path: Assets/Scenes/Prototipe/Prototipe_main.unity
     guid: e0a7f57c55928df4ba4351ff75c496e8
   - enabled: 0
     path: Assets/Scenes/Prototipe_1.unity
