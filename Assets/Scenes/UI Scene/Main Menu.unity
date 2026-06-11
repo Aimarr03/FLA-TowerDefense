@@ -19922,7 +19922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaManager
   background: {fileID: 106440140}
-  panel: {fileID: 0}
+  panel: {fileID: 1957653998}
   mainPanel: {fileID: 1905824434}
   optionPanel: {fileID: 1942489761}
   unitPanel: {fileID: 1004180554}

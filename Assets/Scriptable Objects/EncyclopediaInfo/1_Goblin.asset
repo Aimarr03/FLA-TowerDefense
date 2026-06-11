@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93e0104c7f775d448f4a82d79c8b92c, type: 3}
+  m_Name: 1_Goblin
+  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaInfo
+  EncyType: 0
+  Profile: {fileID: -6486419780738374814, guid: 5b9f0ce2760652c4b9acd89be530ca2c, type: 3}
+  Name: Goblin
+  Description: A balanced enemy with medium health and slow movement speed. It is
+    commonly found in enemy waves.
+  Deskripsi: Musuh seimbang dengan kesehatan sedang dan kecepatan gerak yang lambat.
+    Musuh ini sering muncul dalam gelombang serangan.
+  Vocabularies:
+  - ID: Seimbang
+    EN: Balanced
+  - ID: Sedang
+    EN: Medium
+  - ID: Pergerakan
+    EN: Movement
+  - ID: Kecepatan
+    EN: Speed
+  - ID: Gelombang
+    EN: Wave

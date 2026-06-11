@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93e0104c7f775d448f4a82d79c8b92c, type: 3}
+  m_Name: 5_AT
+  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaInfo
+  EncyType: 1
+  Profile: {fileID: 4130640169021434097, guid: 7227eaf7bb8134c4884477cdb5b58452, type: 3}
+  Name: Archer Tower
+  Description: A reliable tower that deals moderate damage at a moderate attack speed.
+    It is effective against most enemies.
+  Deskripsi: Menara andal yang menghasilkan kerusakan sedang dengan kecepatan serangan
+    sedang. Menara ini efektif melawan sebagian besar musuh.
+  Vocabularies:
+  - ID: Andal
+    EN: Reliable
+  - ID: Kerusakan
+    EN: Damage
+  - ID: Kecepatan Serangan
+    EN: Attack Speed
+  - ID: Efektif
+    EN: Effective
+  - ID: Musuh
+    EN: Enemy

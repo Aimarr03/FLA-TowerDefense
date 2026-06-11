@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93e0104c7f775d448f4a82d79c8b92c, type: 3}
+  m_Name: 6_MT
+  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaInfo
+  EncyType: 1
+  Profile: {fileID: -3213505208676114249, guid: 7cdebae3b946f2245873be47e1ca8bea, type: 3}
+  Name: Mage Tower
+  Description: A powerful tower that deals high damage. Its attacks are strong, but
+    its attack speed is slow.
+  Deskripsi: Menara kuat yang menghasilkan kerusakan tinggi. Serangannya sangat kuat,
+    tetapi kecepatan serangannya lambat.
+  Vocabularies:
+  - ID: Kuat
+    EN: Powerful
+  - ID: Serangan Tinggi
+    EN: High Damage
+  - ID: Kuat
+    EN: Strong
+  - ID: Lambat
+    EN: Slow
+  - ID: Serangan
+    EN: Attack

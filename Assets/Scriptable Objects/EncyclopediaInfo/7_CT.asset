@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93e0104c7f775d448f4a82d79c8b92c, type: 3}
+  m_Name: 7_CT
+  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaInfo
+  EncyType: 1
+  Profile: {fileID: 3465286685962602723, guid: 0ebc8ed9007b3c2479612edd1d12d1d1, type: 3}
+  Name: Mortar tower
+  Description: A siege tower that deals moderate area damage. It can only attack
+    ground enemies within its range.
+  Deskripsi: Menara pengepungan yang menghasilkan kerusakan area sedang. Menara ini
+    hanya dapat menyerang musuh darat dalam jangkauannya.
+  Vocabularies:
+  - ID: Pengepungan
+    EN: Siege
+  - ID: Kerusakan Area
+    EN: Area Damage
+  - ID: Musuh Darat
+    EN: Ground Enemy
+  - ID: Jangkauan
+    EN: Range
+  - ID: Attack
+    EN: Menyerang
