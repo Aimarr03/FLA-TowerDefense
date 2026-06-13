@@ -5,9 +5,13 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private float projectileSpeed = 3f;
     [SerializeField] private float damage = 1f;
-
+    private AudioSource audioSource;
     Enemy target;
     AttackContext attackContext;
+    void Awake()
+    {
+        audioSource = GetComponentInChildren<AudioSource>();
+    }
     public void SetTarget(AttackContext attackContext)
     {
         this.attackContext = attackContext;
@@ -49,7 +53,9 @@ public class Bullet : MonoBehaviour
             {
                 attackEffect.Apply(attackContext);
             }
-
+            audioSource.PlayOneShot(attackContext.hitClip);
+            audioSource.transform.parent = null;
+            Destroy(audioSource.gameObject, 2f);
             gameObject.SetActive(false);
             target.OnDie -= OnEnemyDie;
             Destroy(gameObject, 1f);

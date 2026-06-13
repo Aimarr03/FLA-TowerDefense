@@ -35,6 +35,8 @@ MonoBehaviour:
   - {fileID: 2847894867104497665, guid: 45eef4d2878a36345981be7b63783951, type: 3}
   AttackableType: -1
   animatorController: {fileID: 9100000, guid: e289f518f0bc77145b681053074b5636, type: 2}
+  shootAudio: {fileID: 8300000, guid: 6b377d3594ef0824599b951279b8908c, type: 3}
+  hitAudio: {fileID: 8300000, guid: 223a543e978667640b50c0fefec0d20e, type: 3}
   references:
     version: 2
     RefIds: []

@@ -17,4 +17,6 @@ public class EnemyData : ScriptableObject
     public EnemyType enemyType;
 
     public Enemy enemyPrefab;
+    [Header("Audio")]
+    public AudioClip dieAudioClip;
 }

@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     private HealthBar healthBar;
     private CharacterMovement characterMovement;
     private EnemyAnimation enemyAnimation;
+    private AudioSource audioSource;
 
     private float currentAttackTick = 0f;
     private Vector2 direction;
@@ -37,6 +38,7 @@ public class Enemy : MonoBehaviour
     public Action<Enemy, bool> OnDie;
     public EnemyTraverseType Type => enemyGroundType;
     Action currentAction;
+    private AudioClip dieAudioClip;
 
     public bool isDead => currentHealh <= 0;
     public float MaxHealth => maxHealth;
@@ -47,6 +49,7 @@ public class Enemy : MonoBehaviour
         characterMovement = GetComponent<CharacterMovement>();
         healthBar = GetComponentInChildren<HealthBar>(true);
         enemyAnimation = GetComponentInChildren<EnemyAnimation>();
+        audioSource = GetComponent<AudioSource>();
 
         characterMovement.MovementSpeed = movementSpeed;
         currentHealh = maxHealth;
@@ -79,6 +82,7 @@ public class Enemy : MonoBehaviour
         float finalMovementSpeed = movementSpeed;
         characterMovement.MovementSpeed = finalMovementSpeed;
         bounty = enemyData.bounty;
+        dieAudioClip = enemyData.dieAudioClip;
 
         target = GameplayManager.instance.MainBase;
         target.OnDeath += StopAction;
@@ -128,7 +132,7 @@ public class Enemy : MonoBehaviour
         characterMovement.ChangeMoveDirection -= OnChangeMoveDirection;
         
         OnDie?.Invoke(this, true);
-        Destroy(gameObject, 1);
+        Destroy(gameObject, 3);
     }
     private void Attacking()
     {
@@ -149,6 +153,7 @@ public class Enemy : MonoBehaviour
         healthBar.UpdateHealth(currentHealh / maxHealth);
         if(currentHealh <= 0)
         {
+            audioSource.PlayOneShot(dieAudioClip);
             healthBar.Hide();
             GetComponent<Collider2D>().enabled = false;
             StopAction();

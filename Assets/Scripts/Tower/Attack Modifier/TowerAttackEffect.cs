@@ -14,6 +14,7 @@ public class AttackContext
     public EnemyTraverseType AttackableType;
     public Enemy Target;
     public float Damage;
+    public AudioClip hitClip;
     public static event Action<Tower,TowerType, float> OnDamage;
     public static event Action<Tower, TowerType> OnKill;
     public void InvokeDamageEvent(float damage) => OnDamage?.Invoke(Source, towerType,damage);

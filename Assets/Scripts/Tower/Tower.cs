@@ -28,6 +28,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     [Header("Bot Property")]
     [SerializeField, Range(1,10)] private int preferenceScore;
     private AreaDetection rangeDetection;
+    private AudioSource audioSource;
     private UIAction uiAction;
 
     public readonly List<Enemy> enemiesInRange = new();
@@ -57,6 +58,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
     {
         rangeDetection = GetComponentInChildren<AreaDetection>();
         uiAction = GetComponentInChildren<UIAction>();
+        audioSource = GetComponent<AudioSource>();
 
         AttackBehaviours = new();
         AttackEffects = new();
@@ -163,7 +165,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
             Source = this,
             Damage = attackDamage,
             towerType = TowerData.Type,
-            AttackableType = TowerData.AttackableType
+            AttackableType = TowerData.AttackableType,
+            hitClip = TowerData.hitAudio
         };
         
         foreach(var attackEffect in AttackEffects)
@@ -172,6 +175,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         Bullet newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
         newBullet.gameObject.SetActive(true);
         newBullet.SetTarget(attackContext);
+        audioSource.PlayOneShot(TowerData.shootAudio);
     }
     private void OnEnemyDie(Enemy enemy)
     {

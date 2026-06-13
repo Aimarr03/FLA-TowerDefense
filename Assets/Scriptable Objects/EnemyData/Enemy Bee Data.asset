@@ -22,3 +22,4 @@ MonoBehaviour:
   enemyGroundType: 2
   enemyType: 3
   enemyPrefab: {fileID: 1372836920914441438, guid: 56676374c62229c49ae2f21070fd357b, type: 3}
+  dieAudioClip: {fileID: 8300000, guid: dd2e09872627c1741a30cf29e81d07fa, type: 3}

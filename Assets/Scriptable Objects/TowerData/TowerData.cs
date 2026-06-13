@@ -33,6 +33,9 @@ public class TowerData : ScriptableObject
 
     public EnemyTraverseType AttackableType;
     public RuntimeAnimatorController animatorController;
+    [Header("Audio")]
+    public AudioClip shootAudio;
+    public AudioClip hitAudio;
     public float AttackRange(int level)
     {
         float multiplier = _baseAttackRange * _multiplierAttackRange;

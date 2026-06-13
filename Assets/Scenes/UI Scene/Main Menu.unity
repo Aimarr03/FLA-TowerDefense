@@ -7179,6 +7179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaInfoDisplayer
   profileLayout: {fileID: 870219208}
+  descriptionLayout: {fileID: 456955107}
   Name: {fileID: 1246975306}
   Image: {fileID: 901202790}
   HP_UI: {fileID: 547962435}
