@@ -6,6 +6,9 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private RectTransform MainOptions;
     [SerializeField] private RectTransform PlayOptions;
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip clickClip;
     void Awake()
     {
         MainMenuOption();
@@ -31,5 +34,9 @@ public class MainMenu : MonoBehaviour
         var builder = new GameConfigBuilder();
         builder.SetScenarioMode(GameplayManager.ScenarioMode.DDA);
         GameManager.instance.LoadPlayScene(builder.Build());
+    }
+    public void PlayClickClip()
+    {
+        audioSource.PlayOneShot(clickClip);
     }
 }

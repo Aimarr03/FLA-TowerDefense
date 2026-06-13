@@ -5,7 +5,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class EncyclopediaInfoDisplayer : MonoBehaviour
+
 {
+    [Header("Layout")]
+    [SerializeField] private RectTransform profileLayout;
+    [SerializeField] private RectTransform descriptionLayout;
+    [Header("Panel")]
     [SerializeField] private TextMeshProUGUI Name;
     [SerializeField] private Image Image;
     [SerializeField] private TextMeshProUGUI HP_UI;
@@ -45,5 +50,7 @@ public class EncyclopediaInfoDisplayer : MonoBehaviour
             ui.text = vocab.ToString();
             ui.gameObject.SetActive(true);
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(profileLayout);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(descriptionLayout);
     }
 }

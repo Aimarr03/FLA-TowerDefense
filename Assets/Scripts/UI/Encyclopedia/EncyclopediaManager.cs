@@ -6,6 +6,10 @@ using TMPro;
 using System.Linq;
 public class EncyclopediaManager : MonoBehaviour
 {
+    [Header("Layout")]
+    [SerializeField] private RectTransform profileLayout;
+
+    [Header("Panel")]
     [SerializeField] private RectTransform background;
     [SerializeField] private RectTransform panel;
     [SerializeField] private RectTransform mainPanel;
@@ -24,6 +28,7 @@ public class EncyclopediaManager : MonoBehaviour
         TowerUnits = new();
         
         infoDisplayer = FindFirstObjectByType<EncyclopediaInfoDisplayer>(FindObjectsInactive.Include);
+        var mainMenu = FindFirstObjectByType<MainMenu>();
         foreach(var ency in EncyInfos)
         {
             var newButton = Instantiate(templateButton, templateButton.transform.parent);
@@ -42,9 +47,9 @@ public class EncyclopediaManager : MonoBehaviour
                 image.transform.localScale = Vector3.one * 2;
             }
                 
-
             newButton.onClick.RemoveAllListeners();
             newButton.onClick.AddListener(() => infoDisplayer.UpdateInfo(ency));
+            newButton.onClick.AddListener(mainMenu.PlayClickClip);
             newButton.onClick.AddListener(OpenUnitPanel);
         }
         CloseMainPanel();
