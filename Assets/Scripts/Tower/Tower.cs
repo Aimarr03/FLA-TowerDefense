@@ -227,6 +227,8 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         {
             currentScore = 160
         };
+
+        GameplayManager.instance.PlayBuildClip();
         ActionInvoke?.Invoke(this,TowerActionType.Buy);
     }
     public void Sell()
@@ -265,6 +267,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
         TowerData = null;
         performance = new();
         ActionInvoke?.Invoke(this,TowerActionType.Sell);
+        GameplayManager.instance.PlayMoneyClip();
         OnMouseDeselect();
     }
     public void Upgrade()
@@ -281,6 +284,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
 
         DetectEnemiesInRange();
         performance.currentScore += 75;
+        GameplayManager.instance.PlayBuildClip();
         ActionInvoke?.Invoke(this, TowerActionType.Upgrade);
     }
     private void UpdateData()
@@ -339,6 +343,7 @@ public class Tower : MonoBehaviour, I_MouseInteractable
             _ => false 
         };
         if (!condition) return;
+        GameplayManager.instance.PlayClickClip();
         uiAction.OnDisplayAction(listActions);
     }
 

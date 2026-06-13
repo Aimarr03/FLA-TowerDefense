@@ -27,6 +27,18 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private FLA fla;
     [SerializeField] private ConfigLoader configLoader;
     [SerializeField] private SelectionManager selectionManager;
+    
+    private AudioSource audioSource;
+    [Header("General Audio")]
+    [SerializeField]private AudioClip clickClip;
+    [SerializeField] private AudioClip confirmClip;
+    [SerializeField] private AudioClip buildClip;
+    [SerializeField] private AudioClip moneyClip;
+    public void PlayClickClip() => audioSource.PlayOneShot(clickClip);
+    public void PlayConfirmClip() => audioSource.PlayOneShot(confirmClip);
+    public void PlayBuildClip() => audioSource.PlayOneShot(buildClip);
+    public void PlayMoneyClip() => audioSource.PlayOneShot(moneyClip);
+
 
     [Header("Enemy Spawner")]
     [SerializeField] private EnemySpawnLoader enemyLoader;
@@ -102,6 +114,7 @@ public class GameplayManager : MonoBehaviour
             instance = this;
             fla = GetComponent<FLA>();
             configLoader = GetComponent<ConfigLoader>();
+            audioSource = GetComponentInChildren<AudioSource>();
 
             MultiplierGold = 1f;
             MultiplierSpawnEnemy = 1f;

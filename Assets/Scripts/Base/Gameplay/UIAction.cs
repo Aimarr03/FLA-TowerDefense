@@ -52,26 +52,27 @@ public class UIAction : MonoBehaviour
         float stepAngle = (clickCounts == 1) ? 0f : 360f / clickCounts;        
         for (int index = 0; index < clickAction.Count; index++) 
         {
-            TowerActionButton button = buttons[index];
-            RectTransform rectButton = button.GetComponent<RectTransform>();
+            TowerActionButton TowerActionButton = buttons[index];
+            RectTransform rectButton = TowerActionButton.GetComponent<RectTransform>();
 
-            button.gameObject.SetActive(true);
-            button.Button.onClick.RemoveAllListeners();
+            TowerActionButton.gameObject.SetActive(true);
+            TowerActionButton.Button.onClick.RemoveAllListeners();
 
             var context = clickAction[index];
-            button.iconAction = context.actionIcon;
-            button.Button.onClick.AddListener(() => OnActionClicked(context, button));
-            button.SetActionIcon();
-            button.isExecutable = context.isExecutable;
+            TowerActionButton.iconAction = context.actionIcon;
+            TowerActionButton.Button.onClick.AddListener(() => OnActionClicked(context, TowerActionButton));
+            
+            TowerActionButton.SetActionIcon();
+            TowerActionButton.isExecutable = context.isExecutable;
 
             if (context.useMoney)
             {
-                button.EnableMoneyText();
-                button.SetMoneyText(context.actionCost);
+                TowerActionButton.EnableMoneyText();
+                TowerActionButton.SetMoneyText(context.actionCost);
             }
             else
             {
-                button.DisableMoneyText();
+                TowerActionButton.DisableMoneyText();
             }
 
             float angle = stepAngle * index;
@@ -87,6 +88,7 @@ public class UIAction : MonoBehaviour
         {
             if (selectedContext.isExecutable())
             {
+                GameplayManager.instance.PlayConfirmClip();
                 context.clickEvent?.Invoke();
                 CloseAction();
             }
@@ -101,6 +103,7 @@ public class UIAction : MonoBehaviour
     }
     private void SelectAction(ActionContext context, TowerActionButton button)
     {
+        GameplayManager.instance.PlayClickClip();
         actionDescriber.ShowActionContext(context);
         bool condition = selectedButton != null && selectedButton != button;
         Debug.Log($"Condition: {condition}");
