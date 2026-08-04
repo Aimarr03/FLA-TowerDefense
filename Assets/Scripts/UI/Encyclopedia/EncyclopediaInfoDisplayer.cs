@@ -25,8 +25,12 @@ public class EncyclopediaInfoDisplayer : MonoBehaviour
         Name.text = info.Name;
         Image.sprite = info.Profile;
 
-        HP_UI.text = info.HP.ToString();
-        MS_UI.text = info.MS.ToString();
+        HP_UI.text = $"HP: {info.HP.ToString()}";
+        MS_UI.text = $"MS: {info.MS.ToString()}";
+
+        bool showcaseStats = info.EncyType == EncyclopediaType.Enemy;
+        HP_UI.gameObject.SetActive(showcaseStats);
+        MS_UI.gameObject.SetActive(showcaseStats);
 
         Description.text = info.Description;
         Deskripsi.text = info.Deskripsi;

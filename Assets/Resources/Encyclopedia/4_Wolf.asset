@@ -15,6 +15,8 @@ MonoBehaviour:
   EncyType: 0
   Profile: {fileID: -6486419780738374814, guid: f5d9dc1c47e8a1242951d6805e74dbaa, type: 3}
   Name: Wolf
+  HP: 0
+  MS: 4
   Description: A fast enemy with low health. Its speed makes it difficult to stop
     before reaching its destination.
   Deskripsi: Musuh cepat dengan kesehatan rendah. Kecepatannya membuat musuh ini

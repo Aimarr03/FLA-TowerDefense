@@ -15,6 +15,8 @@ MonoBehaviour:
   EncyType: 0
   Profile: {fileID: -6486419780738374814, guid: 5b9f0ce2760652c4b9acd89be530ca2c, type: 3}
   Name: Goblin
+  HP: 1
+  MS: 2
   Description: A balanced enemy with medium health and slow movement speed. It is
     commonly found in enemy waves.
   Deskripsi: Musuh seimbang dengan kesehatan sedang dan kecepatan gerak yang lambat.

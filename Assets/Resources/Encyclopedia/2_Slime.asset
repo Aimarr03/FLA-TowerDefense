@@ -15,6 +15,8 @@ MonoBehaviour:
   EncyType: 0
   Profile: {fileID: -6486419780738374814, guid: 22154de9f9398db47a9cd2dc1e810a35, type: 3}
   Name: Slime
+  HP: 2
+  MS: 0
   Description: A durable enemy with high health. It moves very slowly but can withstand
     many attacks.
   Deskripsi: Musuh yang tahan lama dengan kesehatan tinggi. Bergerak sangat lambat

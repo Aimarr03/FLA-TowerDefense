@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f93e0104c7f775d448f4a82d79c8b92c, type: 3}
-  m_Name: 3_Slime
+  m_Name: 3_Bee
   m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaInfo
   EncyType: 0
   Profile: {fileID: -6486419780738374814, guid: 6fdc086421c7f9a4d8bfeb1006b2efe7, type: 3}
   Name: Bee
+  HP: 0
+  MS: 3
   Description: A fragile enemy with low health and medium speed. It can quickly slip
     through weak defenses.
   Deskripsi: Musuh rapuh dengan kesehatan rendah dan kecepatan sedang. Musuh ini

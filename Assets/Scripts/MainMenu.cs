@@ -35,6 +35,13 @@ public class MainMenu : MonoBehaviour
         builder.SetScenarioMode(GameplayManager.ScenarioMode.DDA);
         GameManager.instance.LoadPlayScene(builder.Build());
     }
+    public void PlayAutomatic()
+    {
+        var builder = new GameConfigBuilder();
+        builder.useExperiment = true;
+        GameManager.instance.LoadPlayScene(builder.Build());
+    }
+
     public void PlayClickClip()
     {
         audioSource.PlayOneShot(clickClip);
